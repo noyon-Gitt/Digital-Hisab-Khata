@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="হিসাব খাতা" />
   <link id="pwaManifestLink" rel="manifest" />
-  <title>Digital Hisab Khata - Sky Theme</title>
+  <title>Digital Hisab Khata - Complete Sky UI</title>
   <style>
     * { box-sizing: border-box; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
     body { margin: 0; background: #f0f9ff; color: #0f172a; padding-bottom: 84px; }
@@ -18,7 +18,7 @@
       position: fixed;
       inset: 0;
       background: linear-gradient(180deg, #0284c7 0%, #0369a1 42%, #f0f9ff 42%, #f0f9ff 100%);
-      z-index: 1200;
+      z-index: 1500;
       display: none;
       align-items: center;
       justify-content: center;
@@ -33,12 +33,7 @@
       padding: 24px 20px;
       box-shadow: 0 14px 34px rgba(2, 132, 199, 0.22);
     }
-    .login-brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 14px;
-    }
+    .login-brand { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
     .login-logo {
       width: 44px;
       height: 44px;
@@ -93,12 +88,7 @@
       color: #e0f2fe;
       flex-wrap: wrap;
     }
-    .plan-pill {
-      background: rgba(255,255,255,0.2);
-      padding: 2px 8px;
-      border-radius: 999px;
-      font-weight: 600;
-    }
+    .plan-pill { background: rgba(255,255,255,0.2); padding: 2px 8px; border-radius: 999px; font-weight: 600; }
     .header-right-actions { display: flex; align-items: center; gap: 14px; }
     .header-icon-btn {
       width: auto;
@@ -200,6 +190,104 @@
     .due { color: #dc2626; }
     .credit { color: #16a34a; }
 
+    /* Cashbox Layout (Matches 1000143910.jpg) */
+    .cb-hero-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 14px;
+      box-shadow: 0 2px 8px rgba(2, 132, 199, 0.06);
+      margin-bottom: 12px;
+    }
+    .cb-top-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      text-align: center;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .cb-top-grid > div:first-child { border-right: 1px solid #e2e8f0; }
+    .cb-big-num { font-size: 21px; font-weight: 800; color: #0f172a; }
+    .cb-sub-lbl { font-size: 12px; color: #64748b; margin-top: 2px; font-weight: 600; }
+    .cb-mid-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      text-align: center;
+      padding: 12px 0;
+      border-bottom: 1px solid #f1f5f9;
+      font-size: 14px;
+      font-weight: 800;
+    }
+    .cb-mid-grid > div:first-child { border-right: 1px solid #e2e8f0; }
+    .cb-action-pills {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 12px 0 8px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .cb-pill-yellow {
+      width: auto;
+      background: #fef08a;
+      color: #422006;
+      border-radius: 999px;
+      padding: 7px 14px;
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .cb-pill-outline {
+      width: auto;
+      background: #f0f9ff;
+      color: #0369a1;
+      border: 1px solid #bae6fd;
+      border-radius: 999px;
+      padding: 7px 14px;
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .cb-foot-stats {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      font-weight: 700;
+      padding-top: 10px;
+    }
+    .cb-list-card {
+      background: #fff;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(2, 132, 199, 0.06);
+    }
+    .cb-row-btn {
+      width: 100%;
+      background: #fff;
+      color: #0f172a;
+      border-bottom: 1px solid #f1f5f9;
+      border-radius: 0;
+      padding: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      text-align: left;
+    }
+    .cb-row-btn:last-child { border-bottom: none; }
+    .cb-row-btn:hover:not(:disabled) { background: #f0f9ff; }
+    .cb-row-left { display: flex; align-items: center; gap: 12px; }
+    .cb-icon-circle {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 17px;
+      font-weight: 800;
+    }
+    .cb-row-title { font-size: 14px; font-weight: 700; color: #0f172a; }
+    .cb-row-right { font-size: 14px; font-weight: 800; display: flex; align-items: center; gap: 8px; }
+
     /* Search + Filter + Download Bar */
     .search-action-bar { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
     .search-box-wrap {
@@ -294,7 +382,7 @@
     .party-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
     .party-bal-num { font-size: 15px; font-weight: 800; text-align: right; }
 
-    /* Floating Add Party Button */
+    /* Floating Add Customer Button */
     .fab-add-btn {
       position: fixed;
       right: 18px;
@@ -304,7 +392,7 @@
       border-radius: 50%;
       background: #0284c7;
       color: #fff;
-      font-size: 22px;
+      font-size: 20px;
       font-weight: 700;
       box-shadow: 0 8px 20px rgba(2, 132, 199, 0.35);
       display: flex;
@@ -314,6 +402,183 @@
       padding: 0;
     }
     .fab-add-btn:hover:not(:disabled) { background: #0369a1; }
+
+    /* Add Customer/Supplier Screen (Matches 1000143908.jpg) */
+    .add-party-screen {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: #f8fafc;
+      z-index: 700;
+      overflow-y: auto;
+      padding-bottom: 32px;
+    }
+    .add-party-screen.open { display: block; }
+    .ap-header {
+      background: #fff;
+      border-bottom: 1px solid #e2e8f0;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .ap-back-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #f0f9ff;
+      color: #0284c7;
+      padding: 0;
+      font-size: 18px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .ap-title { margin: 0; font-size: 17px; font-weight: 800; color: #0f172a; }
+    .ap-body { max-width: 640px; margin: 0 auto; padding: 16px 14px; }
+    .ap-role-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .ap-avatar-placeholder {
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      background: #e2e8f0;
+      color: #475569;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+    .ap-radio-card {
+      flex: 1;
+      background: #fff;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 11px 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #334155;
+      cursor: pointer;
+      margin: 0;
+    }
+    .ap-radio-card.selected {
+      border-color: #0284c7;
+      background: #f0f9ff;
+      color: #0284c7;
+    }
+    .ap-radio-card input[type="radio"] { width: auto; margin: 0; accent-color: #0284c7; }
+    .ap-contact-btn {
+      width: 100%;
+      background: #e2e8f0;
+      color: #1e293b;
+      border-radius: 999px;
+      padding: 12px 16px;
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+    .ap-contact-btn:hover:not(:disabled) { background: #cbd5e1; }
+    .ap-input-box {
+      background: #fff;
+      border: 1px solid #cbd5e1;
+      border-radius: 12px;
+      padding: 6px 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .ap-input-box input {
+      border: none !important;
+      margin: 0 !important;
+      padding: 8px 4px !important;
+      background: transparent !important;
+      outline: none;
+      width: 100%;
+    }
+    .ap-submit-btn {
+      width: 100%;
+      margin-top: 24px;
+      padding: 14px 18px;
+      border-radius: 999px;
+      font-size: 16px;
+      font-weight: 800;
+      background: #bae6fd;
+      color: #fff;
+    }
+    .ap-submit-btn.ready { background: #0284c7; }
+    .ap-submit-btn.ready:hover:not(:disabled) { background: #0369a1; }
+
+    /* Menu Slide Drawer (Matches 1000143909.jpg) */
+    .menu-drawer-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.45);
+      z-index: 900;
+      justify-content: flex-end;
+    }
+    .menu-drawer-backdrop.open { display: flex; }
+    .menu-drawer-panel {
+      width: 100%;
+      max-width: 390px;
+      height: 100%;
+      background: #fff;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: -8px 0 28px rgba(15, 23, 42, 0.2);
+      animation: slideLeft 0.18s ease-out;
+    }
+    @keyframes slideLeft { from { transform: translateX(30px); opacity: 0.6; } to { transform: translateX(0); opacity: 1; } }
+    .md-profile-head {
+      padding: 18px 16px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .md-section-title {
+      padding: 12px 16px 6px;
+      font-size: 13px;
+      font-weight: 800;
+      color: #0284c7;
+    }
+    .md-item-btn {
+      width: 100%;
+      background: #fff;
+      color: #1e293b;
+      border-radius: 0;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      text-align: left;
+    }
+    .md-item-btn:hover:not(:disabled) { background: #f0f9ff; }
+    .md-footer {
+      padding: 14px 16px 20px;
+      border-top: 1px solid #e2e8f0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      background: #f8fafc;
+    }
 
     /* Party Entry Screen */
     .party-entry-screen {
@@ -460,7 +725,7 @@
     .pe-confirm-btn.ready { background: #0284c7; color: #fff; }
     .pe-confirm-btn.ready:hover:not(:disabled) { background: #0369a1; }
 
-    /* Secondary Pages & Cards */
+    /* Cards, Forms & Tables */
     .card {
       background: #fff;
       border-radius: 14px;
@@ -479,10 +744,7 @@
       font-size: 14px;
       background: #fff;
     }
-    input:focus, select:focus {
-      outline: none;
-      border-color: #0284c7;
-    }
+    input:focus, select:focus { outline: none; border-color: #0284c7; }
     button {
       background: #0284c7;
       color: #fff;
@@ -593,7 +855,7 @@
       position: fixed;
       inset: 0;
       background: rgba(15, 23, 42, 0.55);
-      z-index: 999;
+      z-index: 1100;
       align-items: center;
       justify-content: center;
       padding: 16px;
@@ -773,36 +1035,82 @@
 
       <div id="tallyMsg" class="msg"></div>
 
-      <button type="button" class="fab-add-btn" id="openAddPartyModalBtn" title="নতুন পার্টি যোগ করুন">👤+</button>
+      <button type="button" class="fab-add-btn" id="openAddPartyScreenBtn" title="নতুন কাস্টমার/সাপ্লায়ার যোগ করুন">👤+</button>
     </section>
 
-    <!-- TAB 2: ক্যাশবক্স -->
+    <!-- TAB 2: ক্যাশবক্স (Matches 1000143910.jpg) -->
     <section id="page-cashbox" class="page-view" aria-label="ক্যাশবক্স">
-      <div class="card">
-        <h2>আজকের ক্যাশবক্স হিসাব</h2>
-        <div class="summary-strip" style="box-shadow:none; padding:6px 0; margin-bottom:10px;">
-          <div class="summary-col">
-            <div id="todayReceived" class="summary-val credit">৳0</div>
-            <div class="summary-lbl">আজ জমা পেলাম</div>
+      <div class="cb-hero-card">
+        <div class="cb-top-grid">
+          <div>
+            <div id="cbTodaySale" class="cb-big-num">৳0.00</div>
+            <div class="cb-sub-lbl">আজকের বেচা</div>
           </div>
-          <div class="summary-col">
-            <div id="todayDue" class="summary-val due">৳0</div>
-            <div class="summary-lbl">আজ নতুন বাকি দিলাম</div>
+          <div>
+            <div id="cbCurrentCash" class="cb-big-num">৳0.00</div>
+            <div class="cb-sub-lbl">বর্তমান ক্যাশ</div>
           </div>
+        </div>
+
+        <div class="cb-mid-grid">
+          <div class="credit">আজ পেলাম <span id="cbTodayGot">৳0.00</span></div>
+          <div class="due">আজ দিলাম <span id="cbTodayGave">৳0.00</span></div>
+        </div>
+
+        <div class="cb-action-pills">
+          <button type="button" id="cbReportBtn" class="cb-pill-yellow">📄 রিপোর্ট</button>
+          <button type="button" id="cbReconcileBtn" class="cb-pill-outline">⇄ ক্যাশবক্স মিলাই</button>
+          <button type="button" id="cbTogglePrivacyBtn" class="circle-icon-btn" style="width:32px; height:32px; font-size:13px;" title="হিসাব লুকান/দেখান">👁</button>
+        </div>
+
+        <div class="cb-foot-stats">
+          <div class="credit">বাকি আদায় <span id="cbDueCollect">৳0.00</span></div>
+          <div>পেমেন্ট দেয়া <span id="cbPaymentGiven">৳0.00</span></div>
         </div>
       </div>
 
-      <div class="card">
-        <h2>পার্টি বেছে লেনদেন করুন</h2>
-        <p style="margin:0 0 10px; font-size:13px; color:#475569;">
-          যেকোনো পার্টির লেনদেন স্ক্রিন খুলতে পার্টি নির্বাচন করুন অথবা **টালি** ট্যাব থেকে সরাসরি পার্টিতে চাপ দিন।
-        </p>
-        <label for="cashboxPartySelect">পার্টি নির্বাচন করুন</label>
-        <select id="cashboxPartySelect">
-          <option value="">-- পার্টি নির্বাচন করুন --</option>
-        </select>
-        <button type="button" id="openSelectedPartyLedgerBtn">পার্টির খাতা খুলুন</button>
+      <div class="cb-list-card">
+        <button type="button" class="cb-row-btn" data-cb-entry="cash_sale">
+          <span class="cb-row-left">
+            <span class="cb-icon-circle" style="background:#dcfce7; color:#15803d;">↙</span>
+            <span class="cb-row-title">ক্যাশ বেচা</span>
+          </span>
+          <span class="cb-row-right credit"><span id="cbValCashSale">৳0.00</span> <span>›</span></span>
+        </button>
+
+        <button type="button" class="cb-row-btn" data-cb-entry="cash_buy">
+          <span class="cb-row-left">
+            <span class="cb-icon-circle" style="background:#fee2e2; color:#dc2626;">↗</span>
+            <span class="cb-row-title">ক্যাশ কেনা</span>
+          </span>
+          <span class="cb-row-right due"><span id="cbValCashBuy">৳0.00</span> <span>›</span></span>
+        </button>
+
+        <button type="button" class="cb-row-btn" data-cb-entry="expense">
+          <span class="cb-row-left">
+            <span class="cb-icon-circle" style="background:#fee2e2; color:#dc2626;">↗</span>
+            <span class="cb-row-title">খরচ</span>
+          </span>
+          <span class="cb-row-right due"><span id="cbValExpense">৳0.00</span> <span>›</span></span>
+        </button>
+
+        <button type="button" class="cb-row-btn" data-cb-entry="owner_gave">
+          <span class="cb-row-left">
+            <span class="cb-icon-circle" style="background:#dcfce7; color:#15803d;">↙</span>
+            <span class="cb-row-title">মালিক দিল</span>
+          </span>
+          <span class="cb-row-right credit"><span id="cbValOwnerGave">৳0.00</span> <span>›</span></span>
+        </button>
+
+        <button type="button" class="cb-row-btn" data-cb-entry="owner_took">
+          <span class="cb-row-left">
+            <span class="cb-icon-circle" style="background:#fee2e2; color:#dc2626;">↗</span>
+            <span class="cb-row-title">মালিক নিল</span>
+          </span>
+          <span class="cb-row-right due"><span id="cbValOwnerTook">৳0.00</span> <span>›</span></span>
+        </button>
       </div>
+      <div id="cashboxMsg" class="msg"></div>
     </section>
 
     <!-- TAB 3: টালিপে / লেনদেন -->
@@ -841,7 +1149,7 @@
       </div>
     </section>
 
-    <!-- TAB 4: মেনু -->
+    <!-- TAB 4: মেনু (Fallback section + slide drawer) -->
     <section id="page-menu" class="page-view" aria-label="মেনু ও ব্যাকআপ">
       <div class="card">
         <h2>অ্যাকাউন্ট ও ব্যাকআপ</h2>
@@ -858,6 +1166,115 @@
         <div id="backupMsg" class="msg"></div>
       </div>
     </section>
+  </div>
+
+  <!-- ADD CUSTOMER/SUPPLIER SCREEN (Matches 1000143908.jpg) -->
+  <div id="addPartyScreen" class="add-party-screen" aria-hidden="true">
+    <div class="ap-header">
+      <button type="button" id="apBackBtn" class="ap-back-btn" aria-label="ফিরে যান">←</button>
+      <h2 class="ap-title">নতুন কাস্টমার/সাপ্লায়ার</h2>
+    </div>
+
+    <div class="ap-body">
+      <form id="partyForm">
+        <div class="ap-role-row">
+          <div class="ap-avatar-placeholder">👤<span style="font-size:11px; margin-left:-4px;">📷</span></div>
+
+          <label id="apRoleCustomerCard" class="ap-radio-card selected">
+            <input type="radio" name="partyRole" id="roleCustomer" value="customer" checked />
+            <span>কাস্টমার</span>
+          </label>
+
+          <label id="apRoleSupplierCard" class="ap-radio-card">
+            <input type="radio" name="partyRole" id="roleSupplier" value="supplier" />
+            <span>সাপ্লায়ার</span>
+          </label>
+        </div>
+
+        <button type="button" id="pickContactBtn" class="ap-contact-btn">📇 ফোনবুক থেকে যোগ করি</button>
+
+        <div class="ap-input-box">
+          <span>👤</span>
+          <input type="text" id="partyName" placeholder="নাম" required />
+        </div>
+
+        <div class="ap-input-box">
+          <span>📞</span>
+          <input type="tel" id="partyPhone" placeholder="মোবাইল নম্বর" />
+        </div>
+
+        <label for="openingBalance" style="margin-top:6px;">শুরুর ব্যালেন্স (৳) — বাকি (+), জমা (-)</label>
+        <input type="number" id="openingBalance" step="any" value="0" />
+
+        <div id="partyMsg" class="msg"></div>
+        <button type="submit" id="addPartyBtn" class="ap-submit-btn">নিশ্চিত</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MENU SLIDE DRAWER (Matches 1000143909.jpg) -->
+  <div id="menuDrawerBackdrop" class="menu-drawer-backdrop" aria-hidden="true">
+    <aside class="menu-drawer-panel" role="dialog" aria-label="মেনু">
+      <div>
+        <div class="md-profile-head">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div id="mdAvatar" class="avatar-circle" style="background:#fef08a; color:#854d0e;">MN</div>
+            <div>
+              <div id="mdProfileName" style="font-size:15px; font-weight:800; color:#0f172a;">MD Noyon Mia</div>
+              <div id="mdProfilePhone" style="font-size:12px; color:#64748b;">+88017XXXXXXXX</div>
+            </div>
+          </div>
+          <span style="color:#64748b; font-size:18px;">›</span>
+        </div>
+
+        <div style="padding:10px 14px 4px;">
+          <div class="gold-banner" id="mdGoldBanner" style="margin-bottom:4px;">
+            <span>👑 হিসাব খাতা গোল্ড কিনুন</span>
+            <span>›</span>
+          </div>
+        </div>
+
+        <div class="md-section-title">হিসাব খাতা</div>
+        <button type="button" class="md-item-btn" data-md-nav="cashbox">
+          <span>🏷️</span>
+          <span>বেচা কেনা হিসাব</span>
+        </button>
+        <button type="button" class="md-item-btn" data-md-nav="expense">
+          <span>📤</span>
+          <span>খরচ</span>
+        </button>
+        <button type="button" class="md-item-btn" data-md-nav="due">
+          <span>📖</span>
+          <span>বাকি হিসাব</span>
+        </button>
+        <button type="button" class="md-item-btn" data-md-nav="cashbox">
+          <span>💼</span>
+          <span>ক্যাশ হিসাব</span>
+        </button>
+        <button type="button" class="md-item-btn" data-md-nav="transactions">
+          <span>📋</span>
+          <span>মালিকের রিপোর্ট</span>
+        </button>
+
+        <div class="md-section-title">অন্যান্য</div>
+        <button type="button" class="md-item-btn" data-md-nav="backup">
+          <span>⚙️</span>
+          <span>সেটিংস ও ব্যাকআপ</span>
+        </button>
+        <button type="button" class="md-item-btn" id="mdShareAppBtn">
+          <span>🔗</span>
+          <span>হিসাব খাতা রেফার করুন</span>
+        </button>
+      </div>
+
+      <div class="md-footer">
+        <div style="font-size:15px; font-weight:800; color:#0284c7;">৳ হিসাব খাতা</div>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:11px; color:#64748b;">ভার্সন - ৭.১৮.১</span>
+          <button type="button" id="mdLogoutBtn" class="mini-action-btn btn-logout">লগআউট</button>
+        </div>
+      </div>
+    </aside>
   </div>
 
   <!-- PARTY TRANSACTION SCREEN -->
@@ -976,28 +1393,21 @@
     </button>
   </nav>
 
-  <!-- Add Party Modal -->
-  <div id="addPartyModal" class="modal-backdrop" aria-hidden="true">
+  <!-- Cashbox Entry Modal -->
+  <div id="cashboxEntryModal" class="modal-backdrop" aria-hidden="true">
     <div class="modal-box">
-      <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:10px;">
-        <h3 style="margin:0;">নতুন পার্টি যোগ করুন</h3>
-        <button type="button" id="pickContactBtn" class="mini-action-btn" style="background:#0284c7; color:#fff;">ফোনবুক</button>
-      </div>
-      <form id="partyForm">
-        <label for="partyName">পার্টির নাম *</label>
-        <input type="text" id="partyName" placeholder="যেমন: Dr Belal Ahmed Raghaichoti G" required />
-
-        <label for="partyPhone">মোবাইল নম্বর</label>
-        <input type="text" id="partyPhone" placeholder="যেমন: +88017XXXXXXXX" />
-
-        <label for="openingBalance">শুরুর ব্যালেন্স (৳) — বাকি (+), জমা (-)</label>
-        <input type="number" id="openingBalance" step="any" value="0" />
-
+      <h3 id="cbModalTitle">ক্যাশবক্স এন্ট্রি</h3>
+      <form id="cashboxEntryForm">
+        <input type="hidden" id="cbEntryKind" />
+        <label for="cbAmountInput">টাকার পরিমাণ (৳) *</label>
+        <input type="number" id="cbAmountInput" step="any" min="0.01" placeholder="0.00" required />
+        <label for="cbNoteInput">বিবরণ / নোট</label>
+        <input type="text" id="cbNoteInput" placeholder="যেমন: নগদ বিক্রয় বা খরচ" />
         <div class="modal-actions">
-          <button type="submit" id="addPartyBtn">পার্টি সেভ করুন</button>
-          <button type="button" id="closeAddPartyModalBtn" class="btn-cancel">বন্ধ</button>
+          <button type="submit" id="cbSaveBtn">নিশ্চিত করুন</button>
+          <button type="button" id="cbCancelBtn" class="btn-cancel">বাতিল</button>
         </div>
-        <div id="partyMsg" class="msg"></div>
+        <div id="cbFormMsg" class="msg"></div>
       </form>
     </div>
   </div>
@@ -1109,7 +1519,7 @@
         }
         if ("serviceWorker" in navigator && window.location.protocol.startsWith("http")) {
           const swCode = `
-            const CACHE_NAME = "hisab-khata-sky-v1";
+            const CACHE_NAME = "hisab-khata-complete-v1";
             self.addEventListener("install", () => self.skipWaiting());
             self.addEventListener("activate", (event) => {
               event.waitUntil(caches.keys().then((keys) => Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k)))));
@@ -1132,6 +1542,7 @@
   <script type="module">
     const LOGIN_PHONE_KEY = "hisab_khata_logged_phone_v1";
     const LOGIN_PROFILE_KEY = "hisab_khata_profile_name_v1";
+    const CASHBOX_STATE_KEY = "hisab_khata_cashbox_v1";
 
     const phoneLoginScreen = document.getElementById("phoneLoginScreen");
     const phoneSendOtpForm = document.getElementById("phoneSendOtpForm");
@@ -1149,9 +1560,31 @@
     const menuAccountPhone = document.getElementById("menuAccountPhone");
     const logoutPhoneBtn = document.getElementById("logoutPhoneBtn");
 
+    const menuDrawerBackdrop = document.getElementById("menuDrawerBackdrop");
+    const mdAvatar = document.getElementById("mdAvatar");
+    const mdProfileName = document.getElementById("mdProfileName");
+    const mdProfilePhone = document.getElementById("mdProfilePhone");
+    const mdLogoutBtn = document.getElementById("mdLogoutBtn");
+    const mdShareAppBtn = document.getElementById("mdShareAppBtn");
+
+    const addPartyScreen = document.getElementById("addPartyScreen");
+    const openAddPartyScreenBtn = document.getElementById("openAddPartyScreenBtn");
+    const apBackBtn = document.getElementById("apBackBtn");
+    const apRoleCustomerCard = document.getElementById("apRoleCustomerCard");
+    const apRoleSupplierCard = document.getElementById("apRoleSupplierCard");
+    const roleCustomerRadio = document.getElementById("roleCustomer");
+    const roleSupplierRadio = document.getElementById("roleSupplier");
+    const addPartyBtn = document.getElementById("addPartyBtn");
+
     let pendingProfileName = "";
     let pendingPhone = "";
     let generatedOtpCode = "";
+
+    const getInitials = (name) => {
+      const parts = String(name || "P").trim().split(/\s+/).filter(Boolean);
+      if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
+      return String(name || "P").trim().slice(0, 2).toUpperCase();
+    };
 
     function normalizePhoneNumber(raw) {
       const digits = String(raw || "").replace(/[^\d]/g, "");
@@ -1174,6 +1607,9 @@
         loggedInPhoneBadge.textContent = `নম্বর: ${cleanPhone}`;
         menuProfileName.textContent = cleanName;
         menuAccountPhone.textContent = cleanPhone;
+        mdProfileName.textContent = cleanName;
+        mdProfilePhone.textContent = cleanPhone;
+        mdAvatar.textContent = getInitials(cleanName);
       } else {
         localStorage.removeItem(LOGIN_PROFILE_KEY);
         localStorage.removeItem(LOGIN_PHONE_KEY);
@@ -1181,6 +1617,9 @@
         loggedInPhoneBadge.textContent = "লগইন প্রয়োজন";
         menuProfileName.textContent = "-";
         menuAccountPhone.textContent = "-";
+        mdProfileName.textContent = "-";
+        mdProfilePhone.textContent = "-";
+        mdAvatar.textContent = "HK";
         pendingProfileName = "";
         pendingPhone = "";
         generatedOtpCode = "";
@@ -1227,8 +1666,7 @@
 
     verifyOtpForm.addEventListener("submit", (e) => {
       e.preventDefault();
-      const entered = otpCodeInput.value.trim();
-      if (entered !== generatedOtpCode) {
+      if (otpCodeInput.value.trim() !== generatedOtpCode) {
         loginMsg.textContent = "ভুল কোড দিয়েছেন, সঠিক কোড লিখুন।";
         loginMsg.className = "msg err";
         return;
@@ -1247,26 +1685,43 @@
       loginProfileNameInput.focus();
     });
 
-    logoutPhoneBtn.addEventListener("click", () => {
+    const handleLogoutFlow = () => {
+      closeMenuDrawer();
       if (confirm("লগআউট করলে আবার প্রোফাইল নাম ও ফোন নম্বর দিয়ে লগইন করতে হবে। লগআউট করবেন?")) {
         applyLoggedInState("", "");
       }
-    });
+    };
+    logoutPhoneBtn.addEventListener("click", handleLogoutFlow);
+    mdLogoutBtn.addEventListener("click", handleLogoutFlow);
 
     const savedName = localStorage.getItem(LOGIN_PROFILE_KEY);
     const savedPhone = localStorage.getItem(LOGIN_PHONE_KEY);
-    if (savedName && savedPhone) {
-      applyLoggedInState(savedName, savedPhone);
-    } else {
-      applyLoggedInState("", "");
-    }
+    if (savedName && savedPhone) applyLoggedInState(savedName, savedPhone);
+    else applyLoggedInState("", "");
 
+    // Navigation & Slide Menu Drawer
     const dbStatusEl = document.getElementById("dbStatus");
     const installAppBtn = document.getElementById("installAppBtn");
     const navButtons = Array.from(document.querySelectorAll(".nav-tab-btn"));
     const pageSections = Array.from(document.querySelectorAll(".page-view"));
 
+    function openMenuDrawer() {
+      menuDrawerBackdrop.classList.add("open");
+      menuDrawerBackdrop.setAttribute("aria-hidden", "false");
+    }
+    function closeMenuDrawer() {
+      menuDrawerBackdrop.classList.remove("open");
+      menuDrawerBackdrop.setAttribute("aria-hidden", "true");
+    }
+    menuDrawerBackdrop.addEventListener("click", (e) => {
+      if (e.target === menuDrawerBackdrop) closeMenuDrawer();
+    });
+
     function switchPage(pageId) {
+      if (pageId === "page-menu") {
+        openMenuDrawer();
+        return;
+      }
       const targetExists = pageSections.some((sec) => sec.id === pageId);
       const activeId = targetExists ? pageId : "page-tally";
       pageSections.forEach((sec) => sec.classList.toggle("active", sec.id === activeId));
@@ -1276,6 +1731,39 @@
 
     navButtons.forEach((btn) => {
       btn.addEventListener("click", () => switchPage(btn.getAttribute("data-page")));
+    });
+
+    document.querySelectorAll("[data-md-nav]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const target = btn.getAttribute("data-md-nav");
+        closeMenuDrawer();
+        if (target === "cashbox") switchPage("page-cashbox");
+        else if (target === "transactions") switchPage("page-tallypay");
+        else if (target === "backup") {
+          pageSections.forEach((sec) => sec.classList.toggle("active", sec.id === "page-menu"));
+          navButtons.forEach((b) => b.classList.toggle("active", b.getAttribute("data-page") === "page-menu"));
+        } else if (target === "due") {
+          switchPage("page-tally");
+          statusFilterIdx = 1;
+          statusFilterLabel.textContent = "ফিল্টার: " + statusFilterLabels.due;
+          cycleStatusFilterBtn.classList.add("active");
+          renderFilteredParties();
+        } else if (target === "expense") {
+          switchPage("page-cashbox");
+          openCashboxEntryModal("expense");
+        }
+      });
+    });
+
+    document.getElementById("mdGoldBanner").addEventListener("click", () => {
+      closeMenuDrawer();
+      pageSections.forEach((sec) => sec.classList.toggle("active", sec.id === "page-menu"));
+    });
+
+    mdShareAppBtn.addEventListener("click", async () => {
+      const shareText = "ডিজিটাল হিসাব খাতা দিয়ে সহজে কাস্টমার ও ক্যাশবক্সের হিসাব রাখুন!";
+      if (navigator.share) await navigator.share({ title: "ডিজিটাল হিসাব খাতা", text: shareText, url: location.href }).catch(() => {});
+      else prompt("শেয়ার লিংক কপি করুন:", location.href);
     });
 
     let deferredInstallPrompt = null;
@@ -1332,20 +1820,12 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    const addPartyModal = document.getElementById("addPartyModal");
-    const openAddPartyModalBtn = document.getElementById("openAddPartyModalBtn");
-    const closeAddPartyModalBtn = document.getElementById("closeAddPartyModalBtn");
     const partyForm = document.getElementById("partyForm");
     const pickContactBtn = document.getElementById("pickContactBtn");
     const partyNameInput = document.getElementById("partyName");
     const partyPhoneInput = document.getElementById("partyPhone");
     const partyMsg = document.getElementById("partyMsg");
     const tallyMsg = document.getElementById("tallyMsg");
-
-    const cashboxPartySelect = document.getElementById("cashboxPartySelect");
-    const openSelectedPartyLedgerBtn = document.getElementById("openSelectedPartyLedgerBtn");
-    const todayReceivedEl = document.getElementById("todayReceived");
-    const todayDueEl = document.getElementById("todayDue");
 
     const partyEntryScreen = document.getElementById("partyEntryScreen");
     const peBackBtn = document.getElementById("peBackBtn");
@@ -1394,6 +1874,17 @@
     const menuTotalParties = document.getElementById("menuTotalParties");
     const inboxCount = document.getElementById("inboxCount");
 
+    // Cashbox elements
+    const cashboxEntryModal = document.getElementById("cashboxEntryModal");
+    const cashboxEntryForm = document.getElementById("cashboxEntryForm");
+    const cbModalTitle = document.getElementById("cbModalTitle");
+    const cbEntryKind = document.getElementById("cbEntryKind");
+    const cbAmountInput = document.getElementById("cbAmountInput");
+    const cbNoteInput = document.getElementById("cbNoteInput");
+    const cbCancelBtn = document.getElementById("cbCancelBtn");
+    const cbFormMsg = document.getElementById("cbFormMsg");
+    const cashboxMsg = document.getElementById("cashboxMsg");
+
     const khataModal = document.getElementById("khataModal");
     const khataTitle = document.getElementById("khataTitle");
     const khataMeta = document.getElementById("khataMeta");
@@ -1425,12 +1916,39 @@
     let partiesMap = new Map();
     let latestParties = [];
     let latestTransactions = [];
+    let latestReceivable = 0;
+    let latestPayable = 0;
+    let cashboxPrivacyHidden = false;
+
     const statusFilterModes = ["all", "due", "advance"];
     const statusFilterLabels = { all: "সব", due: "শুধু পাবো", advance: "শুধু জমা" };
     let statusFilterIdx = 0;
     let todayOnlyFilter = false;
     let activePartyId = null;
     let activeKhataPartyId = null;
+
+    const defaultCashbox = {
+      cash_sale: 0,
+      cash_buy: 0,
+      expense: 0,
+      owner_gave: 0,
+      owner_took: 0
+    };
+    let cashboxTotals = { ...defaultCashbox };
+    try {
+      const savedCb = JSON.parse(localStorage.getItem(CASHBOX_STATE_KEY) || "null");
+      if (savedCb && typeof savedCb === "object") cashboxTotals = { ...defaultCashbox, ...savedCb };
+    } catch (e) {}
+
+    const saveCashboxState = () => localStorage.setItem(CASHBOX_STATE_KEY, JSON.stringify(cashboxTotals));
+
+    const cbKindTitles = {
+      cash_sale: "ক্যাশ বেচা",
+      cash_buy: "ক্যাশ কেনা",
+      expense: "খরচ",
+      owner_gave: "মালিক দিল",
+      owner_took: "মালিক নিল"
+    };
 
     const avatarPalette = [
       { bg: "#dbeafe", fg: "#1d4ed8" },
@@ -1439,12 +1957,6 @@
       { bg: "#fef9c3", fg: "#a16207" },
       { bg: "#e0e7ff", fg: "#4338ca" }
     ];
-
-    const getInitials = (name) => {
-      const parts = String(name || "P").trim().split(/\s+/).filter(Boolean);
-      if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
-      return String(name || "P").trim().slice(0, 2).toUpperCase();
-    };
 
     const getAvatarStyle = (name) => {
       let hash = 0;
@@ -1467,6 +1979,7 @@
     };
 
     const formatBDT = (num) => {
+      if (cashboxPrivacyHidden) return "৳••••";
       const n = Number(num) || 0;
       return "৳" + Math.abs(n).toLocaleString("en-BD", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     };
@@ -1510,11 +2023,178 @@
       return `https://wa.me/${waPhone}?text=${encodeURIComponent(msgText)}`;
     };
 
+    function renderCashboxDashboard() {
+      let todayGot = 0;
+      let todayGave = 0;
+      let todayCount = 0;
+      latestTransactions.forEach((tx) => {
+        if (isTodayDate(tx.createdAt || tx.date)) {
+          todayCount += 1;
+          const amt = Math.abs(Number(tx.amount) || 0);
+          if (tx.type === "receive") todayGot += amt;
+          else todayGave += amt;
+        }
+      });
+
+      const currentCash =
+        (Number(cashboxTotals.cash_sale) || 0) +
+        (Number(cashboxTotals.owner_gave) || 0) +
+        todayGot -
+        (Number(cashboxTotals.cash_buy) || 0) -
+        (Number(cashboxTotals.expense) || 0) -
+        (Number(cashboxTotals.owner_took) || 0);
+
+      document.getElementById("cbTodaySale").textContent = formatBDT(cashboxTotals.cash_sale);
+      document.getElementById("cbCurrentCash").textContent = formatBDT(currentCash);
+      document.getElementById("cbTodayGot").textContent = formatBDT(todayGot);
+      document.getElementById("cbTodayGave").textContent = formatBDT(todayGave);
+      document.getElementById("cbDueCollect").textContent = formatBDT(latestReceivable);
+      document.getElementById("cbPaymentGiven").textContent = formatBDT(latestPayable);
+
+      document.getElementById("cbValCashSale").textContent = formatBDT(cashboxTotals.cash_sale);
+      document.getElementById("cbValCashBuy").textContent = formatBDT(cashboxTotals.cash_buy);
+      document.getElementById("cbValExpense").textContent = formatBDT(cashboxTotals.expense);
+      document.getElementById("cbValOwnerGave").textContent = formatBDT(cashboxTotals.owner_gave);
+      document.getElementById("cbValOwnerTook").textContent = formatBDT(cashboxTotals.owner_took);
+      inboxCount.textContent = String(todayCount);
+    }
+
+    function openCashboxEntryModal(kind) {
+      cbEntryKind.value = kind;
+      cbModalTitle.textContent = cbKindTitles[kind] || "ক্যাশবক্স এন্ট্রি";
+      cbAmountInput.value = "";
+      cbNoteInput.value = "";
+      cbFormMsg.textContent = "";
+      cashboxEntryModal.classList.add("open");
+      cashboxEntryModal.setAttribute("aria-hidden", "false");
+      cbAmountInput.focus();
+    }
+
+    cbCancelBtn.addEventListener("click", () => cashboxEntryModal.classList.remove("open"));
+    cashboxEntryModal.addEventListener("click", (e) => {
+      if (e.target === cashboxEntryModal) cashboxEntryModal.classList.remove("open");
+    });
+
+    document.querySelectorAll("[data-cb-entry]").forEach((btn) => {
+      btn.addEventListener("click", () => openCashboxEntryModal(btn.getAttribute("data-cb-entry")));
+    });
+
+    cashboxEntryForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const kind = cbEntryKind.value;
+      const amt = Number(cbAmountInput.value) || 0;
+      if (amt <= 0 || !(kind in cashboxTotals)) return;
+      cashboxTotals[kind] = (Number(cashboxTotals[kind]) || 0) + amt;
+      saveCashboxState();
+      renderCashboxDashboard();
+      cashboxEntryModal.classList.remove("open");
+      cashboxMsg.textContent = `${cbKindTitles[kind]} (${formatBDT(amt)}) যুক্ত হয়েছে ✓`;
+      cashboxMsg.className = "msg ok";
+    });
+
+    document.getElementById("cbReportBtn").addEventListener("click", () => switchPage("page-tallypay"));
+    document.getElementById("cbReconcileBtn").addEventListener("click", () => {
+      const inputVal = prompt("বর্তমান প্রকৃত ক্যাশ পরিমাণ লিখুন (৳):", String((Number(cashboxTotals.cash_sale) || 0) + (Number(cashboxTotals.owner_gave) || 0) - (Number(cashboxTotals.cash_buy) || 0) - (Number(cashboxTotals.expense) || 0) - (Number(cashboxTotals.owner_took) || 0)));
+      if (inputVal === null) return;
+      const targetCash = Number(inputVal);
+      if (isNaN(targetCash)) return;
+      cashboxTotals.cash_sale = Math.max(0, targetCash);
+      cashboxTotals.cash_buy = 0;
+      cashboxTotals.expense = 0;
+      cashboxTotals.owner_gave = 0;
+      cashboxTotals.owner_took = 0;
+      saveCashboxState();
+      renderCashboxDashboard();
+      cashboxMsg.textContent = "ক্যাশবক্স ব্যালেন্স মেলানো হয়েছে ✓";
+      cashboxMsg.className = "msg ok";
+    });
+    document.getElementById("cbTogglePrivacyBtn").addEventListener("click", () => {
+      cashboxPrivacyHidden = !cashboxPrivacyHidden;
+      renderCashboxDashboard();
+    });
+
+    // Add Customer/Supplier Screen (Matches 1000143908.jpg)
+    function syncAddPartyFormState() {
+      const hasName = partyNameInput.value.trim().length > 0;
+      addPartyBtn.disabled = !hasName;
+      addPartyBtn.classList.toggle("ready", hasName);
+      apRoleCustomerCard.classList.toggle("selected", roleCustomerRadio.checked);
+      apRoleSupplierCard.classList.toggle("selected", roleSupplierRadio.checked);
+    }
+
+    roleCustomerRadio.addEventListener("change", syncAddPartyFormState);
+    roleSupplierRadio.addEventListener("change", syncAddPartyFormState);
+    partyNameInput.addEventListener("input", syncAddPartyFormState);
+
+    openAddPartyScreenBtn.addEventListener("click", () => {
+      partyForm.reset();
+      document.getElementById("openingBalance").value = "0";
+      roleCustomerRadio.checked = true;
+      partyMsg.textContent = "";
+      syncAddPartyFormState();
+      addPartyScreen.classList.add("open");
+      addPartyScreen.setAttribute("aria-hidden", "false");
+      partyNameInput.focus();
+    });
+
+    apBackBtn.addEventListener("click", () => {
+      addPartyScreen.classList.remove("open");
+      addPartyScreen.setAttribute("aria-hidden", "true");
+    });
+
+    document.querySelector(".quick-grid").addEventListener("click", (e) => {
+      const tile = e.target.closest(".quick-tile");
+      if (!tile) return;
+      const act = tile.getAttribute("data-action");
+      if (act === "add-party") openAddPartyScreenBtn.click();
+      else if (act === "add-tx" || act === "cashbox") switchPage("page-cashbox");
+      else if (act === "transactions") switchPage("page-tallypay");
+      else if (act === "backup") openMenuDrawer();
+      else if (act === "filter-due") {
+        statusFilterIdx = 1;
+        statusFilterLabel.textContent = "ফিল্টার: " + statusFilterLabels.due;
+        cycleStatusFilterBtn.classList.add("active");
+        renderFilteredParties();
+      }
+    });
+
+    document.getElementById("openInboxBtn").addEventListener("click", () => switchPage("page-tallypay"));
+    document.getElementById("openSupportBtn").addEventListener("click", openMenuDrawer);
+    document.getElementById("goldBannerBtn").addEventListener("click", openMenuDrawer);
+
+    pickContactBtn.addEventListener("click", async () => {
+      partyMsg.textContent = "";
+      if (!("contacts" in navigator && navigator.contacts && typeof navigator.contacts.select === "function")) {
+        partyMsg.textContent = "এই ব্রাউজারে সরাসরি ফোনবুক নেই; নাম ও নম্বর লিখে নিশ্চিত করুন।";
+        partyMsg.className = "msg err";
+        return;
+      }
+      pickContactBtn.disabled = true;
+      try {
+        const contacts = await navigator.contacts.select(["name", "tel"], { multiple: false });
+        if (contacts && contacts.length) {
+          const p = contacts[0];
+          const n = Array.isArray(p.name) ? (p.name[0] || "") : (p.name || "");
+          const t = Array.isArray(p.tel) ? (p.tel[0] || "") : (p.tel || "");
+          if (n) partyNameInput.value = n.trim();
+          if (t) partyPhoneInput.value = normalizePhoneForTel(t);
+          syncAddPartyFormState();
+          partyMsg.textContent = "ফোনবুক থেকে তথ্য যুক্ত হয়েছে ✓";
+          partyMsg.className = "msg ok";
+        }
+      } catch (err) {
+        partyMsg.textContent = "ফোনবুক থেকে তথ্য আনা যায়নি।";
+        partyMsg.className = "msg err";
+      } finally {
+        pickContactBtn.disabled = false;
+      }
+    });
+
+    // Party Entry Screen
     function syncPartyEntryFormState() {
       const dueVal = Number(peDueAmount.value) || 0;
       const recVal = Number(peReceiveAmount.value) || 0;
       const hasAmount = dueVal > 0 || recVal > 0;
-
       peDueBox.classList.toggle("active-due", dueVal > 0);
       peReceiveBox.classList.toggle("active-receive", recVal > 0);
       peConfirmBtn.disabled = !hasAmount;
@@ -1525,12 +2205,10 @@
       if ((Number(peDueAmount.value) || 0) > 0) peReceiveAmount.value = "";
       syncPartyEntryFormState();
     });
-
     peReceiveAmount.addEventListener("input", () => {
       if ((Number(peReceiveAmount.value) || 0) > 0) peDueAmount.value = "";
       syncPartyEntryFormState();
     });
-
     pePhotoNoteBtn.addEventListener("click", () => {
       const note = prompt("নোট বা রসিদ/ছবির রেফারেন্স লিখুন:", peNoteInput.value || "");
       if (note !== null) {
@@ -1633,7 +2311,7 @@
     peDelPartyBtn.addEventListener("click", () => { if (activePartyId) deletePartyWithTransactions(activePartyId, peDelPartyBtn); });
     document.getElementById("peGoldBanner").addEventListener("click", () => {
       closePartyEntryScreen();
-      switchPage("page-menu");
+      openMenuDrawer();
     });
 
     peHistoryBody.addEventListener("click", (e) => {
@@ -1646,12 +2324,10 @@
     peTxForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       if (!activePartyId) return;
-
       const dueVal = Number(peDueAmount.value) || 0;
       const recVal = Number(peReceiveAmount.value) || 0;
       const isDue = dueVal > 0;
       const amount = isDue ? dueVal : recVal;
-
       if (amount <= 0) return;
 
       const type = isDue ? "due" : "receive";
@@ -1692,89 +2368,12 @@
       }
     });
 
-    openSelectedPartyLedgerBtn.addEventListener("click", () => {
-      if (cashboxPartySelect.value) openPartyEntryScreen(cashboxPartySelect.value);
-    });
-
-    openAddPartyModalBtn.addEventListener("click", () => {
-      partyMsg.textContent = "";
-      addPartyModal.classList.add("open");
-      addPartyModal.setAttribute("aria-hidden", "false");
-      partyNameInput.focus();
-    });
-    closeAddPartyModalBtn.addEventListener("click", () => addPartyModal.classList.remove("open"));
-    addPartyModal.addEventListener("click", (e) => { if (e.target === addPartyModal) addPartyModal.classList.remove("open"); });
-
-    document.querySelector(".quick-grid").addEventListener("click", (e) => {
-      const tile = e.target.closest(".quick-tile");
-      if (!tile) return;
-      const act = tile.getAttribute("data-action");
-      if (act === "add-party") openAddPartyModalBtn.click();
-      else if (act === "add-tx" || act === "cashbox") switchPage("page-cashbox");
-      else if (act === "transactions") switchPage("page-tallypay");
-      else if (act === "backup") switchPage("page-menu");
-      else if (act === "filter-due") {
-        statusFilterIdx = 1;
-        statusFilterLabel.textContent = "ফিল্টার: " + statusFilterLabels.due;
-        cycleStatusFilterBtn.classList.add("active");
-        renderFilteredParties();
-      }
-    });
-
-    document.getElementById("openInboxBtn").addEventListener("click", () => switchPage("page-tallypay"));
-    document.getElementById("openSupportBtn").addEventListener("click", () => switchPage("page-menu"));
-    document.getElementById("goldBannerBtn").addEventListener("click", () => switchPage("page-menu"));
-
-    function updateTodaySummary() {
-      let r = 0;
-      let d = 0;
-      let todayCount = 0;
-      latestTransactions.forEach((tx) => {
-        if (isTodayDate(tx.createdAt || tx.date)) {
-          todayCount += 1;
-          const amt = Math.abs(Number(tx.amount) || 0);
-          if (tx.type === "receive") r += amt;
-          else d += amt;
-        }
-      });
-      todayReceivedEl.textContent = formatBDT(r);
-      todayDueEl.textContent = formatBDT(d);
-      inboxCount.textContent = String(todayCount);
-    }
-
-    pickContactBtn.addEventListener("click", async () => {
-      partyMsg.textContent = "";
-      if (!("contacts" in navigator && navigator.contacts && typeof navigator.contacts.select === "function")) {
-        partyMsg.textContent = "এই ব্রাউজারে সরাসরি ফোনবুক নেই; নাম ও নম্বর লিখে সেভ করুন।";
-        partyMsg.className = "msg err";
-        return;
-      }
-      pickContactBtn.disabled = true;
-      try {
-        const contacts = await navigator.contacts.select(["name", "tel"], { multiple: false });
-        if (contacts && contacts.length) {
-          const p = contacts[0];
-          const n = Array.isArray(p.name) ? (p.name[0] || "") : (p.name || "");
-          const t = Array.isArray(p.tel) ? (p.tel[0] || "") : (p.tel || "");
-          if (n) partyNameInput.value = n.trim();
-          if (t) partyPhoneInput.value = normalizePhoneForTel(t);
-          partyMsg.textContent = "ফোনবুক থেকে তথ্য যুক্ত হয়েছে ✓";
-          partyMsg.className = "msg ok";
-        }
-      } catch (err) {
-        partyMsg.textContent = "ফোনবুক থেকে তথ্য আনা যায়নি।";
-        partyMsg.className = "msg err";
-      } finally {
-        pickContactBtn.disabled = false;
-      }
-    });
-
+    // CSV & JSON Backup
     const csvEscape = (val) => {
       const str = String(val ?? "");
       const guarded = /^[=+\-@]/.test(str) ? "'" + str : str;
       return `"${guarded.replace(/"/g, '""')}"`;
     };
-
     const downloadFile = (content, filename, mimeType) => {
       const blob = new Blob([content], { type: mimeType });
       const url = URL.createObjectURL(blob);
@@ -1786,7 +2385,6 @@
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
     };
-
     const serializeValueForJSON = (val) => {
       if (val && typeof val.toDate === "function") return val.toDate().toISOString();
       if (Array.isArray(val)) return val.map(serializeValueForJSON);
@@ -1825,9 +2423,7 @@
         await exportAllCsvAction();
         backupMsg.textContent = "CSV ডাউনলোড হয়েছে ✓";
         backupMsg.className = "msg ok";
-      } finally {
-        exportCsvBtn.disabled = false;
-      }
+      } finally { exportCsvBtn.disabled = false; }
     });
 
     exportJsonBtn.addEventListener("click", async () => {
@@ -1838,14 +2434,13 @@
           version: 1,
           exportedAt: new Date().toISOString(),
           parties: latestParties,
-          transactions: latestTransactions
+          transactions: latestTransactions,
+          cashbox: cashboxTotals
         };
         downloadFile(JSON.stringify(payload, null, 2), `hisab-khata-backup-${toLocalDateStr(new Date())}.json`, "application/json;charset=utf-8");
         backupMsg.textContent = `JSON ব্যাকআপ ডাউনলোড হয়েছে (${latestParties.length} পার্টি, ${latestTransactions.length} লেনদেন) ✓`;
         backupMsg.className = "msg ok";
-      } finally {
-        exportJsonBtn.disabled = false;
-      }
+      } finally { exportJsonBtn.disabled = false; }
     });
 
     restoreJsonInput.addEventListener("change", async (e) => {
@@ -1859,6 +2454,11 @@
         const parsed = JSON.parse(await file.text());
         const parties = Array.isArray(parsed.parties) ? parsed.parties : [];
         const transactions = Array.isArray(parsed.transactions) ? parsed.transactions : [];
+        if (parsed.cashbox && typeof parsed.cashbox === "object") {
+          cashboxTotals = { ...defaultCashbox, ...parsed.cashbox };
+          saveCashboxState();
+          renderCashboxDashboard();
+        }
         if (!parties.length && !transactions.length) throw new Error("Empty backup");
 
         const batch = writeBatch(db);
@@ -1874,6 +2474,7 @@
           batch.set(docRef, {
             name: String(p.name || "").trim(),
             phone: String(p.phone || "").trim(),
+            role: p.role === "supplier" ? "supplier" : "customer",
             balance: startBal,
             createdAt: p.createdAt ? new Date(p.createdAt) : serverTimestamp()
           }, { merge: true });
@@ -1905,9 +2506,7 @@
       } catch (err) {
         backupMsg.textContent = "সঠিক JSON ব্যাকআপ ফাইল দিন।";
         backupMsg.className = "msg err";
-      } finally {
-        e.target.value = "";
-      }
+      } finally { e.target.value = ""; }
     });
 
     cycleStatusFilterBtn.addEventListener("click", () => {
@@ -1929,7 +2528,13 @@
       const keyword = (partySearchInput.value || "").trim().toLowerCase();
       const mode = statusFilterModes[statusFilterIdx];
 
-      partyCountSummary.textContent = `কাস্টমার ${latestParties.length} / সাপ্লায়ার ০`;
+      let customerCount = 0;
+      let supplierCount = 0;
+      latestParties.forEach((p) => {
+        if (p.role === "supplier") supplierCount += 1;
+        else customerCount += 1;
+      });
+      partyCountSummary.textContent = `কাস্টমার ${customerCount} / সাপ্লায়ার ${supplierCount}`;
 
       const filtered = latestParties.filter((p) => {
         const bal = Number(p.balance) || 0;
@@ -2151,7 +2756,6 @@
       latestParties = [];
       let rec = 0;
       let pay = 0;
-      let opts = '<option value="">-- পার্টি নির্বাচন করুন --</option>';
 
       snapshot.forEach((docSnap) => {
         const data = docSnap.data();
@@ -2161,17 +2765,15 @@
         latestParties.push(item);
         if (bal > 0) rec += bal;
         if (bal < 0) pay += Math.abs(bal);
-        opts += `<option value="${docSnap.id}">${escapeHtml(data.name)} (${formatBDT(bal)})</option>`;
       });
 
+      latestReceivable = rec;
+      latestPayable = pay;
       document.getElementById("totalReceivable").textContent = formatBDT(rec);
       document.getElementById("totalPayable").textContent = formatBDT(pay);
       menuTotalParties.textContent = String(snapshot.size);
 
-      const prevSel = cashboxPartySelect.value;
-      cashboxPartySelect.innerHTML = opts;
-      if (prevSel && partiesMap.has(prevSel)) cashboxPartySelect.value = prevSel;
-
+      renderCashboxDashboard();
       renderFilteredParties();
       renderFilteredTransactions();
       if (activePartyId && partiesMap.has(activePartyId)) renderPartyEntryScreen(activePartyId);
@@ -2258,7 +2860,7 @@
 
     onSnapshot(query(collection(db, "transactions"), orderBy("createdAt", "desc")), (snapshot) => {
       latestTransactions = snapshot.docs.map((d) => ({ id: d.id, ...serializeValueForJSON(d.data()) }));
-      updateTodaySummary();
+      renderCashboxDashboard();
       renderFilteredParties();
       renderFilteredTransactions();
       if (activePartyId && partiesMap.has(activePartyId)) renderPartyEntryScreen(activePartyId);
@@ -2269,18 +2871,29 @@
       e.preventDefault();
       const name = partyNameInput.value.trim();
       const phone = partyPhoneInput.value.trim();
+      const role = roleSupplierRadio.checked ? "supplier" : "customer";
       const balance = Number(document.getElementById("openingBalance").value) || 0;
+      if (!name) return;
 
       const dup = latestParties.find((p) => String(p.name || "").trim().toLowerCase() === name.toLowerCase() || (phone && String(p.phone || "").trim() === phone));
       if (dup && !confirm(`"${dup.name}" নামে আগে থেকেই পার্টি আছে। তবুও সেভ করবেন?`)) return;
 
-      await addDoc(collection(db, "parties"), { name, phone, balance, createdAt: serverTimestamp() });
-      partyForm.reset();
-      document.getElementById("openingBalance").value = "0";
-      addPartyModal.classList.remove("open");
-      tallyMsg.textContent = `"${name}" সেভ হয়েছে ✓`;
-      tallyMsg.className = "msg ok";
+      addPartyBtn.disabled = true;
+      try {
+        await addDoc(collection(db, "parties"), { name, phone, role, balance, createdAt: serverTimestamp() });
+        partyForm.reset();
+        document.getElementById("openingBalance").value = "0";
+        roleCustomerRadio.checked = true;
+        addPartyScreen.classList.remove("open");
+        addPartyScreen.setAttribute("aria-hidden", "true");
+        tallyMsg.textContent = `"${name}" (${role === "supplier" ? "সাপ্লায়ার" : "কাস্টমার"}) যুক্ত হয়েছে ✓`;
+        tallyMsg.className = "msg ok";
+      } finally {
+        syncAddPartyFormState();
+      }
     });
+
+    renderCashboxDashboard();
 
     function escapeHtml(str) {
       return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
