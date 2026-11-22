@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Digital Hisab Khata - Firestore</title>
+  <style>
+    * { box-sizing: border-box; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+    body { margin: 0; background: #f3f6fb; color: #1e293b; }
+    header { background: #0f766e; color: #fff; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+    header h1 { margin: 0; font-size: 20px; }
+    .status { font-size: 13px; background: rgba(255,255,255,0.18); padding: 6px 12px; border-radius: 999px; }
+    .container { max-width: 1050px; margin: 20px auto; padding: 0 16px; }
+    .summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-bottom: 20px; }
+    .card { background: #fff; border-radius: 12px; padding: 16px; box-shadow: 0 2px 8px rgba(15,23,42,0.06); }
+    .card h3 { margin: 0 0 8px; font-size: 14px; color: #64748b; }
+    .card .amount { font-size: 24px; font-weight: 700; }
+    .due { color: #dc2626; }
+    .credit { color: #16a34a; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 18px; margin-bottom: 22px; }
+    h2 { margin: 0 0 12px; font-size: 17px; }
+    label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 5px; color: #334155; }
+    input, select { width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 8px; margin-bottom: 12px; font-size: 14px; }
+    button { background: #0f766e; color: #fff; border: none; padding: 10px 16px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; width: 100%; }
+    button:hover { background: #115e59; }
+    button:disabled { opacity: 0.6; cursor: not-allowed; }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 20px; }
+    .toolbar button, .toolbar .upload-btn { width: auto; display: inline-flex; align-items: center; justify-content: center; padding: 9px 14px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; margin-bottom: 0; }
+    .btn-json { background: #1d4ed8; color: #fff; }
+    .btn-json:hover { background: #1e40af; }
+    .btn-csv { background: #15803d; color: #fff; }
+    .btn-csv:hover { background: #166534; }
+    .upload-btn { background: #e2e8f0; color: #0f172a; border: 1px solid #cbd5e1; }
+    .upload-btn:hover { background: #cbd5e1; }
+    .toolbar-msg { font-size: 13px; font-weight: 600; }
+    table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(15,23,42,0.06); }
+    th, td { padding: 12px 14px; text-align: left; border-bottom: 1px solid #e2e8f0; font-size: 14px; }
+    th { background: #f8fafc; color: #475569; font-weight: 700; }
+    .badge-due { background: #fee2e2; color: #b91c1c; padding: 3px 8px; border-radius: 6px; font-size: 12px; font-weight: 600; }
+    .badge-receive { background: #dcfce7; color: #15803d; padding: 3px 8px; border-radius: 6px; font-size: 12px; font-weight: 600; }
+    .msg { margin-top: 10px; font-size: 13px; min-height: 18px; }
+    .ok { color: #15803d; }
+    .err { color: #dc2626; }
+    @media (max-width: 640px) {
+      th, td { padding: 10px 8px; font-size: 13px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Digital Hisab Khata (ডিজিটাল হিসাব খাতা)</h1>
+    <div id="dbStatus" class="status">Firestore যুক্ত হচ্ছে...</div>
+  </header>
+
+  <div class="container">
+    <!-- Summary Cards -->
+    <div class="summary">
+      <div class="card">
+        <h3>মোট পার্টি (Total Parties)</h3>
+        <div id="totalParties" class="amount">0</div>
+      </div>
+      <div class="card">
+        <h3>মোট পাবো / বাকি (Total Receivable)</h3>
+        <div id="totalReceivable" class="amount due">৳0</div>
+      </div>
+      <div class="card">
+        <h3>মোট জমা / অগ্রিম (Total Payable / Advance)</h3>
+        <div id="totalPayable" class="amount credit">৳0</div>
+      </div>
+    </div>
+
+    <!-- Backup & Export Bar -->
+    <div class="toolbar">
+      <button type="button" id="exportJsonBtn" class="btn-json">JSON ব্যাকআপ নামান</button>
+      <button type="button" id="exportCsvBtn" class="btn-csv">CSV এক্সপোর্ট করুন</button>
+      <label for="restoreJsonInput" class="upload-btn">JSON রিস্টোর করুন</label>
+      <input type="file" id="restoreJsonInput" accept=".json,application/json" style="display:none;" />
+      <span id="backupMsg" class="toolbar-msg"></span>
+    </div>
+
+    <!-- Forms Grid -->
+    <div class="grid">
+      <!-- Add Party Form -->
+      <div class="card">
+        <h2>নতুন পার্টি যোগ করুন (Add Party)</h2>
+        <form id="partyForm">
+          <label for="partyName">পার্টির নাম (Name) *</label>
+          <input type="text" id="partyName" placeholder="যেমন: করিম ট্রেডার্স" required />
+
+          <label for="partyPhone">মোবাইল নম্বর (Phone)</label>
+          <input type="text" id="partyPhone" placeholder="যেমন: 017XXXXXXXX" />
+
+          <label for="openingBalance">শুরুর ব্যালেন্স (৳) — বাকি হলে (+), জমা হলে (-)</label>
+          <input type="number" id="openingBalance" step="any" value="0" />
+
+          <button type="submit" id="addPartyBtn">পার্টি সেভ করুন</button>
+          <div id="partyMsg" class="msg"></div>
+        </form>
+      </div>
+
+      <!-- Add Transaction Form -->
+      <div class="card">
+        <h2>লেনদেন যুক্ত করুন (Add Transaction)</h2>
+        <form id="txForm">
+          <label for="txParty">পার্টি নির্বাচন করুন (Select Party) *</label>
+          <select id="txParty" required>
+            <option value="">-- আগে পার্টি যুক্ত করুন --</option>
+          </select>
+
+          <label for="txType">লেনদেনের ধরন (Type) *</label>
+          <select id="txType" required>
+            <option value="due">বাকি দিলাম / পাবো (Due / Gave Credit)</option>
+            <option value="receive">টাকা পেলাম / জমা হলো (Received / Payment In)</option>
+          </select>
+
+          <label for="txAmount">টাকার পরিমাণ (Amount in ৳) *</label>
+          <input type="number" id="txAmount" step="any" min="0.01" placeholder="যেমন: 500" required />
+
+          <label for="txNote">নোট / বিবরণ (Note)</label>
+          <input type="text" id="txNote" placeholder="যেমন: চাল বাকি বা ক্যাশ জমা" />
+
+          <button type="submit" id="addTxBtn">লেনদেন সেভ করুন</button>
+          <div id="txMsg" class="msg"></div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Parties Table -->
+    <h2>পার্টি তালিকা ও ব্যালেন্স (Parties List)</h2>
+    <div style="overflow-x:auto; margin-bottom:24px;">
+      <table>
+        <thead>
+          <tr>
+            <th>নাম (Name)</th>
+            <th>ফোন (Phone)</th>
+            <th>বর্তমান ব্যালেন্স (Balance)</th>
+            <th>অবস্থা (Status)</th>
+          </tr>
+        </thead>
+        <tbody id="partiesBody">
+          <tr><td colspan="4">লোড হচ্ছে...</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Recent Transactions Table -->
+    <h2>সাম্প্রতিক লেনদেন (Recent Transactions)</h2>
+    <div style="overflow-x:auto;">
+      <table>
+        <thead>
+          <tr>
+            <th>তারিখ (Date)</th>
+            <th>পার্টি (Party)</th>
+            <th>ধরন (Type)</th>
+            <th>নোট (Note)</th>
+            <th>পরিমাণ (Amount)</th>
+          </tr>
+        </thead>
+        <tbody id="txBody">
+          <tr><td colspan="5">লোড হচ্ছে...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+    import {
+      getFirestore,
+      collection,
+      getDocs,
+      addDoc,
+      doc,
+      updateDoc,
+      writeBatch,
+      increment,
+      onSnapshot,
+      query,
+      orderBy,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyC4dUfe6B5hrzn49c4F6OpuWD7BmFfi6Mc",
+      authDomain: "digital-hisab-khata-db87f.firebaseapp.com",
+      projectId: "digital-hisab-khata-db87f",
+      storageBucket: "digital-hisab-khata-db87f.firebasestorage.app",
+      messagingSenderId: "1058373687985",
+      appId: "1:1058373687985:web:53155b120fc0484c13e090",
+      measurementId: "G-7GDFMF27D2"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const dbStatus = document.getElementById("dbStatus");
+    const partyForm = document.getElementById("partyForm");
+    const txForm = document.getElementById("txForm");
+    const txPartySelect = document.getElementById("txParty");
+    const partiesBody = document.getElementById("partiesBody");
+    const txBody = document.getElementById("txBody");
+    const partyMsg = document.getElementById("partyMsg");
+    const txMsg = document.getElementById("txMsg");
+    const backupMsg = document.getElementById("backupMsg");
+    const exportJsonBtn = document.getElementById("exportJsonBtn");
+    const exportCsvBtn = document.getElementById("exportCsvBtn");
+    const restoreJsonInput = document.getElementById("restoreJsonInput");
+
+    let partiesMap = new Map();
+    let latestParties = [];
+    let latestTransactions = [];
+
+    const formatBDT = (num) => {
+      const n = Number(num) || 0;
+      return "৳" + Math.abs(n).toLocaleString("en-BD", { maximumFractionDigits: 2 });
+    };
+
+    const formatDate = (ts) => {
+      if (!ts) return "এইমাত্র";
+      const d = ts.toDate ? ts.toDate() : new Date(ts);
+      if (isNaN(d.getTime())) return String(ts);
+      return d.toLocaleString("bn-BD", { dateStyle: "medium", timeStyle: "short" });
+    };
+
+    const setBackupStatus = (text, isErr = false) => {
+      backupMsg.textContent = text;
+      backupMsg.className = isErr ? "toolbar-msg err" : "toolbar-msg ok";
+    };
+
+    const getDateStamp = () => {
+      const now = new Date();
+      const y = now.getFullYear();
+      const m = String(now.getMonth() + 1).padStart(2, "0");
+      const d = String(now.getDate()).padStart(2, "0");
+      return `${y}-${m}-${d}`;
+    };
+
+    const downloadFile = (content, filename, mimeType) => {
+      const blob = new Blob([content], { type: mimeType });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    };
+
+    const serializeValueForJSON = (val) => {
+      if (val && typeof val.toDate === "function") {
+        return val.toDate().toISOString();
+      }
+      if (Array.isArray(val)) {
+        return val.map(serializeValueForJSON);
+      }
+      if (val && typeof val === "object") {
+        const out = {};
+        for (const [k, v] of Object.entries(val)) {
+          out[k] = serializeValueForJSON(v);
+        }
+        return out;
+      }
+      return val;
+    };
+
+    const loadSnapshotData = async () => {
+      const [pSnap, tSnap] = await Promise.all([
+        getDocs(collection(db, "parties")),
+        getDocs(query(collection(db, "transactions"), orderBy("createdAt", "desc")))
+      ]);
+      const parties = pSnap.docs.map((d) => ({ id: d.id, ...serializeValueForJSON(d.data()) }));
+      const transactions = tSnap.docs.map((d) => ({ id: d.id, ...serializeValueForJSON(d.data()) }));
+      return { parties, transactions };
+    };
+
+    // Export JSON Backup
+    exportJsonBtn.addEventListener("click", async () => {
+      exportJsonBtn.disabled = true;
+      try {
+        setBackupStatus("JSON ব্যাকআপ তৈরি হচ্ছে...");
+        const data = latestParties.length || latestTransactions.length
+          ? { parties: latestParties, transactions: latestTransactions }
+          : await loadSnapshotData();
+
+        const payload = {
+          app: "Digital Hisab Khata",
+          version: 1,
+          exportedAt: new Date().toISOString(),
+          parties: data.parties,
+          transactions: data.transactions
+        };
+
+        downloadFile(
+          JSON.stringify(payload, null, 2),
+          `digital-hisab-khata-backup-${getDateStamp()}.json`,
+          "application/json;charset=utf-8"
+        );
+        setBackupStatus(`JSON ব্যাকআপ ডাউনলোড হয়েছে (${data.parties.length} পার্টি, ${data.transactions.length} লেনদেন) ✓`);
+      } catch (err) {
+        console.error(err);
+        setBackupStatus("JSON ব্যাকআপ তৈরি করতে সমস্যা হয়েছে।", true);
+      } finally {
+        exportJsonBtn.disabled = false;
+      }
+    });
+
+    // Export CSV
+    const csvEscape = (val) => {
+      const str = String(val ?? "");
+      const guarded = /^[=+\-@]/.test(str) ? "'" + str : str;
+      return `"${guarded.replace(/"/g, '""')}"`;
+    };
+
+    exportCsvBtn.addEventListener("click", async () => {
+      exportCsvBtn.disabled = true;
+      try {
+        setBackupStatus("CSV ফাইল তৈরি হচ্ছে...");
+        const data = latestParties.length || latestTransactions.length
+          ? { parties: latestParties, transactions: latestTransactions }
+          : await loadSnapshotData();
+
+        const pLookup = new Map(data.parties.map((p) => [p.id, p]));
+        const headers = [
+          "তারিখ (Date)",
+          "পার্টির নাম (Party)",
+          "ফোন (Phone)",
+          "ধরন (Type)",
+          "নোট (Note)",
+          "পরিমাণ (Amount)",
+          "পার্টির বর্তমান ব্যালেন্স (Current Balance)"
+        ];
+
+        const lines = [headers.map(csvEscape).join(",")];
+        data.transactions.forEach((tx) => {
+          const party = pLookup.get(tx.partyId) || {};
+          const typeLabel = tx.type === "due" ? "বাকি / পাবো" : "জমা / পেলাম";
+          const amountVal = tx.type === "due" ? Number(tx.amount) || 0 : -(Number(tx.amount) || 0);
+
+          lines.push([
+            csvEscape(formatDate(tx.createdAt || tx.date)),
+            csvEscape(party.name || tx.partyName || "অজানা পার্টি"),
+            csvEscape(party.phone || "-"),
+            csvEscape(typeLabel),
+            csvEscape(tx.note || "-"),
+            csvEscape(amountVal),
+            csvEscape(Number(party.balance) || 0)
+          ].join(","));
+        });
+
+        downloadFile(
+          "\uFEFF" + lines.join("\n"),
+          `digital-hisab-khata-transactions-${getDateStamp()}.csv`,
+          "text/csv;charset=utf-8;"
+        );
+        setBackupStatus(`CSV এক্সপোর্ট সম্পন্ন হয়েছে (${data.transactions.length}টি লেনদেন) ✓`);
+      } catch (err) {
+        console.error(err);
+        setBackupStatus("CSV এক্সপোর্ট করতে সমস্যা হয়েছে।", true);
+      } finally {
+        exportCsvBtn.disabled = false;
+      }
+    });
+
+    // Restore from JSON Backup
+    restoreJsonInput.addEventListener("change", async (e) => {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+
+      const ok = confirm(
+        "সতর্কতা: ব্যাকআপ ফাইল থেকে রিস্টোর করলে বর্তমান পার্টি ও লেনদেনের ডেটা আপডেট/ওভাররাইট হবে। আপনি কি এগিয়ে যেতে চান?"
+      );
+      if (!ok) {
+        e.target.value = "";
+        return;
+      }
+
+      try {
+        setBackupStatus("ব্যাকআপ ফাইল পড়া হচ্ছে...");
+        const rawText = await file.text();
+        const parsed = JSON.parse(rawText);
+
+        const parties = Array.isArray(parsed.parties) ? parsed.parties : [];
+        const transactions = Array.isArray(parsed.transactions) ? parsed.transactions : [];
+
+        if (!parties.length && !transactions.length) {
+          throw new Error("ব্যাকআপ ফাইলে কোনো পার্টি বা লেনদেন নেই।");
+        }
+
+        const batch = writeBatch(db);
+        const partyIdMap = new Map();
+        const recalculatedBalance = new Map();
+
+        parties.forEach((p) => {
+          const oldId = p.id;
+          const docRef = oldId ? doc(db, "parties", String(oldId)) : doc(collection(db, "parties"));
+          if (oldId) {
+            partyIdMap.set(String(oldId), docRef.id);
+          }
+          const startBal = Number(p.balance) || 0;
+          recalculatedBalance.set(docRef.id, startBal);
+
+          batch.set(
+            docRef,
+            {
+              name: String(p.name || "").trim(),
+              phone: String(p.phone || "").trim(),
+              balance: startBal,
+              createdAt: p.createdAt ? new Date(p.createdAt) : serverTimestamp()
+            },
+            { merge: true }
+          );
+        });
+
+        transactions.forEach((tx) => {
+          const txRef = tx.id ? doc(db, "transactions", String(tx.id)) : doc(collection(db, "transactions"));
+          const mappedPartyId = partyIdMap.get(String(tx.partyId)) || tx.partyId || "";
+          const amount = Math.abs(Number(tx.amount) || 0);
+          const type = tx.type === "receive" ? "receive" : "due";
+
+          if (recalculatedBalance.has(mappedPartyId)) {
+            const delta = type === "due" ? amount : -amount;
+            recalculatedBalance.set(mappedPartyId, (recalculatedBalance.get(mappedPartyId) || 0) + delta);
+          }
+
+          batch.set(
+            txRef,
+            {
+              partyId: mappedPartyId,
+              partyName: String(tx.partyName || ""),
+              type,
+              amount,
+              note: String(tx.note || ""),
+              date: tx.date || new Date().toISOString(),
+              createdAt: tx.createdAt ? new Date(tx.createdAt) : serverTimestamp()
+            },
+            { merge: true }
+          );
+        });
+
+        recalculatedBalance.forEach((bal, pId) => {
+          batch.update(doc(db, "parties", pId), { balance: bal });
+        });
+
+        await batch.commit();
+        setBackupStatus("ব্যাকআপ সফলভাবে রিস্টোর হয়েছে ✓");
+      } catch (err) {
+        console.error(err);
+        setBackupStatus("রিস্টোর ব্যর্থ: সঠিক JSON ব্যাকআপ ফাইল সিলেক্ট করুন।", true);
+      } finally {
+        e.target.value = "";
+      }
+    });
+
+    // Listen to Parties collection in real-time
+    const partiesQuery = query(collection(db, "parties"), orderBy("name"));
+    onSnapshot(
+      partiesQuery,
+      (snapshot) => {
+        dbStatus.textContent = "Firestore সংযুক্ত ✓";
+        partiesMap.clear();
+        latestParties = [];
+
+        let totalReceivable = 0;
+        let totalPayable = 0;
+        let rowsHtml = "";
+        let selectHtml = '<option value="">-- পার্টি নির্বাচন করুন --</option>';
+
+        snapshot.forEach((docSnap) => {
+          const data = docSnap.data();
+          const balance = Number(data.balance) || 0;
+          const partyRecord = { id: docSnap.id, ...serializeValueForJSON(data), balance };
+          partiesMap.set(docSnap.id, partyRecord);
+          latestParties.push(partyRecord);
+
+          if (balance > 0) totalReceivable += balance;
+          if (balance < 0) totalPayable += Math.abs(balance);
+
+          const statusBadge =
+            balance > 0
+              ? '<span class="badge-due">পাবো (Due)</span>'
+              : balance < 0
+              ? '<span class="badge-receive">জমা / অগ্রিম (Advance)</span>'
+              : "সমান (Settled)";
+
+          const balanceClass = balance > 0 ? "due" : balance < 0 ? "credit" : "";
+
+          rowsHtml += `
+            <tr>
+              <td><strong>${escapeHtml(data.name || "")}</strong></td>
+              <td>${escapeHtml(data.phone || "-")}</td>
+              <td class="${balanceClass}"><strong>${formatBDT(balance)}</strong></td>
+              <td>${statusBadge}</td>
+            </tr>
+          `;
+
+          selectHtml += `<option value="${docSnap.id}">${escapeHtml(data.name)} (${balance >= 0 ? "বাকি" : "জমা"}: ${formatBDT(balance)})</option>`;
+        });
+
+        document.getElementById("totalParties").textContent = snapshot.size;
+        document.getElementById("totalReceivable").textContent = formatBDT(totalReceivable);
+        document.getElementById("totalPayable").textContent = formatBDT(totalPayable);
+
+        partiesBody.innerHTML = rowsHtml || '<tr><td colspan="4">এখনো কোনো পার্টি যুক্ত করা হয়নি।</td></tr>';
+
+        const prevSelected = txPartySelect.value;
+        txPartySelect.innerHTML = selectHtml;
+        if (prevSelected && partiesMap.has(prevSelected)) {
+          txPartySelect.value = prevSelected;
+        }
+      },
+      (err) => {
+        dbStatus.textContent = "সংযোগে সমস্যা!";
+        console.error(err);
+      }
+    );
+
+    // Listen to Transactions collection in real-time
+    const txQuery = query(collection(db, "transactions"), orderBy("createdAt", "desc"));
+    onSnapshot(
+      txQuery,
+      (snapshot) => {
+        let txHtml = "";
+        latestTransactions = [];
+        snapshot.forEach((docSnap) => {
+          const tx = docSnap.data();
+          latestTransactions.push({ id: docSnap.id, ...serializeValueForJSON(tx) });
+          const party = partiesMap.get(tx.partyId);
+          const partyName = party ? party.name : (tx.partyName || "অজানা পার্টি");
+          const isDue = tx.type === "due";
+          const amount = Number(tx.amount) || 0;
+
+          txHtml += `
+            <tr>
+              <td>${formatDate(tx.createdAt || tx.date)}</td>
+              <td>${escapeHtml(partyName)}</td>
+              <td><span class="${isDue ? "badge-due" : "badge-receive"}">${isDue ? "বাকি / পাবো" : "জমা / পেলাম"}</span></td>
+              <td>${escapeHtml(tx.note || "-")}</td>
+              <td class="${isDue ? "due" : "credit"}"><strong>${isDue ? "+" : "-"}${formatBDT(amount)}</strong></td>
+            </tr>
+          `;
+        });
+        txBody.innerHTML = txHtml || '<tr><td colspan="5">এখনো কোনো লেনদেন নেই।</td></tr>';
+      },
+      (err) => {
+        console.error(err);
+      }
+    );
+
+    // Add Party
+    partyForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      partyMsg.textContent = "";
+      const btn = document.getElementById("addPartyBtn");
+      btn.disabled = true;
+
+      const name = document.getElementById("partyName").value.trim();
+      const phone = document.getElementById("partyPhone").value.trim();
+      const balance = Number(document.getElementById("openingBalance").value) || 0;
+
+      try {
+        await addDoc(collection(db, "parties"), {
+          name,
+          phone,
+          balance,
+          createdAt: serverTimestamp()
+        });
+        partyForm.reset();
+        document.getElementById("openingBalance").value = "0";
+        partyMsg.textContent = "পার্টি Firestore-এ সেভ হয়েছে ✓";
+        partyMsg.className = "msg ok";
+      } catch (err) {
+        console.error(err);
+        partyMsg.textContent = "সেভ করতে সমস্যা হয়েছে। Rules চেক করুন।";
+        partyMsg.className = "msg err";
+      } finally {
+        btn.disabled = false;
+      }
+    });
+
+    // Add Transaction & update Party balance
+    txForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      txMsg.textContent = "";
+      const btn = document.getElementById("addTxBtn");
+      btn.disabled = true;
+
+      const partyId = txPartySelect.value;
+      const type = document.getElementById("txType").value;
+      const amount = Number(document.getElementById("txAmount").value) || 0;
+      const note = document.getElementById("txNote").value.trim();
+
+      if (!partyId || amount <= 0) {
+        txMsg.textContent = "সঠিক পার্টি ও টাকার পরিমাণ দিন।";
+        txMsg.className = "msg err";
+        btn.disabled = false;
+        return;
+      }
+
+      const delta = type === "due" ? amount : -amount;
+      const partyObj = partiesMap.get(partyId);
+
+      try {
+        await addDoc(collection(db, "transactions"), {
+          partyId,
+          partyName: partyObj ? partyObj.name : "",
+          type,
+          amount,
+          note,
+          date: new Date().toISOString(),
+          createdAt: serverTimestamp()
+        });
+
+        const partyRef = doc(db, "parties", partyId);
+        await updateDoc(partyRef, {
+          balance: increment(delta)
+        });
+
+        txForm.reset();
+        txMsg.textContent = "লেনদেন ও ব্যালেন্স আপডেট হয়েছে ✓";
+        txMsg.className = "msg ok";
+      } catch (err) {
+        console.error(err);
+        txMsg.textContent = "লেনদেন সেভ করতে সমস্যা হয়েছে।";
+        txMsg.className = "msg err";
+      } finally {
+        btn.disabled = false;
+      }
+    });
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+  </script>
+</body>
+</html>
