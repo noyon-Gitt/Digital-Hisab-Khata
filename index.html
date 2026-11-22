@@ -10,7 +10,7 @@
     header { background: #0f766e; color: #fff; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
     header h1 { margin: 0; font-size: 20px; }
     .status { font-size: 13px; background: rgba(255,255,255,0.18); padding: 6px 12px; border-radius: 999px; }
-    .container { max-width: 1050px; margin: 20px auto; padding: 0 16px; }
+    .container { max-width: 1080px; margin: 20px auto; padding: 0 16px; }
     .summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-bottom: 20px; }
     .card { background: #fff; border-radius: 12px; padding: 16px; box-shadow: 0 2px 8px rgba(15,23,42,0.06); }
     .card h3 { margin: 0 0 8px; font-size: 14px; color: #64748b; }
@@ -22,14 +22,14 @@
     label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 5px; color: #334155; }
     input, select { width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 8px; margin-bottom: 12px; font-size: 14px; }
     button { background: #0f766e; color: #fff; border: none; padding: 10px 16px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; width: 100%; }
-    button:hover { background: #115e59; }
+    button:hover:not(:disabled) { background: #115e59; }
     button:disabled { opacity: 0.6; cursor: not-allowed; }
     .toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 20px; }
     .toolbar button, .toolbar .upload-btn { width: auto; display: inline-flex; align-items: center; justify-content: center; padding: 9px 14px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; margin-bottom: 0; }
     .btn-json { background: #1d4ed8; color: #fff; }
-    .btn-json:hover { background: #1e40af; }
+    .btn-json:hover:not(:disabled) { background: #1e40af; }
     .btn-csv { background: #15803d; color: #fff; }
-    .btn-csv:hover { background: #166534; }
+    .btn-csv:hover:not(:disabled) { background: #166534; }
     .upload-btn { background: #e2e8f0; color: #0f172a; border: 1px solid #cbd5e1; }
     .upload-btn:hover { background: #cbd5e1; }
     .toolbar-msg { font-size: 13px; font-weight: 600; }
@@ -38,9 +38,68 @@
     th { background: #f8fafc; color: #475569; font-weight: 700; }
     .badge-due { background: #fee2e2; color: #b91c1c; padding: 3px 8px; border-radius: 6px; font-size: 12px; font-weight: 600; }
     .badge-receive { background: #dcfce7; color: #15803d; padding: 3px 8px; border-radius: 6px; font-size: 12px; font-weight: 600; }
+    .action-group { display: flex; gap: 6px; flex-wrap: wrap; }
+    .btn-edit-row {
+      width: auto;
+      padding: 6px 10px;
+      font-size: 12px;
+      border-radius: 6px;
+      background: #e0f2fe;
+      color: #0369a1;
+      border: 1px solid #bae6fd;
+    }
+    .btn-edit-row:hover:not(:disabled) {
+      background: #0284c7;
+      color: #fff;
+      border-color: #0284c7;
+    }
+    .btn-del-row {
+      width: auto;
+      padding: 6px 10px;
+      font-size: 12px;
+      border-radius: 6px;
+      background: #fee2e2;
+      color: #b91c1c;
+      border: 1px solid #fecaca;
+    }
+    .btn-del-row:hover:not(:disabled) {
+      background: #dc2626;
+      color: #fff;
+      border-color: #dc2626;
+    }
     .msg { margin-top: 10px; font-size: 13px; min-height: 18px; }
     .ok { color: #15803d; }
     .err { color: #dc2626; }
+
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.55);
+      z-index: 999;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal-box {
+      background: #fff;
+      width: 100%;
+      max-width: 440px;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 12px 32px rgba(15, 23, 42, 0.22);
+    }
+    .modal-box h3 { margin: 0 0 14px; font-size: 17px; color: #0f172a; }
+    .modal-actions { display: flex; gap: 10px; margin-top: 6px; }
+    .btn-cancel {
+      background: #e2e8f0;
+      color: #1e293b;
+    }
+    .btn-cancel:hover:not(:disabled) {
+      background: #cbd5e1;
+    }
+
     @media (max-width: 640px) {
       th, td { padding: 10px 8px; font-size: 13px; }
     }
@@ -53,7 +112,6 @@
   </header>
 
   <div class="container">
-    <!-- Summary Cards -->
     <div class="summary">
       <div class="card">
         <h3>মোট পার্টি (Total Parties)</h3>
@@ -69,7 +127,6 @@
       </div>
     </div>
 
-    <!-- Backup & Export Bar -->
     <div class="toolbar">
       <button type="button" id="exportJsonBtn" class="btn-json">JSON ব্যাকআপ নামান</button>
       <button type="button" id="exportCsvBtn" class="btn-csv">CSV এক্সপোর্ট করুন</button>
@@ -78,9 +135,7 @@
       <span id="backupMsg" class="toolbar-msg"></span>
     </div>
 
-    <!-- Forms Grid -->
     <div class="grid">
-      <!-- Add Party Form -->
       <div class="card">
         <h2>নতুন পার্টি যোগ করুন (Add Party)</h2>
         <form id="partyForm">
@@ -98,7 +153,6 @@
         </form>
       </div>
 
-      <!-- Add Transaction Form -->
       <div class="card">
         <h2>লেনদেন যুক্ত করুন (Add Transaction)</h2>
         <form id="txForm">
@@ -125,7 +179,6 @@
       </div>
     </div>
 
-    <!-- Parties Table -->
     <h2>পার্টি তালিকা ও ব্যালেন্স (Parties List)</h2>
     <div style="overflow-x:auto; margin-bottom:24px;">
       <table>
@@ -135,15 +188,15 @@
             <th>ফোন (Phone)</th>
             <th>বর্তমান ব্যালেন্স (Balance)</th>
             <th>অবস্থা (Status)</th>
+            <th>অ্যাকশন (Action)</th>
           </tr>
         </thead>
         <tbody id="partiesBody">
-          <tr><td colspan="4">লোড হচ্ছে...</td></tr>
+          <tr><td colspan="5">লোড হচ্ছে...</td></tr>
         </tbody>
       </table>
     </div>
 
-    <!-- Recent Transactions Table -->
     <h2>সাম্প্রতিক লেনদেন (Recent Transactions)</h2>
     <div style="overflow-x:auto;">
       <table>
@@ -154,16 +207,74 @@
             <th>ধরন (Type)</th>
             <th>নোট (Note)</th>
             <th>পরিমাণ (Amount)</th>
+            <th>অ্যাকশন (Action)</th>
           </tr>
         </thead>
         <tbody id="txBody">
-          <tr><td colspan="5">লোড হচ্ছে...</td></tr>
+          <tr><td colspan="6">লোড হচ্ছে...</td></tr>
         </tbody>
       </table>
     </div>
   </div>
 
+  <div id="editPartyModal" class="modal-backdrop" aria-hidden="true">
+    <div class="modal-box">
+      <h3>পার্টির তথ্য এডিট করুন</h3>
+      <form id="editPartyForm">
+        <input type="hidden" id="editPartyId" />
+        <label for="editPartyName">পার্টির নাম (Name) *</label>
+        <input type="text" id="editPartyName" required />
+        <label for="editPartyPhone">মোবাইল নম্বর (Phone)</label>
+        <input type="text" id="editPartyPhone" />
+        <label for="editPartyBalance">বর্তমান ব্যালেন্স (৳) — বাকি হলে (+), জমা হলে (-)</label>
+        <input type="number" id="editPartyBalance" step="any" required />
+        <div class="modal-actions">
+          <button type="submit" id="saveEditPartyBtn">আপডেট সেভ করুন</button>
+          <button type="button" id="cancelEditPartyBtn" class="btn-cancel">বাতিল</button>
+        </div>
+        <div id="editPartyMsg" class="msg"></div>
+      </form>
+    </div>
+  </div>
+
+  <div id="editTxModal" class="modal-backdrop" aria-hidden="true">
+    <div class="modal-box">
+      <h3>লেনদেন এডিট করুন</h3>
+      <form id="editTxForm">
+        <input type="hidden" id="editTxId" />
+        <label for="editTxParty">পার্টি নির্বাচন করুন (Select Party) *</label>
+        <select id="editTxParty" required></select>
+        <label for="editTxType">লেনদেনের ধরন (Type) *</label>
+        <select id="editTxType" required>
+          <option value="due">বাকি দিলাম / পাবো (Due / Gave Credit)</option>
+          <option value="receive">টাকা পেলাম / জমা হলো (Received / Payment In)</option>
+        </select>
+        <label for="editTxAmount">টাকার পরিমাণ (Amount in ৳) *</label>
+        <input type="number" id="editTxAmount" step="any" min="0.01" required />
+        <label for="editTxNote">নোট / বিবরণ (Note)</label>
+        <input type="text" id="editTxNote" placeholder="যেমন: চাল বাকি বা ক্যাশ জমা" />
+        <div class="modal-actions">
+          <button type="submit" id="saveEditTxBtn">লেনদেন আপডেট করুন</button>
+          <button type="button" id="cancelEditTxBtn" class="btn-cancel">বাতিল</button>
+        </div>
+        <div id="editTxMsg" class="msg"></div>
+      </form>
+    </div>
+  </div>
+
   <script type="module">
+    const dbStatusEl = document.getElementById("dbStatus");
+
+    window.addEventListener("error", (ev) => {
+      console.error("Global error:", ev.error || ev.message);
+      if (dbStatusEl) dbStatusEl.textContent = "স্ক্রিপ্ট এরর: " + (ev.message || "দেখুন");
+    });
+
+    window.addEventListener("unhandledrejection", (ev) => {
+      console.error("Unhandled promise rejection:", ev.reason);
+      if (dbStatusEl) dbStatusEl.textContent = "Firestore এরর: " + (ev.reason?.message || "দেখুন");
+    });
+
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
     import {
       getFirestore,
@@ -173,9 +284,11 @@
       doc,
       updateDoc,
       writeBatch,
+      runTransaction,
       increment,
       onSnapshot,
       query,
+      where,
       orderBy,
       serverTimestamp
     } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
@@ -193,7 +306,7 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    const dbStatus = document.getElementById("dbStatus");
+    const dbStatus = dbStatusEl;
     const partyForm = document.getElementById("partyForm");
     const txForm = document.getElementById("txForm");
     const txPartySelect = document.getElementById("txParty");
@@ -205,6 +318,25 @@
     const exportJsonBtn = document.getElementById("exportJsonBtn");
     const exportCsvBtn = document.getElementById("exportCsvBtn");
     const restoreJsonInput = document.getElementById("restoreJsonInput");
+
+    const editPartyModal = document.getElementById("editPartyModal");
+    const editPartyForm = document.getElementById("editPartyForm");
+    const editPartyId = document.getElementById("editPartyId");
+    const editPartyName = document.getElementById("editPartyName");
+    const editPartyPhone = document.getElementById("editPartyPhone");
+    const editPartyBalance = document.getElementById("editPartyBalance");
+    const editPartyMsg = document.getElementById("editPartyMsg");
+    const cancelEditPartyBtn = document.getElementById("cancelEditPartyBtn");
+
+    const editTxModal = document.getElementById("editTxModal");
+    const editTxForm = document.getElementById("editTxForm");
+    const editTxId = document.getElementById("editTxId");
+    const editTxPartySelect = document.getElementById("editTxParty");
+    const editTxTypeSelect = document.getElementById("editTxType");
+    const editTxAmountInput = document.getElementById("editTxAmount");
+    const editTxNoteInput = document.getElementById("editTxNote");
+    const editTxMsg = document.getElementById("editTxMsg");
+    const cancelEditTxBtn = document.getElementById("cancelEditTxBtn");
 
     let partiesMap = new Map();
     let latestParties = [];
@@ -274,7 +406,6 @@
       return { parties, transactions };
     };
 
-    // Export JSON Backup
     exportJsonBtn.addEventListener("click", async () => {
       exportJsonBtn.disabled = true;
       try {
@@ -305,7 +436,6 @@
       }
     });
 
-    // Export CSV
     const csvEscape = (val) => {
       const str = String(val ?? "");
       const guarded = /^[=+\-@]/.test(str) ? "'" + str : str;
@@ -362,7 +492,6 @@
       }
     });
 
-    // Restore from JSON Backup
     restoreJsonInput.addEventListener("change", async (e) => {
       const file = e.target.files && e.target.files[0];
       if (!file) return;
@@ -452,7 +581,115 @@
       }
     });
 
-    // Listen to Parties collection in real-time
+    function openEditPartyModal(partyId) {
+      const party = partiesMap.get(partyId);
+      if (!party) return;
+
+      editPartyId.value = party.id;
+      editPartyName.value = party.name || "";
+      editPartyPhone.value = party.phone || "";
+      editPartyBalance.value = Number(party.balance) || 0;
+      editPartyMsg.textContent = "";
+      editPartyMsg.className = "msg";
+      editPartyModal.classList.add("open");
+      editPartyModal.setAttribute("aria-hidden", "false");
+      editPartyName.focus();
+    }
+
+    function closeEditPartyModal() {
+      editPartyModal.classList.remove("open");
+      editPartyModal.setAttribute("aria-hidden", "true");
+      editPartyForm.reset();
+    }
+
+    cancelEditPartyBtn.addEventListener("click", closeEditPartyModal);
+    editPartyModal.addEventListener("click", (e) => {
+      if (e.target === editPartyModal) closeEditPartyModal();
+    });
+
+    editPartyForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const saveBtn = document.getElementById("saveEditPartyBtn");
+      const id = editPartyId.value;
+      const name = editPartyName.value.trim();
+      const phone = editPartyPhone.value.trim();
+      const balance = Number(editPartyBalance.value) || 0;
+
+      if (!id || !name) {
+        editPartyMsg.textContent = "পার্টির নাম আবশ্যক।";
+        editPartyMsg.className = "msg err";
+        return;
+      }
+
+      saveBtn.disabled = true;
+      editPartyMsg.textContent = "";
+
+      try {
+        await updateDoc(doc(db, "parties", id), { name, phone, balance });
+        partyMsg.textContent = `"${name}" পার্টির তথ্য আপডেট হয়েছে ✓`;
+        partyMsg.className = "msg ok";
+        closeEditPartyModal();
+      } catch (err) {
+        console.error("Edit party error:", err);
+        editPartyMsg.textContent = "তথ্য আপডেট করতে সমস্যা হয়েছে: " + (err.message || "");
+        editPartyMsg.className = "msg err";
+      } finally {
+        saveBtn.disabled = false;
+      }
+    });
+
+    async function deletePartyWithTransactions(partyId, btnEl) {
+      const party = partiesMap.get(partyId);
+      const partyLabel = party?.name || "এই পার্টি";
+
+      const confirmed = confirm(
+        `"${partyLabel}" পার্টি এবং এর সাথে যুক্ত সব লেনদেন স্থায়ীভাবে মুছে ফেলতে চান?`
+      );
+      if (!confirmed) return;
+
+      if (btnEl) {
+        btnEl.disabled = true;
+        btnEl.textContent = "মুছছে...";
+      }
+      partyMsg.textContent = "";
+
+      try {
+        const txSnap = await getDocs(
+          query(collection(db, "transactions"), where("partyId", "==", partyId))
+        );
+
+        const batch = writeBatch(db);
+        txSnap.forEach((txDoc) => batch.delete(txDoc.ref));
+        batch.delete(doc(db, "parties", partyId));
+
+        await batch.commit();
+        partyMsg.textContent = `"${partyLabel}" এবং সংশ্লিষ্ট লেনদেন মুছে ফেলা হয়েছে ✓`;
+        partyMsg.className = "msg ok";
+      } catch (err) {
+        console.error("Delete party error:", err);
+        partyMsg.textContent = "পার্টি ডিলিট করা যায়নি: " + (err.message || "সমস্যা হয়েছে");
+        partyMsg.className = "msg err";
+        if (btnEl) {
+          btnEl.disabled = false;
+          btnEl.textContent = "ডিলিট";
+        }
+      }
+    }
+
+    partiesBody.addEventListener("click", (e) => {
+      const editBtn = e.target.closest(".btn-edit-party");
+      if (editBtn) {
+        const pId = editBtn.getAttribute("data-id");
+        if (pId) openEditPartyModal(pId);
+        return;
+      }
+      const delBtn = e.target.closest(".btn-del-party");
+      if (delBtn) {
+        const pId = delBtn.getAttribute("data-id");
+        if (pId) deletePartyWithTransactions(pId, delBtn);
+      }
+    });
+
     const partiesQuery = query(collection(db, "parties"), orderBy("name"));
     onSnapshot(
       partiesQuery,
@@ -491,6 +728,12 @@
               <td>${escapeHtml(data.phone || "-")}</td>
               <td class="${balanceClass}"><strong>${formatBDT(balance)}</strong></td>
               <td>${statusBadge}</td>
+              <td>
+                <div class="action-group">
+                  <button type="button" class="btn-edit-row btn-edit-party" data-id="${escapeHtml(docSnap.id)}">এডিট</button>
+                  <button type="button" class="btn-del-row btn-del-party" data-id="${escapeHtml(docSnap.id)}">ডিলিট</button>
+                </div>
+              </td>
             </tr>
           `;
 
@@ -501,7 +744,7 @@
         document.getElementById("totalReceivable").textContent = formatBDT(totalReceivable);
         document.getElementById("totalPayable").textContent = formatBDT(totalPayable);
 
-        partiesBody.innerHTML = rowsHtml || '<tr><td colspan="4">এখনো কোনো পার্টি যুক্ত করা হয়নি।</td></tr>';
+        partiesBody.innerHTML = rowsHtml || '<tr><td colspan="5">এখনো কোনো পার্টি যুক্ত করা হয়নি।</td></tr>';
 
         const prevSelected = txPartySelect.value;
         txPartySelect.innerHTML = selectHtml;
@@ -510,12 +753,192 @@
         }
       },
       (err) => {
-        dbStatus.textContent = "সংযোগে সমস্যা!";
-        console.error(err);
+        console.error("Parties onSnapshot error:", err);
+        dbStatus.textContent = "Firestore সমস্যা: " + (err.code || err.message || "Rules চেক করুন");
       }
     );
 
-    // Listen to Transactions collection in real-time
+    function openEditTxModal(txId) {
+      const tx = latestTransactions.find((t) => t.id === txId);
+      if (!tx) return;
+
+      let optionsHtml = '<option value="">-- পার্টি নির্বাচন করুন --</option>';
+      latestParties.forEach((p) => {
+        optionsHtml += `<option value="${escapeHtml(p.id)}">${escapeHtml(p.name)}</option>`;
+      });
+      if (tx.partyId && !partiesMap.has(tx.partyId)) {
+        optionsHtml += `<option value="${escapeHtml(tx.partyId)}">${escapeHtml(tx.partyName || "পুরনো পার্টি")}</option>`;
+      }
+
+      editTxPartySelect.innerHTML = optionsHtml;
+      editTxId.value = tx.id;
+      editTxPartySelect.value = tx.partyId || "";
+      editTxTypeSelect.value = tx.type === "receive" ? "receive" : "due";
+      editTxAmountInput.value = Number(tx.amount) || 0;
+      editTxNoteInput.value = tx.note || "";
+      editTxMsg.textContent = "";
+      editTxMsg.className = "msg";
+
+      editTxModal.classList.add("open");
+      editTxModal.setAttribute("aria-hidden", "false");
+      editTxAmountInput.focus();
+    }
+
+    function closeEditTxModal() {
+      editTxModal.classList.remove("open");
+      editTxModal.setAttribute("aria-hidden", "true");
+      editTxForm.reset();
+    }
+
+    cancelEditTxBtn.addEventListener("click", closeEditTxModal);
+    editTxModal.addEventListener("click", (e) => {
+      if (e.target === editTxModal) closeEditTxModal();
+    });
+
+    editTxForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const saveBtn = document.getElementById("saveEditTxBtn");
+      const txId = editTxId.value;
+      const newPartyId = editTxPartySelect.value;
+      const newType = editTxTypeSelect.value === "receive" ? "receive" : "due";
+      const newAmount = Number(editTxAmountInput.value) || 0;
+      const newNote = editTxNoteInput.value.trim();
+
+      if (!txId || !newPartyId || newAmount <= 0) {
+        editTxMsg.textContent = "সঠিক পার্টি, ধরন ও টাকার পরিমাণ দিন।";
+        editTxMsg.className = "msg err";
+        return;
+      }
+
+      saveBtn.disabled = true;
+      editTxMsg.textContent = "";
+
+      try {
+        await runTransaction(db, async (transaction) => {
+          const txRef = doc(db, "transactions", txId);
+          const txSnap = await transaction.get(txRef);
+          if (!txSnap.exists()) throw new Error("লেনদেনটি পাওয়া যায়নি।");
+
+          const oldData = txSnap.data();
+          const oldPartyId = oldData.partyId || "";
+          const oldType = oldData.type === "receive" ? "receive" : "due";
+          const oldAmount = Math.abs(Number(oldData.amount) || 0);
+
+          const oldEffect = oldType === "due" ? oldAmount : -oldAmount;
+          const newEffect = newType === "due" ? newAmount : -newAmount;
+
+          const newPartyRef = doc(db, "parties", String(newPartyId));
+          const newPartySnap = await transaction.get(newPartyRef);
+          const newPartyName = newPartySnap.exists() ? (newPartySnap.data().name || "") : (oldData.partyName || "");
+
+          if (oldPartyId && oldPartyId === newPartyId) {
+            if (newPartySnap.exists()) {
+              const currentBal = Number(newPartySnap.data().balance) || 0;
+              transaction.update(newPartyRef, { balance: currentBal - oldEffect + newEffect });
+            }
+          } else {
+            if (oldPartyId) {
+              const oldPartyRef = doc(db, "parties", String(oldPartyId));
+              const oldPartySnap = await transaction.get(oldPartyRef);
+              if (oldPartySnap.exists()) {
+                const oldBal = Number(oldPartySnap.data().balance) || 0;
+                transaction.update(oldPartyRef, { balance: oldBal - oldEffect });
+              }
+            }
+            if (newPartySnap.exists()) {
+              const newBal = Number(newPartySnap.data().balance) || 0;
+              transaction.update(newPartyRef, { balance: newBal + newEffect });
+            }
+          }
+
+          transaction.update(txRef, {
+            partyId: newPartyId,
+            partyName: newPartyName,
+            type: newType,
+            amount: newAmount,
+            note: newNote
+          });
+        });
+
+        txMsg.textContent = "লেনদেন ও ব্যালেন্স সফলভাবে আপডেট হয়েছে ✓";
+        txMsg.className = "msg ok";
+        closeEditTxModal();
+      } catch (err) {
+        console.error("Edit transaction failed:", err);
+        editTxMsg.textContent = "লেনদেন আপডেট করা যায়নি: " + (err.message || "সমস্যা হয়েছে");
+        editTxMsg.className = "msg err";
+      } finally {
+        saveBtn.disabled = false;
+      }
+    });
+
+    async function deleteTransactionWithBalance(txId, btnEl) {
+      const txItem = latestTransactions.find((t) => t.id === txId);
+      const partyLabel = txItem?.partyName || (txItem?.partyId && partiesMap.get(txItem.partyId)?.name) || "এই পার্টি";
+      const amountText = txItem ? formatBDT(txItem.amount) : "এই লেনদেনটি";
+
+      const confirmed = confirm(
+        `${partyLabel}-এর ${amountText} টাকার লেনদেনটি মুছে ফেলতে চান? পার্টির ব্যালেন্স স্বয়ংক্রিয়ভাবে ঠিক হয়ে যাবে।`
+      );
+      if (!confirmed) return;
+
+      if (btnEl) {
+        btnEl.disabled = true;
+        btnEl.textContent = "মুছছে...";
+      }
+      txMsg.textContent = "";
+
+      try {
+        await runTransaction(db, async (transaction) => {
+          const txRef = doc(db, "transactions", txId);
+          const txSnap = await transaction.get(txRef);
+          if (!txSnap.exists()) throw new Error("লেনদেনটি ইতিমধ্যে মুছে ফেলা হয়েছে।");
+
+          const txData = txSnap.data();
+          const savedAmount = Math.abs(Number(txData.amount) || 0);
+          const savedType = txData.type === "receive" ? "receive" : "due";
+          const partyId = txData.partyId;
+          const reverseDelta = savedType === "due" ? -savedAmount : savedAmount;
+
+          if (partyId) {
+            const partyRef = doc(db, "parties", String(partyId));
+            const partySnap = await transaction.get(partyRef);
+            if (partySnap.exists()) {
+              const currentBalance = Number(partySnap.data().balance) || 0;
+              transaction.update(partyRef, { balance: currentBalance + reverseDelta });
+            }
+          }
+
+          transaction.delete(txRef);
+        });
+
+        txMsg.textContent = "লেনদেন মুছে ফেলা হয়েছে এবং ব্যালেন্স আপডেট হয়েছে ✓";
+        txMsg.className = "msg ok";
+      } catch (err) {
+        console.error("Delete transaction failed:", err);
+        txMsg.textContent = "লেনদেন ডিলিট করা যায়নি: " + (err.message || "সমস্যা হয়েছে");
+        txMsg.className = "msg err";
+        if (btnEl) {
+          btnEl.disabled = false;
+          btnEl.textContent = "ডিলিট";
+        }
+      }
+    }
+
+    txBody.addEventListener("click", (e) => {
+      const editBtn = e.target.closest(".btn-edit-tx");
+      if (editBtn) {
+        const txId = editBtn.getAttribute("data-id");
+        if (txId) openEditTxModal(txId);
+        return;
+      }
+      const delBtn = e.target.closest(".btn-del-tx");
+      if (delBtn) {
+        const txId = delBtn.getAttribute("data-id");
+        if (txId) deleteTransactionWithBalance(txId, delBtn);
+      }
+    });
+
     const txQuery = query(collection(db, "transactions"), orderBy("createdAt", "desc"));
     onSnapshot(
       txQuery,
@@ -537,17 +960,22 @@
               <td><span class="${isDue ? "badge-due" : "badge-receive"}">${isDue ? "বাকি / পাবো" : "জমা / পেলাম"}</span></td>
               <td>${escapeHtml(tx.note || "-")}</td>
               <td class="${isDue ? "due" : "credit"}"><strong>${isDue ? "+" : "-"}${formatBDT(amount)}</strong></td>
+              <td>
+                <div class="action-group">
+                  <button type="button" class="btn-edit-row btn-edit-tx" data-id="${escapeHtml(docSnap.id)}">এডিট</button>
+                  <button type="button" class="btn-del-row btn-del-tx" data-id="${escapeHtml(docSnap.id)}">ডিলিট</button>
+                </div>
+              </td>
             </tr>
           `;
         });
-        txBody.innerHTML = txHtml || '<tr><td colspan="5">এখনো কোনো লেনদেন নেই।</td></tr>';
+        txBody.innerHTML = txHtml || '<tr><td colspan="6">এখনো কোনো লেনদেন নেই।</td></tr>';
       },
       (err) => {
-        console.error(err);
+        console.error("Transactions onSnapshot error:", err);
       }
     );
 
-    // Add Party
     partyForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       partyMsg.textContent = "";
@@ -571,14 +999,13 @@
         partyMsg.className = "msg ok";
       } catch (err) {
         console.error(err);
-        partyMsg.textContent = "সেভ করতে সমস্যা হয়েছে। Rules চেক করুন।";
+        partyMsg.textContent = "সেভ করতে সমস্যা হয়েছে: " + (err.message || "Rules চেক করুন।");
         partyMsg.className = "msg err";
       } finally {
         btn.disabled = false;
       }
     });
 
-    // Add Transaction & update Party balance
     txForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       txMsg.textContent = "";
@@ -612,16 +1039,14 @@
         });
 
         const partyRef = doc(db, "parties", partyId);
-        await updateDoc(partyRef, {
-          balance: increment(delta)
-        });
+        await updateDoc(partyRef, { balance: increment(delta) });
 
         txForm.reset();
         txMsg.textContent = "লেনদেন ও ব্যালেন্স আপডেট হয়েছে ✓";
         txMsg.className = "msg ok";
       } catch (err) {
         console.error(err);
-        txMsg.textContent = "লেনদেন সেভ করতে সমস্যা হয়েছে।";
+        txMsg.textContent = "লেনদেন সেভ করতে সমস্যা হয়েছে: " + (err.message || "");
         txMsg.className = "msg err";
       } finally {
         btn.disabled = false;
