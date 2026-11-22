@@ -4,13 +4,31 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#0f766e" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="হিসাব খাতা" />
+  <link id="pwaManifestLink" rel="manifest" />
   <title>Digital Hisab Khata - Firestore</title>
   <style>
     * { box-sizing: border-box; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
     body { margin: 0; background: #f3f6fb; color: #1e293b; }
     header { background: #0f766e; color: #fff; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
     header h1 { margin: 0; font-size: 20px; }
+    .header-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
     .status { font-size: 13px; background: rgba(255,255,255,0.18); padding: 6px 12px; border-radius: 999px; }
+    .btn-install {
+      width: auto;
+      padding: 6px 12px;
+      font-size: 12px;
+      border-radius: 999px;
+      background: #ffffff;
+      color: #0f766e;
+      border: none;
+      font-weight: 700;
+    }
+    .btn-install:hover:not(:disabled) {
+      background: #e6fffa;
+    }
     .container { max-width: 1080px; margin: 20px auto; padding: 0 16px; }
     .summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-bottom: 14px; }
     .today-bar {
@@ -65,6 +83,40 @@
       background: #dcfce7;
       color: #15803d;
       border-color: #86efac;
+    }
+    .amount-chips-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: -6px;
+      margin-bottom: 12px;
+      align-items: center;
+    }
+    .btn-amt-chip {
+      width: auto;
+      padding: 5px 10px;
+      font-size: 12px;
+      border-radius: 8px;
+      background: #f0fdfa;
+      color: #0f766e;
+      border: 1px solid #99f6e4;
+      font-weight: 700;
+    }
+    .btn-amt-chip:hover:not(:disabled) {
+      background: #ccfbf1;
+    }
+    .btn-amt-clear {
+      width: auto;
+      padding: 5px 9px;
+      font-size: 11px;
+      border-radius: 8px;
+      background: #f1f5f9;
+      color: #475569;
+      border: 1px solid #cbd5e1;
+      font-weight: 600;
+    }
+    .btn-amt-clear:hover:not(:disabled) {
+      background: #e2e8f0;
     }
     .suggestion-row {
       display: flex;
@@ -129,9 +181,9 @@
     .filter-bar input,
     .filter-bar select {
       width: auto;
-      min-width: 175px;
+      min-width: 155px;
       margin-bottom: 0;
-      padding: 8px 12px;
+      padding: 8px 10px;
       font-size: 13px;
     }
     .btn-today-filter {
@@ -339,7 +391,10 @@
 <body>
   <header>
     <h1>Digital Hisab Khata (ডিজিটাল হিসাব খাতা)</h1>
-    <div id="dbStatus" class="status">Firestore যুক্ত হচ্ছে...</div>
+    <div class="header-actions">
+      <button type="button" id="installAppBtn" class="btn-install" style="display:none;">অ্যাপ ইনস্টল করুন</button>
+      <div id="dbStatus" class="status">Firestore যুক্ত হচ্ছে...</div>
+    </div>
   </header>
 
   <div class="container">
@@ -417,6 +472,13 @@
 
           <label for="txAmount">টাকার পরিমাণ (Amount in ৳) *</label>
           <input type="number" id="txAmount" step="any" min="0.01" placeholder="যেমন: 500" required />
+          <div id="quickAmountsRow" class="amount-chips-row" aria-label="দ্রুত টাকার পরিমাণ">
+            <button type="button" class="btn-amt-chip" data-add="100">+৳100</button>
+            <button type="button" class="btn-amt-chip" data-add="200">+৳200</button>
+            <button type="button" class="btn-amt-chip" data-add="500">+৳500</button>
+            <button type="button" class="btn-amt-chip" data-add="1000">+৳1000</button>
+            <button type="button" class="btn-amt-clear" id="clearAmountBtn">মুছুন</button>
+          </div>
 
           <label for="txNote">নোট / বিবরণ (Note)</label>
           <input type="text" id="txNote" placeholder="যেমন: পুরনো বকেয়া পরিশোধ বা আজকের বাকি" />
@@ -463,7 +525,9 @@
       <h2>সাম্প্রতিক লেনদেন (Recent Transactions)</h2>
       <div class="filter-bar">
         <button type="button" id="todayOnlyFilterBtn" class="btn-today-filter">শুধু আজকের লেনদেন</button>
-        <input type="search" id="txSearchInput" placeholder="পার্টির নাম বা নোট দিয়ে খুঁজুন..." aria-label="লেনদেন খুঁজুন" />
+        <input type="month" id="txMonthFilter" aria-label="মাস অনুযায়ী ফিল্টার" title="মাস অনুযায়ী ফিল্টার" />
+        <input type="date" id="txDateFilter" aria-label="তারিখ অনুযায়ী ফিল্টার" title="তারিখ অনুযায়ী ফিল্টার" />
+        <input type="search" id="txSearchInput" placeholder="পার্টির নাম বা নোট..." aria-label="লেনদেন খুঁজুন" />
         <select id="txTypeFilter" aria-label="লেনদেনের ধরন ফিল্টার">
           <option value="all">সব ধরন (All)</option>
           <option value="receive">আজ জমা দিল (Receive)</option>
@@ -578,8 +642,89 @@
     </div>
   </div>
 
+  <script>
+    // PWA Manifest & Service Worker setup
+    (function setupPWA() {
+      try {
+        const iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192"><rect width="192" height="192" rx="36" fill="#0f766e"/><text x="96" y="118" font-size="88" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-weight="bold">৳</text></svg>`;
+        const iconUrl = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(iconSvg);
+        const manifestObj = {
+          name: "Digital Hisab Khata - ডিজিটাল হিসাব খাতা",
+          short_name: "হিসাব খাতা",
+          start_url: "./",
+          display: "standalone",
+          background_color: "#f3f6fb",
+          theme_color: "#0f766e",
+          icons: [
+            { src: iconUrl, sizes: "192x192", type: "image/svg+xml", purpose: "any" },
+            { src: iconUrl, sizes: "512x512", type: "image/svg+xml", purpose: "any" }
+          ]
+        };
+        const manifestLink = document.getElementById("pwaManifestLink");
+        if (manifestLink) {
+          const mBlob = new Blob([JSON.stringify(manifestObj)], { type: "application/manifest+json" });
+          manifestLink.href = URL.createObjectURL(mBlob);
+        }
+
+        if ("serviceWorker" in navigator && window.location.protocol.startsWith("http")) {
+          const swCode = `
+            const CACHE_NAME = "hisab-khata-v1";
+            self.addEventListener("install", (event) => {
+              self.skipWaiting();
+            });
+            self.addEventListener("activate", (event) => {
+              event.waitUntil(
+                caches.keys().then((keys) =>
+                  Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k)))
+                )
+              );
+              self.clients.claim();
+            });
+            self.addEventListener("fetch", (event) => {
+              if (event.request.method !== "GET") return;
+              const url = new URL(event.request.url);
+              if (url.origin === location.origin && url.pathname.endsWith(".html")) {
+                event.respondWith(
+                  fetch(event.request).catch(() => caches.match(event.request))
+                );
+              }
+            });
+          `;
+          const swBlob = new Blob([swCode], { type: "application/javascript" });
+          const swUrl = URL.createObjectURL(swBlob);
+          navigator.serviceWorker.register(swUrl).catch(() => {});
+        }
+      } catch (e) {
+        console.warn("PWA setup notice:", e);
+      }
+    })();
+  </script>
+
   <script type="module">
     const dbStatusEl = document.getElementById("dbStatus");
+    const installAppBtn = document.getElementById("installAppBtn");
+    let deferredInstallPrompt = null;
+
+    window.addEventListener("beforeinstallprompt", (e) => {
+      e.preventDefault();
+      deferredInstallPrompt = e;
+      if (installAppBtn) installAppBtn.style.display = "inline-block";
+    });
+
+    if (installAppBtn) {
+      installAppBtn.addEventListener("click", async () => {
+        if (!deferredInstallPrompt) return;
+        deferredInstallPrompt.prompt();
+        await deferredInstallPrompt.userChoice.catch(() => {});
+        deferredInstallPrompt = null;
+        installAppBtn.style.display = "none";
+      });
+    }
+
+    window.addEventListener("appinstalled", () => {
+      deferredInstallPrompt = null;
+      if (installAppBtn) installAppBtn.style.display = "none";
+    });
 
     window.addEventListener("error", (ev) => {
       console.error("Global error:", ev.error || ev.message);
@@ -630,6 +775,9 @@
     const txForm = document.getElementById("txForm");
     const txPartySelect = document.getElementById("txParty");
     const txTypeSelect = document.getElementById("txType");
+    const txAmountInput = document.getElementById("txAmount");
+    const quickAmountsRow = document.getElementById("quickAmountsRow");
+    const clearAmountBtn = document.getElementById("clearAmountBtn");
     const txNoteInput = document.getElementById("txNote");
     const noteSuggestionsRow = document.getElementById("noteSuggestionsRow");
     const quickReceiveBtn = document.getElementById("quickReceiveBtn");
@@ -649,6 +797,8 @@
     const partyStatusFilter = document.getElementById("partyStatusFilter");
     const clearPartyFilterBtn = document.getElementById("clearPartyFilterBtn");
     const todayOnlyFilterBtn = document.getElementById("todayOnlyFilterBtn");
+    const txMonthFilter = document.getElementById("txMonthFilter");
+    const txDateFilter = document.getElementById("txDateFilter");
     const txSearchInput = document.getElementById("txSearchInput");
     const txTypeFilter = document.getElementById("txTypeFilter");
     const clearTxFilterBtn = document.getElementById("clearTxFilterBtn");
@@ -708,23 +858,37 @@
       return "৳" + Math.abs(n).toLocaleString("en-BD", { maximumFractionDigits: 2 });
     };
 
+    const getDateObj = (ts) => {
+      if (!ts) return new Date();
+      const d = ts.toDate ? ts.toDate() : new Date(ts);
+      return isNaN(d.getTime()) ? null : d;
+    };
+
     const formatDate = (ts) => {
       if (!ts) return "এইমাত্র";
-      const d = ts.toDate ? ts.toDate() : new Date(ts);
-      if (isNaN(d.getTime())) return String(ts);
+      const d = getDateObj(ts);
+      if (!d) return String(ts);
       return d.toLocaleString("bn-BD", { dateStyle: "medium", timeStyle: "short" });
+    };
+
+    const toLocalDateStr = (d) => {
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
+      return `${y}-${m}-${day}`;
+    };
+
+    const toLocalMonthStr = (d) => {
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, "0");
+      return `${y}-${m}`;
     };
 
     const isTodayDate = (ts) => {
       if (!ts) return true;
-      const d = ts.toDate ? ts.toDate() : new Date(ts);
-      if (isNaN(d.getTime())) return false;
-      const now = new Date();
-      return (
-        d.getFullYear() === now.getFullYear() &&
-        d.getMonth() === now.getMonth() &&
-        d.getDate() === now.getDate()
-      );
+      const d = getDateObj(ts);
+      if (!d) return false;
+      return toLocalDateStr(d) === toLocalDateStr(new Date());
     };
 
     const normalizePhoneForWa = (rawPhone) => {
@@ -752,6 +916,22 @@
       const msgText = `আসসালামু আলাইকুম ${party?.name || ""}, আপনার ডিজিটাল হিসাব খাতার বর্তমান অবস্থা— ${summaryLine}।`;
       return `https://wa.me/${waPhone}?text=${encodeURIComponent(msgText)}`;
     };
+
+    // Quick amount buttons handler
+    quickAmountsRow.addEventListener("click", (e) => {
+      const chip = e.target.closest(".btn-amt-chip");
+      if (chip) {
+        const addVal = Number(chip.getAttribute("data-add")) || 0;
+        const currentVal = Number(txAmountInput.value) || 0;
+        txAmountInput.value = currentVal + addVal;
+        txAmountInput.focus();
+        return;
+      }
+      if (e.target.closest("#clearAmountBtn")) {
+        txAmountInput.value = "";
+        txAmountInput.focus();
+      }
+    });
 
     function renderNoteSuggestions() {
       const type = txTypeSelect.value === "receive" ? "receive" : "due";
@@ -882,13 +1062,7 @@
       backupMsg.className = isErr ? "toolbar-msg err" : "toolbar-msg ok";
     };
 
-    const getDateStamp = () => {
-      const now = new Date();
-      const y = now.getFullYear();
-      const m = String(now.getMonth() + 1).padStart(2, "0");
-      const d = String(now.getDate()).padStart(2, "0");
-      return `${y}-${m}-${d}`;
-    };
+    const getDateStamp = () => toLocalDateStr(new Date());
 
     const downloadFile = (content, filename, mimeType) => {
       const blob = new Blob([content], { type: mimeType });
@@ -990,11 +1164,21 @@
     function renderFilteredTransactions() {
       const keyword = (txSearchInput.value || "").trim().toLowerCase();
       const selectedType = txTypeFilter.value || "all";
+      const selectedMonth = txMonthFilter.value || "";
+      const selectedDate = txDateFilter.value || "";
 
       const filtered = latestTransactions.filter((tx) => {
+        const txDateObj = getDateObj(tx.createdAt || tx.date);
+
         if (todayOnlyFilter && !isTodayDate(tx.createdAt || tx.date)) {
           return false;
         }
+        if (selectedDate) {
+          if (!txDateObj || toLocalDateStr(txDateObj) !== selectedDate) return false;
+        } else if (selectedMonth) {
+          if (!txDateObj || toLocalMonthStr(txDateObj) !== selectedMonth) return false;
+        }
+
         if (selectedType !== "all" && tx.type !== selectedType) {
           return false;
         }
@@ -1046,7 +1230,29 @@
 
     todayOnlyFilterBtn.addEventListener("click", () => {
       todayOnlyFilter = !todayOnlyFilter;
+      if (todayOnlyFilter) {
+        txDateFilter.value = "";
+        txMonthFilter.value = "";
+      }
       syncTodayFilterButton();
+      renderFilteredTransactions();
+    });
+
+    txDateFilter.addEventListener("change", () => {
+      if (txDateFilter.value) {
+        todayOnlyFilter = false;
+        txMonthFilter.value = "";
+        syncTodayFilterButton();
+      }
+      renderFilteredTransactions();
+    });
+
+    txMonthFilter.addEventListener("change", () => {
+      if (txMonthFilter.value) {
+        todayOnlyFilter = false;
+        txDateFilter.value = "";
+        syncTodayFilterButton();
+      }
       renderFilteredTransactions();
     });
 
@@ -1064,6 +1270,8 @@
     clearTxFilterBtn.addEventListener("click", () => {
       txSearchInput.value = "";
       txTypeFilter.value = "all";
+      txMonthFilter.value = "";
+      txDateFilter.value = "";
       todayOnlyFilter = false;
       syncTodayFilterButton();
       renderFilteredTransactions();
@@ -1793,7 +2001,7 @@
 
       const partyId = txPartySelect.value;
       const type = txTypeSelect.value;
-      const amount = Number(document.getElementById("txAmount").value) || 0;
+      const amount = Number(txAmountInput.value) || 0;
       const note = txNoteInput.value.trim();
 
       if (!partyId || amount <= 0) {
