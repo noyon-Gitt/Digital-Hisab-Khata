@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0f766e" />
   <title>Digital Hisab Khata - Firestore</title>
   <style>
     * { box-sizing: border-box; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
@@ -11,7 +12,21 @@
     header h1 { margin: 0; font-size: 20px; }
     .status { font-size: 13px; background: rgba(255,255,255,0.18); padding: 6px 12px; border-radius: 999px; }
     .container { max-width: 1080px; margin: 20px auto; padding: 0 16px; }
-    .summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-bottom: 20px; }
+    .summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-bottom: 14px; }
+    .today-bar {
+      background: #fff;
+      border-radius: 12px;
+      padding: 12px 16px;
+      box-shadow: 0 2px 8px rgba(15,23,42,0.06);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+    .today-metrics { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; }
     .card { background: #fff; border-radius: 12px; padding: 16px; box-shadow: 0 2px 8px rgba(15,23,42,0.06); }
     .card h3 { margin: 0 0 8px; font-size: 14px; color: #64748b; }
     .card .amount { font-size: 24px; font-weight: 700; }
@@ -26,6 +41,50 @@
       flex-wrap: wrap;
       gap: 8px;
       margin-bottom: 12px;
+    }
+    .quick-type-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .btn-quick-type {
+      padding: 8px 10px;
+      font-size: 12px;
+      border-radius: 8px;
+      background: #f1f5f9;
+      color: #334155;
+      border: 1px solid #cbd5e1;
+    }
+    .btn-quick-type.active-due {
+      background: #fee2e2;
+      color: #b91c1c;
+      border-color: #fca5a5;
+    }
+    .btn-quick-type.active-receive {
+      background: #dcfce7;
+      color: #15803d;
+      border-color: #86efac;
+    }
+    .suggestion-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: -6px;
+      margin-bottom: 12px;
+    }
+    .btn-chip {
+      width: auto;
+      padding: 5px 10px;
+      font-size: 11px;
+      border-radius: 999px;
+      background: #f1f5f9;
+      color: #334155;
+      border: 1px solid #cbd5e1;
+      font-weight: 600;
+    }
+    .btn-chip:hover:not(:disabled) {
+      background: #e2e8f0;
     }
     .btn-contact {
       width: auto;
@@ -70,10 +129,23 @@
     .filter-bar input,
     .filter-bar select {
       width: auto;
-      min-width: 190px;
+      min-width: 175px;
       margin-bottom: 0;
       padding: 8px 12px;
       font-size: 13px;
+    }
+    .btn-today-filter {
+      width: auto;
+      padding: 8px 12px;
+      font-size: 12px;
+      background: #f1f5f9;
+      color: #0f172a;
+      border: 1px solid #cbd5e1;
+    }
+    .btn-today-filter.active {
+      background: #0f766e;
+      color: #fff;
+      border-color: #0f766e;
     }
     .btn-reset {
       width: auto;
@@ -92,7 +164,21 @@
     th { background: #f8fafc; color: #475569; font-weight: 700; }
     .badge-due { background: #fee2e2; color: #b91c1c; padding: 3px 8px; border-radius: 6px; font-size: 12px; font-weight: 600; }
     .badge-receive { background: #dcfce7; color: #15803d; padding: 3px 8px; border-radius: 6px; font-size: 12px; font-weight: 600; }
-    .action-group { display: flex; gap: 6px; flex-wrap: wrap; }
+    .action-group { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+    .btn-khata-row {
+      width: auto;
+      padding: 6px 10px;
+      font-size: 12px;
+      border-radius: 6px;
+      background: #f0fdf4;
+      color: #15803d;
+      border: 1px solid #bbf7d0;
+    }
+    .btn-khata-row:hover:not(:disabled) {
+      background: #16a34a;
+      color: #fff;
+      border-color: #16a34a;
+    }
     .btn-edit-row {
       width: auto;
       padding: 6px 10px;
@@ -121,6 +207,36 @@
       color: #fff;
       border-color: #dc2626;
     }
+    .btn-whatsapp {
+      width: auto;
+      padding: 6px 10px;
+      font-size: 12px;
+      border-radius: 6px;
+      background: #16a34a;
+      color: #fff;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      font-weight: 600;
+    }
+    .btn-whatsapp:hover {
+      background: #15803d;
+    }
+    .btn-call {
+      width: auto;
+      padding: 6px 10px;
+      font-size: 12px;
+      border-radius: 6px;
+      background: #0f766e;
+      color: #fff;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      font-weight: 600;
+    }
+    .btn-call:hover {
+      background: #115e59;
+    }
     .msg { margin-top: 10px; font-size: 13px; min-height: 18px; }
     .ok { color: #15803d; }
     .err { color: #dc2626; }
@@ -143,6 +259,11 @@
       border-radius: 12px;
       padding: 20px;
       box-shadow: 0 12px 32px rgba(15, 23, 42, 0.22);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .modal-box.khata-modal-box {
+      max-width: 760px;
     }
     .modal-box h3 { margin: 0 0 14px; font-size: 17px; color: #0f172a; }
     .modal-actions { display: flex; gap: 10px; margin-top: 6px; }
@@ -153,11 +274,65 @@
     .btn-cancel:hover:not(:disabled) {
       background: #cbd5e1;
     }
+    .btn-print {
+      background: #1d4ed8;
+      color: #fff;
+    }
+    .btn-print:hover:not(:disabled) {
+      background: #1e40af;
+    }
+    .khata-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .khata-toolbar select,
+    .khata-toolbar button,
+    .khata-toolbar a {
+      width: auto;
+      margin-bottom: 0;
+      padding: 7px 11px;
+      font-size: 12px;
+    }
+    .khata-meta {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 14px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 10px;
+      font-size: 13px;
+    }
+    .khata-meta div strong { display: block; font-size: 15px; margin-top: 2px; }
+
+    @media print {
+      body * { visibility: hidden; }
+      #khataModal, #khataModal * { visibility: visible; }
+      #khataModal {
+        position: static;
+        background: #fff;
+        padding: 0;
+        display: block !important;
+      }
+      .modal-box.khata-modal-box {
+        max-width: 100%;
+        box-shadow: none;
+        max-height: none;
+        padding: 0;
+      }
+      .no-print { display: none !important; }
+    }
 
     @media (max-width: 640px) {
       th, td { padding: 10px 8px; font-size: 13px; }
       .filter-bar input,
-      .filter-bar select { min-width: 100%; }
+      .filter-bar select,
+      .filter-bar button { width: 100%; }
     }
   </style>
 </head>
@@ -180,6 +355,14 @@
       <div class="card">
         <h3>মোট জমা / অগ্রিম (Total Payable / Advance)</h3>
         <div id="totalPayable" class="amount credit">৳0</div>
+      </div>
+    </div>
+
+    <div class="today-bar">
+      <div><strong>আজকের হিসাব:</strong></div>
+      <div class="today-metrics">
+        <span>আজ জমা পেলাম: <strong id="todayReceived" class="credit">৳0</strong></span>
+        <span>আজ নতুন বাকি দিলাম: <strong id="todayDue" class="due">৳0</strong></span>
       </div>
     </div>
 
@@ -216,6 +399,10 @@
         <div class="card-header">
           <h2>লেনদেন যুক্ত করুন (Add Transaction)</h2>
         </div>
+        <div class="quick-type-row">
+          <button type="button" id="quickReceiveBtn" class="btn-quick-type">আজ জমা দিল (Receive)</button>
+          <button type="button" id="quickDueBtn" class="btn-quick-type active-due">আজ বাকি দিলাম (Due)</button>
+        </div>
         <form id="txForm">
           <label for="txParty">পার্টি নির্বাচন করুন (Select Party) *</label>
           <select id="txParty" required>
@@ -224,15 +411,16 @@
 
           <label for="txType">লেনদেনের ধরন (Type) *</label>
           <select id="txType" required>
-            <option value="due">বাকি দিলাম / পাবো (Due / Gave Credit)</option>
-            <option value="receive">টাকা পেলাম / জমা হলো (Received / Payment In)</option>
+            <option value="receive">পূর্বের বাকি থেকে আজ জমা দিল (Received / Payment In)</option>
+            <option value="due" selected>আজ নতুন বাকি দিলাম (New Due / Gave Credit)</option>
           </select>
 
           <label for="txAmount">টাকার পরিমাণ (Amount in ৳) *</label>
           <input type="number" id="txAmount" step="any" min="0.01" placeholder="যেমন: 500" required />
 
           <label for="txNote">নোট / বিবরণ (Note)</label>
-          <input type="text" id="txNote" placeholder="যেমন: চাল বাকি বা ক্যাশ জমা" />
+          <input type="text" id="txNote" placeholder="যেমন: পুরনো বকেয়া পরিশোধ বা আজকের বাকি" />
+          <div id="noteSuggestionsRow" class="suggestion-row" aria-label="নোট সাজেশন"></div>
 
           <button type="submit" id="addTxBtn">লেনদেন সেভ করুন</button>
           <div id="txMsg" class="msg"></div>
@@ -245,6 +433,11 @@
       <h2>পার্টি তালিকা ও ব্যালেন্স (Parties List)</h2>
       <div class="filter-bar">
         <input type="search" id="partySearchInput" placeholder="নাম বা ফোন দিয়ে পার্টি খুঁজুন..." aria-label="পার্টি খুঁজুন" />
+        <select id="partyStatusFilter" aria-label="পার্টির অবস্থা ফিল্টার">
+          <option value="all">সব পার্টি (All)</option>
+          <option value="due">শুধু পাবো (Due)</option>
+          <option value="advance">শুধু জমা / অগ্রিম (Advance)</option>
+        </select>
         <button type="button" id="clearPartyFilterBtn" class="btn-reset">রিসেট</button>
       </div>
     </div>
@@ -269,11 +462,12 @@
     <div class="section-header">
       <h2>সাম্প্রতিক লেনদেন (Recent Transactions)</h2>
       <div class="filter-bar">
+        <button type="button" id="todayOnlyFilterBtn" class="btn-today-filter">শুধু আজকের লেনদেন</button>
         <input type="search" id="txSearchInput" placeholder="পার্টির নাম বা নোট দিয়ে খুঁজুন..." aria-label="লেনদেন খুঁজুন" />
         <select id="txTypeFilter" aria-label="লেনদেনের ধরন ফিল্টার">
           <option value="all">সব ধরন (All)</option>
-          <option value="due">বাকি / পাবো (Due)</option>
-          <option value="receive">জমা / পেলাম (Receive)</option>
+          <option value="receive">আজ জমা দিল (Receive)</option>
+          <option value="due">আজ বাকি দিলাম (Due)</option>
         </select>
         <button type="button" id="clearTxFilterBtn" class="btn-reset">রিসেট</button>
       </div>
@@ -297,6 +491,47 @@
     </div>
   </div>
 
+  <!-- Party Khata Modal -->
+  <div id="khataModal" class="modal-backdrop" aria-hidden="true">
+    <div class="modal-box khata-modal-box">
+      <div class="card-header">
+        <h3 id="khataTitle" style="margin:0;">পার্টির খাতা</h3>
+        <div class="action-group no-print">
+          <a id="khataCallLink" class="btn-call" href="#" style="display:none;">কল করুন</a>
+          <a id="khataWhatsappLink" class="btn-whatsapp" href="#" target="_blank" rel="noopener noreferrer" style="display:none;">WhatsApp</a>
+          <button type="button" id="exportPartyCsvBtn" class="btn-csv" style="width:auto; padding:7px 11px; font-size:12px;">পার্টির CSV</button>
+          <button type="button" id="printKhataBtn" class="btn-print" style="width:auto; padding:7px 11px; font-size:12px;">প্রিন্ট করুন</button>
+          <button type="button" id="closeKhataBtn" class="btn-cancel" style="width:auto; padding:7px 11px; font-size:12px;">বন্ধ করুন</button>
+        </div>
+      </div>
+
+      <div class="khata-toolbar no-print">
+        <span style="font-size:12px; color:#475569;">লেনদেন ফিল্টার:</span>
+        <select id="khataTypeFilter">
+          <option value="all">সব লেনদেন (All)</option>
+          <option value="receive">শুধু আজ জমা দিল (Receive)</option>
+          <option value="due">শুধু আজ বাকি দিলাম (Due)</option>
+        </select>
+      </div>
+
+      <div id="khataMeta" class="khata-meta"></div>
+      <div style="overflow-x:auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>তারিখ (Date)</th>
+              <th>ধরন (Type)</th>
+              <th>নোট (Note)</th>
+              <th>পরিমাণ (Amount)</th>
+            </tr>
+          </thead>
+          <tbody id="khataTxBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Party Modal -->
   <div id="editPartyModal" class="modal-backdrop" aria-hidden="true">
     <div class="modal-box">
       <h3>পার্টির তথ্য এডিট করুন</h3>
@@ -317,6 +552,7 @@
     </div>
   </div>
 
+  <!-- Edit Transaction Modal -->
   <div id="editTxModal" class="modal-backdrop" aria-hidden="true">
     <div class="modal-box">
       <h3>লেনদেন এডিট করুন</h3>
@@ -326,13 +562,13 @@
         <select id="editTxParty" required></select>
         <label for="editTxType">লেনদেনের ধরন (Type) *</label>
         <select id="editTxType" required>
-          <option value="due">বাকি দিলাম / পাবো (Due / Gave Credit)</option>
-          <option value="receive">টাকা পেলাম / জমা হলো (Received / Payment In)</option>
+          <option value="receive">পূর্বের বাকি থেকে আজ জমা দিল (Received / Payment In)</option>
+          <option value="due">আজ নতুন বাকি দিলাম (New Due / Gave Credit)</option>
         </select>
         <label for="editTxAmount">টাকার পরিমাণ (Amount in ৳) *</label>
         <input type="number" id="editTxAmount" step="any" min="0.01" required />
         <label for="editTxNote">নোট / বিবরণ (Note)</label>
-        <input type="text" id="editTxNote" placeholder="যেমন: চাল বাকি বা ক্যাশ জমা" />
+        <input type="text" id="editTxNote" placeholder="যেমন: পুরনো বকেয়া পরিশোধ বা আজকের বাকি" />
         <div class="modal-actions">
           <button type="submit" id="saveEditTxBtn">লেনদেন আপডেট করুন</button>
           <button type="button" id="cancelEditTxBtn" class="btn-cancel">বাতিল</button>
@@ -393,6 +629,13 @@
     const partyPhoneInput = document.getElementById("partyPhone");
     const txForm = document.getElementById("txForm");
     const txPartySelect = document.getElementById("txParty");
+    const txTypeSelect = document.getElementById("txType");
+    const txNoteInput = document.getElementById("txNote");
+    const noteSuggestionsRow = document.getElementById("noteSuggestionsRow");
+    const quickReceiveBtn = document.getElementById("quickReceiveBtn");
+    const quickDueBtn = document.getElementById("quickDueBtn");
+    const todayReceivedEl = document.getElementById("todayReceived");
+    const todayDueEl = document.getElementById("todayDue");
     const partiesBody = document.getElementById("partiesBody");
     const txBody = document.getElementById("txBody");
     const partyMsg = document.getElementById("partyMsg");
@@ -403,10 +646,23 @@
     const restoreJsonInput = document.getElementById("restoreJsonInput");
 
     const partySearchInput = document.getElementById("partySearchInput");
+    const partyStatusFilter = document.getElementById("partyStatusFilter");
     const clearPartyFilterBtn = document.getElementById("clearPartyFilterBtn");
+    const todayOnlyFilterBtn = document.getElementById("todayOnlyFilterBtn");
     const txSearchInput = document.getElementById("txSearchInput");
     const txTypeFilter = document.getElementById("txTypeFilter");
     const clearTxFilterBtn = document.getElementById("clearTxFilterBtn");
+
+    const khataModal = document.getElementById("khataModal");
+    const khataTitle = document.getElementById("khataTitle");
+    const khataMeta = document.getElementById("khataMeta");
+    const khataTxBody = document.getElementById("khataTxBody");
+    const khataTypeFilter = document.getElementById("khataTypeFilter");
+    const khataCallLink = document.getElementById("khataCallLink");
+    const khataWhatsappLink = document.getElementById("khataWhatsappLink");
+    const exportPartyCsvBtn = document.getElementById("exportPartyCsvBtn");
+    const closeKhataBtn = document.getElementById("closeKhataBtn");
+    const printKhataBtn = document.getElementById("printKhataBtn");
 
     const editPartyModal = document.getElementById("editPartyModal");
     const editPartyForm = document.getElementById("editPartyForm");
@@ -430,6 +686,22 @@
     let partiesMap = new Map();
     let latestParties = [];
     let latestTransactions = [];
+    let todayOnlyFilter = false;
+    let activeKhataPartyId = null;
+    let lastAutoSuggestedNote = "";
+
+    const noteSuggestionsMap = {
+      receive: [
+        "পূর্বের বাকি থেকে আজ জমা দিল",
+        "ক্যাশ জমা দিল",
+        "বিকাশ/নগদে জমা দিল"
+      ],
+      due: [
+        "আজ নতুন বাকি দিলাম",
+        "পণ্য বাকি দিলাম",
+        "ক্যাশ বাকি দিলাম"
+      ]
+    };
 
     const formatBDT = (num) => {
       const n = Number(num) || 0;
@@ -443,6 +715,112 @@
       return d.toLocaleString("bn-BD", { dateStyle: "medium", timeStyle: "short" });
     };
 
+    const isTodayDate = (ts) => {
+      if (!ts) return true;
+      const d = ts.toDate ? ts.toDate() : new Date(ts);
+      if (isNaN(d.getTime())) return false;
+      const now = new Date();
+      return (
+        d.getFullYear() === now.getFullYear() &&
+        d.getMonth() === now.getMonth() &&
+        d.getDate() === now.getDate()
+      );
+    };
+
+    const normalizePhoneForWa = (rawPhone) => {
+      const digits = String(rawPhone || "").replace(/[^\d]/g, "");
+      if (!digits) return "";
+      if (digits.startsWith("880")) return digits;
+      if (digits.startsWith("01") && digits.length === 11) return "88" + digits;
+      return digits;
+    };
+
+    const normalizePhoneForTel = (rawPhone) => {
+      return String(rawPhone || "").replace(/[^\d+]/g, "");
+    };
+
+    const buildWhatsappUrl = (party) => {
+      const waPhone = normalizePhoneForWa(party?.phone);
+      if (!waPhone) return "";
+      const bal = Number(party?.balance) || 0;
+      const summaryLine =
+        bal > 0
+          ? `বাকি আছে: ${formatBDT(bal)}`
+          : bal < 0
+          ? `জমা / অগ্রিম আছে: ${formatBDT(bal)}`
+          : "হিসাব সমান আছে";
+      const msgText = `আসসালামু আলাইকুম ${party?.name || ""}, আপনার ডিজিটাল হিসাব খাতার বর্তমান অবস্থা— ${summaryLine}।`;
+      return `https://wa.me/${waPhone}?text=${encodeURIComponent(msgText)}`;
+    };
+
+    function renderNoteSuggestions() {
+      const type = txTypeSelect.value === "receive" ? "receive" : "due";
+      const list = noteSuggestionsMap[type] || [];
+      noteSuggestionsRow.innerHTML = list
+        .map(
+          (s) =>
+            `<button type="button" class="btn-chip" data-note="${escapeHtml(s)}">${escapeHtml(s)}</button>`
+        )
+        .join("");
+    }
+
+    function applyAutoNoteSuggestion(forceDefault = false) {
+      const type = txTypeSelect.value === "receive" ? "receive" : "due";
+      const defaultNote = noteSuggestionsMap[type]?.[0] || "";
+      const currentVal = txNoteInput.value.trim();
+
+      if (forceDefault || !currentVal || currentVal === lastAutoSuggestedNote) {
+        txNoteInput.value = defaultNote;
+        lastAutoSuggestedNote = defaultNote;
+      }
+      renderNoteSuggestions();
+    }
+
+    noteSuggestionsRow.addEventListener("click", (e) => {
+      const chip = e.target.closest(".btn-chip");
+      if (!chip) return;
+      const noteText = chip.getAttribute("data-note") || "";
+      txNoteInput.value = noteText;
+      lastAutoSuggestedNote = noteText;
+      txNoteInput.focus();
+    });
+
+    function syncQuickTypeButtons() {
+      const isReceive = txTypeSelect.value === "receive";
+      quickReceiveBtn.className = isReceive ? "btn-quick-type active-receive" : "btn-quick-type";
+      quickDueBtn.className = !isReceive ? "btn-quick-type active-due" : "btn-quick-type";
+      applyAutoNoteSuggestion(false);
+    }
+
+    quickReceiveBtn.addEventListener("click", () => {
+      txTypeSelect.value = "receive";
+      syncQuickTypeButtons();
+    });
+
+    quickDueBtn.addEventListener("click", () => {
+      txTypeSelect.value = "due";
+      syncQuickTypeButtons();
+    });
+
+    txTypeSelect.addEventListener("change", syncQuickTypeButtons);
+    syncQuickTypeButtons();
+
+    function updateTodaySummary() {
+      let receivedToday = 0;
+      let dueToday = 0;
+
+      latestTransactions.forEach((tx) => {
+        if (isTodayDate(tx.createdAt || tx.date)) {
+          const amt = Math.abs(Number(tx.amount) || 0);
+          if (tx.type === "receive") receivedToday += amt;
+          else dueToday += amt;
+        }
+      });
+
+      todayReceivedEl.textContent = formatBDT(receivedToday);
+      todayDueEl.textContent = formatBDT(dueToday);
+    }
+
     const cleanPhoneNumber = (rawTel) => {
       if (!rawTel) return "";
       const trimmed = String(rawTel).trim();
@@ -451,7 +829,6 @@
       return plusPrefix + digitsOnly;
     };
 
-    // Pick contact from Phonebook via Contact Picker API
     pickContactBtn.addEventListener("click", async () => {
       partyMsg.textContent = "";
 
@@ -481,12 +858,9 @@
         const pickedTel = Array.isArray(picked.tel) ? (picked.tel[0] || "") : (picked.tel || "");
         const cleanedTel = cleanPhoneNumber(pickedTel);
 
-        if (pickedName && !partyNameInput.value.trim()) {
-          partyNameInput.value = pickedName.trim();
-        } else if (pickedName) {
+        if (pickedName) {
           partyNameInput.value = pickedName.trim();
         }
-
         if (cleanedTel) {
           partyPhoneInput.value = cleanedTel;
         }
@@ -557,8 +931,13 @@
 
     function renderFilteredParties() {
       const keyword = (partySearchInput.value || "").trim().toLowerCase();
+      const statusMode = partyStatusFilter.value || "all";
 
       const filtered = latestParties.filter((p) => {
+        const bal = Number(p.balance) || 0;
+        if (statusMode === "due" && !(bal > 0)) return false;
+        if (statusMode === "advance" && !(bal < 0)) return false;
+
         if (!keyword) return true;
         const nameMatch = String(p.name || "").toLowerCase().includes(keyword);
         const phoneMatch = String(p.phone || "").toLowerCase().includes(keyword);
@@ -567,7 +946,7 @@
 
       if (!filtered.length) {
         partiesBody.innerHTML = latestParties.length
-          ? '<tr><td colspan="5">খোঁজা অনুযায়ী কোনো পার্টি পাওয়া যায়নি।</td></tr>'
+          ? '<tr><td colspan="5">ফিল্টার অনুযায়ী কোনো পার্টি পাওয়া যায়নি।</td></tr>'
           : '<tr><td colspan="5">এখনো কোনো পার্টি যুক্ত করা হয়নি।</td></tr>';
         return;
       }
@@ -582,6 +961,10 @@
             ? '<span class="badge-receive">জমা / অগ্রিম (Advance)</span>'
             : "সমান (Settled)";
         const balanceClass = balance > 0 ? "due" : balance < 0 ? "credit" : "";
+        const waUrl = buildWhatsappUrl(p);
+        const waBtnHtml = waUrl
+          ? `<a class="btn-whatsapp" href="${escapeHtml(waUrl)}" target="_blank" rel="noopener noreferrer">WhatsApp</a>`
+          : "";
 
         rowsHtml += `
           <tr>
@@ -591,6 +974,8 @@
             <td>${statusBadge}</td>
             <td>
               <div class="action-group">
+                <button type="button" class="btn-khata-row btn-open-khata" data-id="${escapeHtml(p.id)}">খাতা</button>
+                ${waBtnHtml}
                 <button type="button" class="btn-edit-row btn-edit-party" data-id="${escapeHtml(p.id)}">এডিট</button>
                 <button type="button" class="btn-del-row btn-del-party" data-id="${escapeHtml(p.id)}">ডিলিট</button>
               </div>
@@ -607,6 +992,9 @@
       const selectedType = txTypeFilter.value || "all";
 
       const filtered = latestTransactions.filter((tx) => {
+        if (todayOnlyFilter && !isTodayDate(tx.createdAt || tx.date)) {
+          return false;
+        }
         if (selectedType !== "all" && tx.type !== selectedType) {
           return false;
         }
@@ -636,7 +1024,7 @@
           <tr>
             <td>${formatDate(tx.createdAt || tx.date)}</td>
             <td>${escapeHtml(partyName)}</td>
-            <td><span class="${isDue ? "badge-due" : "badge-receive"}">${isDue ? "বাকি / পাবো" : "জমা / পেলাম"}</span></td>
+            <td><span class="${isDue ? "badge-due" : "badge-receive"}">${isDue ? "আজ বাকি দিলাম" : "আজ জমা দিল"}</span></td>
             <td>${escapeHtml(tx.note || "-")}</td>
             <td class="${isDue ? "due" : "credit"}"><strong>${isDue ? "+" : "-"}${formatBDT(amount)}</strong></td>
             <td>
@@ -652,9 +1040,21 @@
       txBody.innerHTML = txHtml;
     }
 
+    function syncTodayFilterButton() {
+      todayOnlyFilterBtn.className = todayOnlyFilter ? "btn-today-filter active" : "btn-today-filter";
+    }
+
+    todayOnlyFilterBtn.addEventListener("click", () => {
+      todayOnlyFilter = !todayOnlyFilter;
+      syncTodayFilterButton();
+      renderFilteredTransactions();
+    });
+
     partySearchInput.addEventListener("input", renderFilteredParties);
+    partyStatusFilter.addEventListener("change", renderFilteredParties);
     clearPartyFilterBtn.addEventListener("click", () => {
       partySearchInput.value = "";
+      partyStatusFilter.value = "all";
       renderFilteredParties();
       partySearchInput.focus();
     });
@@ -664,8 +1064,141 @@
     clearTxFilterBtn.addEventListener("click", () => {
       txSearchInput.value = "";
       txTypeFilter.value = "all";
+      todayOnlyFilter = false;
+      syncTodayFilterButton();
       renderFilteredTransactions();
       txSearchInput.focus();
+    });
+
+    function getFilteredKhataTransactions(partyId) {
+      const typeMode = khataTypeFilter.value || "all";
+      return latestTransactions.filter((t) => {
+        if (t.partyId !== partyId) return false;
+        if (typeMode !== "all" && t.type !== typeMode) return false;
+        return true;
+      });
+    }
+
+    function renderPartyKhata(partyId) {
+      const party = partiesMap.get(partyId);
+      if (!party) return;
+
+      const allPartyTxs = latestTransactions.filter((t) => t.partyId === partyId);
+      let totalDue = 0;
+      let totalReceive = 0;
+
+      allPartyTxs.forEach((tx) => {
+        const amt = Math.abs(Number(tx.amount) || 0);
+        if (tx.type === "due") totalDue += amt;
+        else totalReceive += amt;
+      });
+
+      const bal = Number(party.balance) || 0;
+      const balClass = bal > 0 ? "due" : bal < 0 ? "credit" : "";
+      const balLabel = bal > 0 ? "পাবো (Due)" : bal < 0 ? "জমা / অগ্রিম" : "সমান";
+
+      const telHref = normalizePhoneForTel(party.phone);
+      const waUrl = buildWhatsappUrl(party);
+
+      if (telHref) {
+        khataCallLink.href = `tel:${telHref}`;
+        khataCallLink.style.display = "inline-flex";
+      } else {
+        khataCallLink.style.display = "none";
+      }
+
+      if (waUrl) {
+        khataWhatsappLink.href = waUrl;
+        khataWhatsappLink.style.display = "inline-flex";
+      } else {
+        khataWhatsappLink.style.display = "none";
+      }
+
+      khataTitle.textContent = `খাতা: ${party.name || "পার্টি"}`;
+      khataMeta.innerHTML = `
+        <div><span>ফোন নম্বর</span><strong>${escapeHtml(party.phone || "-")}</strong></div>
+        <div><span>মোট বাকি দিলাম</span><strong class="due">${formatBDT(totalDue)}</strong></div>
+        <div><span>মোট জমা পেলাম</span><strong class="credit">${formatBDT(totalReceive)}</strong></div>
+        <div><span>বর্তমান ব্যালেন্স (${escapeHtml(balLabel)})</span><strong class="${balClass}">${formatBDT(bal)}</strong></div>
+      `;
+
+      const shownTxs = getFilteredKhataTransactions(partyId);
+      if (!shownTxs.length) {
+        khataTxBody.innerHTML = '<tr><td colspan="4">এই ফিল্টারে কোনো লেনদেন পাওয়া যায়নি।</td></tr>';
+        return;
+      }
+
+      khataTxBody.innerHTML = shownTxs
+        .map((tx) => {
+          const isDue = tx.type === "due";
+          const amount = Number(tx.amount) || 0;
+          return `
+            <tr>
+              <td>${formatDate(tx.createdAt || tx.date)}</td>
+              <td><span class="${isDue ? "badge-due" : "badge-receive"}">${isDue ? "আজ বাকি দিলাম" : "আজ জমা দিল"}</span></td>
+              <td>${escapeHtml(tx.note || "-")}</td>
+              <td class="${isDue ? "due" : "credit"}"><strong>${isDue ? "+" : "-"}${formatBDT(amount)}</strong></td>
+            </tr>
+          `;
+        })
+        .join("");
+    }
+
+    khataTypeFilter.addEventListener("change", () => {
+      if (activeKhataPartyId) renderPartyKhata(activeKhataPartyId);
+    });
+
+    exportPartyCsvBtn.addEventListener("click", () => {
+      if (!activeKhataPartyId) return;
+      const party = partiesMap.get(activeKhataPartyId);
+      if (!party) return;
+
+      const rows = getFilteredKhataTransactions(activeKhataPartyId);
+      const headers = ["তারিখ (Date)", "পার্টির নাম (Party)", "ফোন (Phone)", "ধরন (Type)", "নোট (Note)", "পরিমাণ (Amount)"];
+      const lines = [headers.map(csvEscape).join(",")];
+
+      rows.forEach((tx) => {
+        const typeLabel = tx.type === "due" ? "আজ বাকি দিলাম" : "আজ জমা দিল";
+        const amountVal = tx.type === "due" ? Number(tx.amount) || 0 : -(Number(tx.amount) || 0);
+        lines.push([
+          csvEscape(formatDate(tx.createdAt || tx.date)),
+          csvEscape(party.name || ""),
+          csvEscape(party.phone || "-"),
+          csvEscape(typeLabel),
+          csvEscape(tx.note || "-"),
+          csvEscape(amountVal)
+        ].join(","));
+      });
+
+      const safeName = String(party.name || "party").toLowerCase().replace(/[^a-z0-9\u0980-\u09ff]+/gi, "-");
+      downloadFile(
+        "\uFEFF" + lines.join("\n"),
+        `khata-${safeName}-${getDateStamp()}.csv`,
+        "text/csv;charset=utf-8;"
+      );
+    });
+
+    function openPartyKhata(partyId) {
+      if (!partiesMap.has(partyId)) return;
+      activeKhataPartyId = partyId;
+      khataTypeFilter.value = "all";
+      renderPartyKhata(partyId);
+      khataModal.classList.add("open");
+      khataModal.setAttribute("aria-hidden", "false");
+    }
+
+    function closePartyKhata() {
+      activeKhataPartyId = null;
+      khataModal.classList.remove("open");
+      khataModal.setAttribute("aria-hidden", "true");
+    }
+
+    closeKhataBtn.addEventListener("click", closePartyKhata);
+    khataModal.addEventListener("click", (e) => {
+      if (e.target === khataModal) closePartyKhata();
+    });
+    printKhataBtn.addEventListener("click", () => {
+      window.print();
     });
 
     exportJsonBtn.addEventListener("click", async () => {
@@ -726,7 +1259,7 @@
         const lines = [headers.map(csvEscape).join(",")];
         data.transactions.forEach((tx) => {
           const party = pLookup.get(tx.partyId) || {};
-          const typeLabel = tx.type === "due" ? "বাকি / পাবো" : "জমা / পেলাম";
+          const typeLabel = tx.type === "due" ? "আজ বাকি দিলাম" : "আজ জমা দিল";
           const amountVal = tx.type === "due" ? Number(tx.amount) || 0 : -(Number(tx.amount) || 0);
 
           lines.push([
@@ -834,7 +1367,7 @@
         });
 
         await batch.commit();
-        setBackupStatus("ব্যাকআপ সফলভাবে রিস্টোর হয়েছে ✓");
+        setBackupStatus(`ব্যাকআপ রিস্টোর হয়েছে (${parties.length} পার্টি, ${transactions.length} লেনদেন) ✓`);
       } catch (err) {
         console.error(err);
         setBackupStatus("রিস্টোর ব্যর্থ: সঠিক JSON ব্যাকআপ ফাইল সিলেক্ট করুন।", true);
@@ -925,6 +1458,7 @@
         batch.delete(doc(db, "parties", partyId));
 
         await batch.commit();
+        if (activeKhataPartyId === partyId) closePartyKhata();
         partyMsg.textContent = `"${partyLabel}" এবং সংশ্লিষ্ট লেনদেন মুছে ফেলা হয়েছে ✓`;
         partyMsg.className = "msg ok";
       } catch (err) {
@@ -939,6 +1473,12 @@
     }
 
     partiesBody.addEventListener("click", (e) => {
+      const khataBtn = e.target.closest(".btn-open-khata");
+      if (khataBtn) {
+        const pId = khataBtn.getAttribute("data-id");
+        if (pId) openPartyKhata(pId);
+        return;
+      }
       const editBtn = e.target.closest(".btn-edit-party");
       if (editBtn) {
         const pId = editBtn.getAttribute("data-id");
@@ -983,6 +1523,9 @@
 
         renderFilteredParties();
         renderFilteredTransactions();
+        if (activeKhataPartyId && partiesMap.has(activeKhataPartyId)) {
+          renderPartyKhata(activeKhataPartyId);
+        }
 
         const prevSelected = txPartySelect.value;
         txPartySelect.innerHTML = selectHtml;
@@ -1185,7 +1728,11 @@
         snapshot.forEach((docSnap) => {
           latestTransactions.push({ id: docSnap.id, ...serializeValueForJSON(docSnap.data()) });
         });
+        updateTodaySummary();
         renderFilteredTransactions();
+        if (activeKhataPartyId && partiesMap.has(activeKhataPartyId)) {
+          renderPartyKhata(activeKhataPartyId);
+        }
       },
       (err) => {
         console.error("Transactions onSnapshot error:", err);
@@ -1201,6 +1748,22 @@
       const name = partyNameInput.value.trim();
       const phone = partyPhoneInput.value.trim();
       const balance = Number(document.getElementById("openingBalance").value) || 0;
+
+      const duplicate = latestParties.find((p) => {
+        const sameName = String(p.name || "").trim().toLowerCase() === name.toLowerCase();
+        const samePhone = phone && String(p.phone || "").trim() === phone;
+        return sameName || samePhone;
+      });
+
+      if (duplicate) {
+        const proceed = confirm(
+          `"${duplicate.name}" (${duplicate.phone || "নম্বর নেই"}) নামে আগে থেকেই একটি পার্টি আছে। তবুও কি নতুন পার্টি হিসেবে সেভ করতে চান?`
+        );
+        if (!proceed) {
+          btn.disabled = false;
+          return;
+        }
+      }
 
       try {
         await addDoc(collection(db, "parties"), {
@@ -1229,9 +1792,9 @@
       btn.disabled = true;
 
       const partyId = txPartySelect.value;
-      const type = document.getElementById("txType").value;
+      const type = txTypeSelect.value;
       const amount = Number(document.getElementById("txAmount").value) || 0;
-      const note = document.getElementById("txNote").value.trim();
+      const note = txNoteInput.value.trim();
 
       if (!partyId || amount <= 0) {
         txMsg.textContent = "সঠিক পার্টি ও টাকার পরিমাণ দিন।";
@@ -1258,6 +1821,8 @@
         await updateDoc(partyRef, { balance: increment(delta) });
 
         txForm.reset();
+        lastAutoSuggestedNote = "";
+        syncQuickTypeButtons();
         txMsg.textContent = "লেনদেন ও ব্যালেন্স আপডেট হয়েছে ✓";
         txMsg.className = "msg ok";
       } catch (err) {
