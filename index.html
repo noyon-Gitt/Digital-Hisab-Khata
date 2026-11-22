@@ -18,9 +18,28 @@
     .due { color: #dc2626; }
     .credit { color: #16a34a; }
     .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 18px; margin-bottom: 22px; }
-    h2 { margin: 0 0 12px; font-size: 17px; }
+    h2 { margin: 0; font-size: 17px; }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .btn-contact {
+      width: auto;
+      padding: 7px 12px;
+      font-size: 12px;
+      background: #0284c7;
+      color: #fff;
+      border-radius: 8px;
+    }
+    .btn-contact:hover:not(:disabled) {
+      background: #0369a1;
+    }
     label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 5px; color: #334155; }
-    input, select { width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 8px; margin-bottom: 12px; font-size: 14px; }
+    input, select { width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 8px; margin-bottom: 12px; font-size: 14px; background: #fff; }
     button { background: #0f766e; color: #fff; border: none; padding: 10px 16px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; width: 100%; }
     button:hover:not(:disabled) { background: #115e59; }
     button:disabled { opacity: 0.6; cursor: not-allowed; }
@@ -33,6 +52,41 @@
     .upload-btn { background: #e2e8f0; color: #0f172a; border: 1px solid #cbd5e1; }
     .upload-btn:hover { background: #cbd5e1; }
     .toolbar-msg { font-size: 13px; font-weight: 600; }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+    .filter-bar input,
+    .filter-bar select {
+      width: auto;
+      min-width: 190px;
+      margin-bottom: 0;
+      padding: 8px 12px;
+      font-size: 13px;
+    }
+    .btn-reset {
+      width: auto;
+      padding: 8px 12px;
+      font-size: 12px;
+      background: #e2e8f0;
+      color: #1e293b;
+      border: 1px solid #cbd5e1;
+    }
+    .btn-reset:hover:not(:disabled) {
+      background: #cbd5e1;
+    }
+
     table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(15,23,42,0.06); }
     th, td { padding: 12px 14px; text-align: left; border-bottom: 1px solid #e2e8f0; font-size: 14px; }
     th { background: #f8fafc; color: #475569; font-weight: 700; }
@@ -102,6 +156,8 @@
 
     @media (max-width: 640px) {
       th, td { padding: 10px 8px; font-size: 13px; }
+      .filter-bar input,
+      .filter-bar select { min-width: 100%; }
     }
   </style>
 </head>
@@ -137,7 +193,10 @@
 
     <div class="grid">
       <div class="card">
-        <h2>নতুন পার্টি যোগ করুন (Add Party)</h2>
+        <div class="card-header">
+          <h2>নতুন পার্টি যোগ করুন (Add Party)</h2>
+          <button type="button" id="pickContactBtn" class="btn-contact">ফোনবুক থেকে নিন</button>
+        </div>
         <form id="partyForm">
           <label for="partyName">পার্টির নাম (Name) *</label>
           <input type="text" id="partyName" placeholder="যেমন: করিম ট্রেডার্স" required />
@@ -154,7 +213,9 @@
       </div>
 
       <div class="card">
-        <h2>লেনদেন যুক্ত করুন (Add Transaction)</h2>
+        <div class="card-header">
+          <h2>লেনদেন যুক্ত করুন (Add Transaction)</h2>
+        </div>
         <form id="txForm">
           <label for="txParty">পার্টি নির্বাচন করুন (Select Party) *</label>
           <select id="txParty" required>
@@ -179,7 +240,14 @@
       </div>
     </div>
 
-    <h2>পার্টি তালিকা ও ব্যালেন্স (Parties List)</h2>
+    <!-- Parties Section -->
+    <div class="section-header">
+      <h2>পার্টি তালিকা ও ব্যালেন্স (Parties List)</h2>
+      <div class="filter-bar">
+        <input type="search" id="partySearchInput" placeholder="নাম বা ফোন দিয়ে পার্টি খুঁজুন..." aria-label="পার্টি খুঁজুন" />
+        <button type="button" id="clearPartyFilterBtn" class="btn-reset">রিসেট</button>
+      </div>
+    </div>
     <div style="overflow-x:auto; margin-bottom:24px;">
       <table>
         <thead>
@@ -197,7 +265,19 @@
       </table>
     </div>
 
-    <h2>সাম্প্রতিক লেনদেন (Recent Transactions)</h2>
+    <!-- Recent Transactions Section -->
+    <div class="section-header">
+      <h2>সাম্প্রতিক লেনদেন (Recent Transactions)</h2>
+      <div class="filter-bar">
+        <input type="search" id="txSearchInput" placeholder="পার্টির নাম বা নোট দিয়ে খুঁজুন..." aria-label="লেনদেন খুঁজুন" />
+        <select id="txTypeFilter" aria-label="লেনদেনের ধরন ফিল্টার">
+          <option value="all">সব ধরন (All)</option>
+          <option value="due">বাকি / পাবো (Due)</option>
+          <option value="receive">জমা / পেলাম (Receive)</option>
+        </select>
+        <button type="button" id="clearTxFilterBtn" class="btn-reset">রিসেট</button>
+      </div>
+    </div>
     <div style="overflow-x:auto;">
       <table>
         <thead>
@@ -308,6 +388,9 @@
 
     const dbStatus = dbStatusEl;
     const partyForm = document.getElementById("partyForm");
+    const pickContactBtn = document.getElementById("pickContactBtn");
+    const partyNameInput = document.getElementById("partyName");
+    const partyPhoneInput = document.getElementById("partyPhone");
     const txForm = document.getElementById("txForm");
     const txPartySelect = document.getElementById("txParty");
     const partiesBody = document.getElementById("partiesBody");
@@ -318,6 +401,12 @@
     const exportJsonBtn = document.getElementById("exportJsonBtn");
     const exportCsvBtn = document.getElementById("exportCsvBtn");
     const restoreJsonInput = document.getElementById("restoreJsonInput");
+
+    const partySearchInput = document.getElementById("partySearchInput");
+    const clearPartyFilterBtn = document.getElementById("clearPartyFilterBtn");
+    const txSearchInput = document.getElementById("txSearchInput");
+    const txTypeFilter = document.getElementById("txTypeFilter");
+    const clearTxFilterBtn = document.getElementById("clearTxFilterBtn");
 
     const editPartyModal = document.getElementById("editPartyModal");
     const editPartyForm = document.getElementById("editPartyForm");
@@ -353,6 +442,66 @@
       if (isNaN(d.getTime())) return String(ts);
       return d.toLocaleString("bn-BD", { dateStyle: "medium", timeStyle: "short" });
     };
+
+    const cleanPhoneNumber = (rawTel) => {
+      if (!rawTel) return "";
+      const trimmed = String(rawTel).trim();
+      const plusPrefix = trimmed.startsWith("+") ? "+" : "";
+      const digitsOnly = trimmed.replace(/[^\d]/g, "");
+      return plusPrefix + digitsOnly;
+    };
+
+    // Pick contact from Phonebook via Contact Picker API
+    pickContactBtn.addEventListener("click", async () => {
+      partyMsg.textContent = "";
+
+      const supportsContacts =
+        "contacts" in navigator &&
+        navigator.contacts &&
+        typeof navigator.contacts.select === "function";
+
+      if (!supportsContacts) {
+        partyMsg.textContent =
+          "এই ব্রাউজারে সরাসরি ফোনবুক খোলার সুবিধা নেই। নাম ও নম্বর নিজে লিখে সেভ করুন।";
+        partyMsg.className = "msg err";
+        return;
+      }
+
+      pickContactBtn.disabled = true;
+      try {
+        const contacts = await navigator.contacts.select(["name", "tel"], { multiple: false });
+        if (!contacts || !contacts.length) {
+          partyMsg.textContent = "কোনো কন্ট্যাক্ট নির্বাচন করা হয়নি।";
+          partyMsg.className = "msg err";
+          return;
+        }
+
+        const picked = contacts[0];
+        const pickedName = Array.isArray(picked.name) ? (picked.name[0] || "") : (picked.name || "");
+        const pickedTel = Array.isArray(picked.tel) ? (picked.tel[0] || "") : (picked.tel || "");
+        const cleanedTel = cleanPhoneNumber(pickedTel);
+
+        if (pickedName && !partyNameInput.value.trim()) {
+          partyNameInput.value = pickedName.trim();
+        } else if (pickedName) {
+          partyNameInput.value = pickedName.trim();
+        }
+
+        if (cleanedTel) {
+          partyPhoneInput.value = cleanedTel;
+        }
+
+        partyMsg.textContent = "ফোনবুক থেকে তথ্য যুক্ত হয়েছে ✓";
+        partyMsg.className = "msg ok";
+      } catch (err) {
+        console.error("Contact picker error:", err);
+        partyMsg.textContent =
+          "ফোনবুক থেকে তথ্য আনা যায়নি। নাম ও নম্বর নিজে লিখে সেভ করুন।";
+        partyMsg.className = "msg err";
+      } finally {
+        pickContactBtn.disabled = false;
+      }
+    });
 
     const setBackupStatus = (text, isErr = false) => {
       backupMsg.textContent = text;
@@ -405,6 +554,119 @@
       const transactions = tSnap.docs.map((d) => ({ id: d.id, ...serializeValueForJSON(d.data()) }));
       return { parties, transactions };
     };
+
+    function renderFilteredParties() {
+      const keyword = (partySearchInput.value || "").trim().toLowerCase();
+
+      const filtered = latestParties.filter((p) => {
+        if (!keyword) return true;
+        const nameMatch = String(p.name || "").toLowerCase().includes(keyword);
+        const phoneMatch = String(p.phone || "").toLowerCase().includes(keyword);
+        return nameMatch || phoneMatch;
+      });
+
+      if (!filtered.length) {
+        partiesBody.innerHTML = latestParties.length
+          ? '<tr><td colspan="5">খোঁজা অনুযায়ী কোনো পার্টি পাওয়া যায়নি।</td></tr>'
+          : '<tr><td colspan="5">এখনো কোনো পার্টি যুক্ত করা হয়নি।</td></tr>';
+        return;
+      }
+
+      let rowsHtml = "";
+      filtered.forEach((p) => {
+        const balance = Number(p.balance) || 0;
+        const statusBadge =
+          balance > 0
+            ? '<span class="badge-due">পাবো (Due)</span>'
+            : balance < 0
+            ? '<span class="badge-receive">জমা / অগ্রিম (Advance)</span>'
+            : "সমান (Settled)";
+        const balanceClass = balance > 0 ? "due" : balance < 0 ? "credit" : "";
+
+        rowsHtml += `
+          <tr>
+            <td><strong>${escapeHtml(p.name || "")}</strong></td>
+            <td>${escapeHtml(p.phone || "-")}</td>
+            <td class="${balanceClass}"><strong>${formatBDT(balance)}</strong></td>
+            <td>${statusBadge}</td>
+            <td>
+              <div class="action-group">
+                <button type="button" class="btn-edit-row btn-edit-party" data-id="${escapeHtml(p.id)}">এডিট</button>
+                <button type="button" class="btn-del-row btn-del-party" data-id="${escapeHtml(p.id)}">ডিলিট</button>
+              </div>
+            </td>
+          </tr>
+        `;
+      });
+
+      partiesBody.innerHTML = rowsHtml;
+    }
+
+    function renderFilteredTransactions() {
+      const keyword = (txSearchInput.value || "").trim().toLowerCase();
+      const selectedType = txTypeFilter.value || "all";
+
+      const filtered = latestTransactions.filter((tx) => {
+        if (selectedType !== "all" && tx.type !== selectedType) {
+          return false;
+        }
+        if (!keyword) return true;
+
+        const party = partiesMap.get(tx.partyId);
+        const partyName = (party ? party.name : (tx.partyName || "")).toLowerCase();
+        const noteText = String(tx.note || "").toLowerCase();
+        return partyName.includes(keyword) || noteText.includes(keyword);
+      });
+
+      if (!filtered.length) {
+        txBody.innerHTML = latestTransactions.length
+          ? '<tr><td colspan="6">ফিল্টার অনুযায়ী কোনো লেনদেন পাওয়া যায়নি।</td></tr>'
+          : '<tr><td colspan="6">এখনো কোনো লেনদেন নেই।</td></tr>';
+        return;
+      }
+
+      let txHtml = "";
+      filtered.forEach((tx) => {
+        const party = partiesMap.get(tx.partyId);
+        const partyName = party ? party.name : (tx.partyName || "অজানা পার্টি");
+        const isDue = tx.type === "due";
+        const amount = Number(tx.amount) || 0;
+
+        txHtml += `
+          <tr>
+            <td>${formatDate(tx.createdAt || tx.date)}</td>
+            <td>${escapeHtml(partyName)}</td>
+            <td><span class="${isDue ? "badge-due" : "badge-receive"}">${isDue ? "বাকি / পাবো" : "জমা / পেলাম"}</span></td>
+            <td>${escapeHtml(tx.note || "-")}</td>
+            <td class="${isDue ? "due" : "credit"}"><strong>${isDue ? "+" : "-"}${formatBDT(amount)}</strong></td>
+            <td>
+              <div class="action-group">
+                <button type="button" class="btn-edit-row btn-edit-tx" data-id="${escapeHtml(tx.id)}">এডিট</button>
+                <button type="button" class="btn-del-row btn-del-tx" data-id="${escapeHtml(tx.id)}">ডিলিট</button>
+              </div>
+            </td>
+          </tr>
+        `;
+      });
+
+      txBody.innerHTML = txHtml;
+    }
+
+    partySearchInput.addEventListener("input", renderFilteredParties);
+    clearPartyFilterBtn.addEventListener("click", () => {
+      partySearchInput.value = "";
+      renderFilteredParties();
+      partySearchInput.focus();
+    });
+
+    txSearchInput.addEventListener("input", renderFilteredTransactions);
+    txTypeFilter.addEventListener("change", renderFilteredTransactions);
+    clearTxFilterBtn.addEventListener("click", () => {
+      txSearchInput.value = "";
+      txTypeFilter.value = "all";
+      renderFilteredTransactions();
+      txSearchInput.focus();
+    });
 
     exportJsonBtn.addEventListener("click", async () => {
       exportJsonBtn.disabled = true;
@@ -700,7 +962,6 @@
 
         let totalReceivable = 0;
         let totalPayable = 0;
-        let rowsHtml = "";
         let selectHtml = '<option value="">-- পার্টি নির্বাচন করুন --</option>';
 
         snapshot.forEach((docSnap) => {
@@ -713,30 +974,6 @@
           if (balance > 0) totalReceivable += balance;
           if (balance < 0) totalPayable += Math.abs(balance);
 
-          const statusBadge =
-            balance > 0
-              ? '<span class="badge-due">পাবো (Due)</span>'
-              : balance < 0
-              ? '<span class="badge-receive">জমা / অগ্রিম (Advance)</span>'
-              : "সমান (Settled)";
-
-          const balanceClass = balance > 0 ? "due" : balance < 0 ? "credit" : "";
-
-          rowsHtml += `
-            <tr>
-              <td><strong>${escapeHtml(data.name || "")}</strong></td>
-              <td>${escapeHtml(data.phone || "-")}</td>
-              <td class="${balanceClass}"><strong>${formatBDT(balance)}</strong></td>
-              <td>${statusBadge}</td>
-              <td>
-                <div class="action-group">
-                  <button type="button" class="btn-edit-row btn-edit-party" data-id="${escapeHtml(docSnap.id)}">এডিট</button>
-                  <button type="button" class="btn-del-row btn-del-party" data-id="${escapeHtml(docSnap.id)}">ডিলিট</button>
-                </div>
-              </td>
-            </tr>
-          `;
-
           selectHtml += `<option value="${docSnap.id}">${escapeHtml(data.name)} (${balance >= 0 ? "বাকি" : "জমা"}: ${formatBDT(balance)})</option>`;
         });
 
@@ -744,7 +981,8 @@
         document.getElementById("totalReceivable").textContent = formatBDT(totalReceivable);
         document.getElementById("totalPayable").textContent = formatBDT(totalPayable);
 
-        partiesBody.innerHTML = rowsHtml || '<tr><td colspan="5">এখনো কোনো পার্টি যুক্ত করা হয়নি।</td></tr>';
+        renderFilteredParties();
+        renderFilteredTransactions();
 
         const prevSelected = txPartySelect.value;
         txPartySelect.innerHTML = selectHtml;
@@ -943,33 +1181,11 @@
     onSnapshot(
       txQuery,
       (snapshot) => {
-        let txHtml = "";
         latestTransactions = [];
         snapshot.forEach((docSnap) => {
-          const tx = docSnap.data();
-          latestTransactions.push({ id: docSnap.id, ...serializeValueForJSON(tx) });
-          const party = partiesMap.get(tx.partyId);
-          const partyName = party ? party.name : (tx.partyName || "অজানা পার্টি");
-          const isDue = tx.type === "due";
-          const amount = Number(tx.amount) || 0;
-
-          txHtml += `
-            <tr>
-              <td>${formatDate(tx.createdAt || tx.date)}</td>
-              <td>${escapeHtml(partyName)}</td>
-              <td><span class="${isDue ? "badge-due" : "badge-receive"}">${isDue ? "বাকি / পাবো" : "জমা / পেলাম"}</span></td>
-              <td>${escapeHtml(tx.note || "-")}</td>
-              <td class="${isDue ? "due" : "credit"}"><strong>${isDue ? "+" : "-"}${formatBDT(amount)}</strong></td>
-              <td>
-                <div class="action-group">
-                  <button type="button" class="btn-edit-row btn-edit-tx" data-id="${escapeHtml(docSnap.id)}">এডিট</button>
-                  <button type="button" class="btn-del-row btn-del-tx" data-id="${escapeHtml(docSnap.id)}">ডিলিট</button>
-                </div>
-              </td>
-            </tr>
-          `;
+          latestTransactions.push({ id: docSnap.id, ...serializeValueForJSON(docSnap.data()) });
         });
-        txBody.innerHTML = txHtml || '<tr><td colspan="6">এখনো কোনো লেনদেন নেই।</td></tr>';
+        renderFilteredTransactions();
       },
       (err) => {
         console.error("Transactions onSnapshot error:", err);
@@ -982,8 +1198,8 @@
       const btn = document.getElementById("addPartyBtn");
       btn.disabled = true;
 
-      const name = document.getElementById("partyName").value.trim();
-      const phone = document.getElementById("partyPhone").value.trim();
+      const name = partyNameInput.value.trim();
+      const phone = partyPhoneInput.value.trim();
       const balance = Number(document.getElementById("openingBalance").value) || 0;
 
       try {
