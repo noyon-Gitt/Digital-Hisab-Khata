@@ -190,7 +190,7 @@
     .due { color: #dc2626; }
     .credit { color: #16a34a; }
 
-    /* Cashbox Layout (Matches 1000143910.jpg) */
+    /* Cashbox Layout */
     .cb-hero-card {
       background: #fff;
       border-radius: 16px;
@@ -403,7 +403,7 @@
     }
     .fab-add-btn:hover:not(:disabled) { background: #0369a1; }
 
-    /* Add Customer/Supplier Screen (Matches 1000143908.jpg) */
+    /* Add Customer/Supplier Screen */
     .add-party-screen {
       display: none;
       position: fixed;
@@ -439,12 +439,7 @@
     }
     .ap-title { margin: 0; font-size: 17px; font-weight: 800; color: #0f172a; }
     .ap-body { max-width: 640px; margin: 0 auto; padding: 16px 14px; }
-    .ap-role-row {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 16px;
-    }
+    .ap-role-row { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
     .ap-avatar-placeholder {
       width: 54px;
       height: 54px;
@@ -472,11 +467,7 @@
       cursor: pointer;
       margin: 0;
     }
-    .ap-radio-card.selected {
-      border-color: #0284c7;
-      background: #f0f9ff;
-      color: #0284c7;
-    }
+    .ap-radio-card.selected { border-color: #0284c7; background: #f0f9ff; color: #0284c7; }
     .ap-radio-card input[type="radio"] { width: auto; margin: 0; accent-color: #0284c7; }
     .ap-contact-btn {
       width: 100%;
@@ -520,7 +511,7 @@
     .ap-submit-btn.ready { background: #0284c7; }
     .ap-submit-btn.ready:hover:not(:disabled) { background: #0369a1; }
 
-    /* Menu Slide Drawer (Matches 1000143909.jpg) */
+    /* Menu Slide Drawer */
     .menu-drawer-backdrop {
       display: none;
       position: fixed;
@@ -549,7 +540,9 @@
       align-items: center;
       justify-content: space-between;
       border-bottom: 1px solid #f1f5f9;
+      cursor: pointer;
     }
+    .md-profile-head:hover { background: #f0f9ff; }
     .md-section-title {
       padding: 12px 16px 6px;
       font-size: 13px;
@@ -580,7 +573,116 @@
       background: #f8fafc;
     }
 
-    /* Party Entry Screen */
+    /* Data Backup Full Screen (Matches 1000144008.jpg) */
+    .backup-screen {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: #ffffff;
+      z-index: 820;
+      overflow-y: auto;
+      padding-bottom: 36px;
+    }
+    .backup-screen.open { display: block; }
+    .bk-header {
+      background: #fff;
+      border-bottom: 1px solid #e2e8f0;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .bk-body {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 44px 18px 24px;
+      min-height: calc(100vh - 64px);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .bk-status-center { text-align: left; }
+    .bk-cloud-circle {
+      width: 84px;
+      height: 84px;
+      border-radius: 50%;
+      background: #16a34a;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 38px;
+      margin-bottom: 22px;
+      box-shadow: 0 8px 20px rgba(22, 163, 74, 0.22);
+    }
+    .bk-main-status { font-size: 16px; font-weight: 700; color: #1e293b; margin-bottom: 18px; }
+    .bk-divider { border: none; border-top: 1px solid #e2e8f0; margin: 18px 0; }
+    .bk-last-label { font-size: 13px; color: #64748b; margin-bottom: 4px; }
+    .bk-last-time { font-size: 17px; font-weight: 800; color: #15803d; margin-bottom: 22px; }
+    .bk-tools-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+    .bk-primary-btn {
+      width: 100%;
+      padding: 14px 18px;
+      border-radius: 999px;
+      font-size: 15px;
+      font-weight: 800;
+      background: #0284c7;
+      color: #fff;
+      margin-top: 18px;
+    }
+    .bk-primary-btn.synced { background: #e0f2fe; color: #0369a1; }
+
+    /* Profile Details Full Screen (Matches 1000144009.jpg) */
+    .profile-screen {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: #f8fafc;
+      z-index: 840;
+      overflow-y: auto;
+      padding-bottom: 36px;
+    }
+    .profile-screen.open { display: block; }
+    .pf-top-card {
+      background: #fff;
+      padding: 18px 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .pf-section-card {
+      background: #fff;
+      padding: 18px 16px 24px;
+      margin-top: 8px;
+    }
+    .pf-section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+    .pf-edit-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #f1f5f9;
+      color: #334155;
+      padding: 0;
+      font-size: 16px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .pf-field-item { margin-bottom: 20px; }
+    .pf-field-label { font-size: 13px; color: #64748b; margin-bottom: 4px; }
+    .pf-field-value { font-size: 15px; font-weight: 600; color: #0f172a; min-height: 20px; }
+
+    /* Party Transaction Screen */
     .party-entry-screen {
       display: none;
       position: fixed;
@@ -1038,7 +1140,7 @@
       <button type="button" class="fab-add-btn" id="openAddPartyScreenBtn" title="নতুন কাস্টমার/সাপ্লায়ার যোগ করুন">👤+</button>
     </section>
 
-    <!-- TAB 2: ক্যাশবক্স (Matches 1000143910.jpg) -->
+    <!-- TAB 2: ক্যাশবক্স -->
     <section id="page-cashbox" class="page-view" aria-label="ক্যাশবক্স">
       <div class="cb-hero-card">
         <div class="cb-top-grid">
@@ -1149,7 +1251,7 @@
       </div>
     </section>
 
-    <!-- TAB 4: মেনু (Fallback section + slide drawer) -->
+    <!-- TAB 4: মেনু -->
     <section id="page-menu" class="page-view" aria-label="মেনু ও ব্যাকআপ">
       <div class="card">
         <h2>অ্যাকাউন্ট ও ব্যাকআপ</h2>
@@ -1168,7 +1270,7 @@
     </section>
   </div>
 
-  <!-- ADD CUSTOMER/SUPPLIER SCREEN (Matches 1000143908.jpg) -->
+  <!-- ADD CUSTOMER/SUPPLIER SCREEN -->
   <div id="addPartyScreen" class="add-party-screen" aria-hidden="true">
     <div class="ap-header">
       <button type="button" id="apBackBtn" class="ap-back-btn" aria-label="ফিরে যান">←</button>
@@ -1212,11 +1314,125 @@
     </div>
   </div>
 
-  <!-- MENU SLIDE DRAWER (Matches 1000143909.jpg) -->
+  <!-- DATA BACKUP FULL SCREEN (Matches 1000144008.jpg) -->
+  <div id="dataBackupScreen" class="backup-screen" aria-hidden="true">
+    <div class="bk-header">
+      <div style="display:flex; align-items:center; gap:12px;">
+        <button type="button" id="bkBackBtn" class="ap-back-btn" aria-label="ফিরে যান">←</button>
+        <h2 class="ap-title">ডাটা ব্যাকআপ</h2>
+      </div>
+      <span id="bkPartyCountBadge" style="font-size:12px; font-weight:700; color:#0284c7;">০ পার্টি</span>
+    </div>
+
+    <div class="bk-body">
+      <div class="bk-status-center">
+        <div class="bk-cloud-circle">☁︎✓</div>
+        <div id="bkMainStatusText" class="bk-main-status">সব ডাটা ব্যাকআপ নেয়া আছে।</div>
+
+        <hr class="bk-divider" />
+
+        <div class="bk-last-label">সর্বশেষ ব্যাকআপঃ</div>
+        <div id="bkLastBackupTime" class="bk-last-time">২৩ নভেম্বর, ০৯:৩৯ AM</div>
+
+        <div class="bk-tools-row">
+          <button type="button" id="bkExportJsonBtn" class="mini-action-btn btn-json" style="padding:8px 12px; font-size:12px;">JSON ব্যাকআপ নামান</button>
+          <button type="button" id="bkExportCsvBtn" class="mini-action-btn btn-csv" style="padding:8px 12px; font-size:12px;">CSV এক্সপোর্ট</button>
+          <label for="restoreJsonInput" class="mini-action-btn btn-cancel" style="padding:8px 12px; font-size:12px; cursor:pointer; margin:0;">JSON রিস্টোর</label>
+        </div>
+        <div id="bkScreenMsg" class="msg"></div>
+      </div>
+
+      <button type="button" id="bkRunNowBtn" class="bk-primary-btn synced">ডাটা ব্যাকআপ করুন</button>
+    </div>
+  </div>
+
+  <!-- PROFILE DETAILS FULL SCREEN (Matches 1000144009.jpg) -->
+  <div id="profileScreen" class="profile-screen" aria-hidden="true">
+    <div class="ap-header">
+      <button type="button" id="pfBackBtn" class="ap-back-btn" aria-label="ফিরে যান">←</button>
+      <h2 class="ap-title">আপনার তথ্য সমূহ</h2>
+    </div>
+
+    <div class="pf-top-card">
+      <div id="pfAvatar" class="avatar-circle" style="width:52px; height:52px; font-size:17px; background:#fef08a; color:#854d0e;">MN</div>
+      <div>
+        <div id="pfTopName" style="font-size:16px; font-weight:800; color:#0f172a;">MD Noyon Mia</div>
+        <div id="pfTopPhone" style="font-size:13px; color:#64748b; margin-top:2px;">-</div>
+      </div>
+    </div>
+
+    <div class="pf-section-card">
+      <div class="pf-section-head">
+        <div style="font-size:15px; font-weight:700; color:#0f172a;">অন্যান্য তথ্য</div>
+        <button type="button" id="pfEditOpenBtn" class="pf-edit-btn" title="তথ্য এডিট করুন">✎</button>
+      </div>
+
+      <div class="pf-field-item">
+        <div class="pf-field-label">নাম</div>
+        <div id="pfDetailName" class="pf-field-value"></div>
+      </div>
+
+      <div class="pf-field-item">
+        <div class="pf-field-label">ব্যবসার ধরণ</div>
+        <div id="pfDetailBusinessType" class="pf-field-value">ফার্মেসি</div>
+      </div>
+
+      <div class="pf-field-item">
+        <div class="pf-field-label">NID নম্বর</div>
+        <div id="pfDetailNid" class="pf-field-value"></div>
+      </div>
+
+      <div class="pf-field-item">
+        <div class="pf-field-label">ব্যবসা প্রতিষ্ঠানের আনুমানিক বয়স (বছর)</div>
+        <div id="pfDetailBusinessAge" class="pf-field-value">০ বছর</div>
+      </div>
+
+      <div class="pf-field-item" style="margin-bottom:0;">
+        <div class="pf-field-label">ব্যবসা প্রতিষ্ঠানের ঠিকানা</div>
+        <div id="pfDetailBusinessAddress" class="pf-field-value"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EDIT PROFILE DETAILS MODAL -->
+  <div id="editProfileModal" class="modal-backdrop" aria-hidden="true">
+    <div class="modal-box">
+      <h3>আপনার তথ্য এডিট করুন</h3>
+      <form id="editProfileForm">
+        <label for="editPfProfileName">প্রোফাইল নাম *</label>
+        <input type="text" id="editPfProfileName" required />
+
+        <label for="editPfPhone">মোবাইল নম্বর *</label>
+        <input type="tel" id="editPfPhone" required />
+
+        <label for="editPfDetailName">অন্যান্য তথ্যে নাম</label>
+        <input type="text" id="editPfDetailName" placeholder="যেমন: MD Noyon Mia" />
+
+        <label for="editPfBusinessType">ব্যবসার ধরণ</label>
+        <input type="text" id="editPfBusinessType" placeholder="যেমন: ফার্মেসি" />
+
+        <label for="editPfNid">NID নম্বর</label>
+        <input type="text" id="editPfNid" placeholder="NID নম্বর লিখুন" />
+
+        <label for="editPfBusinessAge">ব্যবসা প্রতিষ্ঠানের আনুমানিক বয়স (বছর)</label>
+        <input type="text" id="editPfBusinessAge" placeholder="যেমন: ০ বছর বা ২ বছর" />
+
+        <label for="editPfBusinessAddress">ব্যবসা প্রতিষ্ঠানের ঠিকানা</label>
+        <input type="text" id="editPfBusinessAddress" placeholder="ঠিকানা লিখুন" />
+
+        <div class="modal-actions">
+          <button type="submit" id="saveProfileBtn">সেভ করুন</button>
+          <button type="button" id="cancelEditProfileBtn" class="btn-cancel">বাতিল</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MENU SLIDE DRAWER -->
   <div id="menuDrawerBackdrop" class="menu-drawer-backdrop" aria-hidden="true">
     <aside class="menu-drawer-panel" role="dialog" aria-label="মেনু">
       <div>
-        <div class="md-profile-head">
+        <div id="mdProfileTrigger" class="md-profile-head" title="প্রোফাইল দেখুন">
           <div style="display:flex; align-items:center; gap:12px;">
             <div id="mdAvatar" class="avatar-circle" style="background:#fef08a; color:#854d0e;">MN</div>
             <div>
@@ -1257,9 +1473,13 @@
         </button>
 
         <div class="md-section-title">অন্যান্য</div>
+        <button type="button" class="md-item-btn" data-md-nav="data-backup">
+          <span>☁️</span>
+          <span>ডাটা ব্যাকআপ</span>
+        </button>
         <button type="button" class="md-item-btn" data-md-nav="backup">
           <span>⚙️</span>
-          <span>সেটিংস ও ব্যাকআপ</span>
+          <span>সেটিংস</span>
         </button>
         <button type="button" class="md-item-btn" id="mdShareAppBtn">
           <span>🔗</span>
@@ -1519,7 +1739,7 @@
         }
         if ("serviceWorker" in navigator && window.location.protocol.startsWith("http")) {
           const swCode = `
-            const CACHE_NAME = "hisab-khata-complete-v1";
+            const CACHE_NAME = "hisab-khata-complete-v2";
             self.addEventListener("install", () => self.skipWaiting());
             self.addEventListener("activate", (event) => {
               event.waitUntil(caches.keys().then((keys) => Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k)))));
@@ -1542,6 +1762,8 @@
   <script type="module">
     const LOGIN_PHONE_KEY = "hisab_khata_logged_phone_v1";
     const LOGIN_PROFILE_KEY = "hisab_khata_profile_name_v1";
+    const PROFILE_DETAILS_KEY = "hisab_khata_profile_details_v1";
+    const BACKUP_META_KEY = "hisab_khata_backup_meta_v1";
     const CASHBOX_STATE_KEY = "hisab_khata_cashbox_v1";
 
     const phoneLoginScreen = document.getElementById("phoneLoginScreen");
@@ -1561,11 +1783,45 @@
     const logoutPhoneBtn = document.getElementById("logoutPhoneBtn");
 
     const menuDrawerBackdrop = document.getElementById("menuDrawerBackdrop");
+    const mdProfileTrigger = document.getElementById("mdProfileTrigger");
     const mdAvatar = document.getElementById("mdAvatar");
     const mdProfileName = document.getElementById("mdProfileName");
     const mdProfilePhone = document.getElementById("mdProfilePhone");
     const mdLogoutBtn = document.getElementById("mdLogoutBtn");
     const mdShareAppBtn = document.getElementById("mdShareAppBtn");
+
+    const dataBackupScreen = document.getElementById("dataBackupScreen");
+    const bkBackBtn = document.getElementById("bkBackBtn");
+    const bkPartyCountBadge = document.getElementById("bkPartyCountBadge");
+    const bkMainStatusText = document.getElementById("bkMainStatusText");
+    const bkLastBackupTime = document.getElementById("bkLastBackupTime");
+    const bkExportJsonBtn = document.getElementById("bkExportJsonBtn");
+    const bkExportCsvBtn = document.getElementById("bkExportCsvBtn");
+    const bkRunNowBtn = document.getElementById("bkRunNowBtn");
+    const bkScreenMsg = document.getElementById("bkScreenMsg");
+
+    const profileScreen = document.getElementById("profileScreen");
+    const pfBackBtn = document.getElementById("pfBackBtn");
+    const pfAvatar = document.getElementById("pfAvatar");
+    const pfTopName = document.getElementById("pfTopName");
+    const pfTopPhone = document.getElementById("pfTopPhone");
+    const pfDetailName = document.getElementById("pfDetailName");
+    const pfDetailBusinessType = document.getElementById("pfDetailBusinessType");
+    const pfDetailNid = document.getElementById("pfDetailNid");
+    const pfDetailBusinessAge = document.getElementById("pfDetailBusinessAge");
+    const pfDetailBusinessAddress = document.getElementById("pfDetailBusinessAddress");
+    const pfEditOpenBtn = document.getElementById("pfEditOpenBtn");
+
+    const editProfileModal = document.getElementById("editProfileModal");
+    const editProfileForm = document.getElementById("editProfileForm");
+    const editPfProfileName = document.getElementById("editPfProfileName");
+    const editPfPhone = document.getElementById("editPfPhone");
+    const editPfDetailName = document.getElementById("editPfDetailName");
+    const editPfBusinessType = document.getElementById("editPfBusinessType");
+    const editPfNid = document.getElementById("editPfNid");
+    const editPfBusinessAge = document.getElementById("editPfBusinessAge");
+    const editPfBusinessAddress = document.getElementById("editPfBusinessAddress");
+    const cancelEditProfileBtn = document.getElementById("cancelEditProfileBtn");
 
     const addPartyScreen = document.getElementById("addPartyScreen");
     const openAddPartyScreenBtn = document.getElementById("openAddPartyScreenBtn");
@@ -1580,6 +1836,43 @@
     let pendingPhone = "";
     let generatedOtpCode = "";
 
+    const defaultProfileDetails = {
+      detailName: "",
+      businessType: "ফার্মেসি",
+      nid: "",
+      businessAge: "০ বছর",
+      businessAddress: ""
+    };
+    let profileDetails = { ...defaultProfileDetails };
+    try {
+      const savedDetails = JSON.parse(localStorage.getItem(PROFILE_DETAILS_KEY) || "null");
+      if (savedDetails && typeof savedDetails === "object") profileDetails = { ...defaultProfileDetails, ...savedDetails };
+    } catch (e) {}
+
+    const formatBanglaBackupTime = (dateObj = new Date()) => {
+      const monthsBn = ["জানুয়ারি", "ফেব্রুয়ারি", "মার্চ", "এপ্রিল", "মে", "জুন", "জুলাই", "আগস্ট", "সেপ্টেম্বর", "অক্টোবর", "নভেম্বর", "ডিসেম্বর"];
+      const toBnDigits = (str) => String(str).replace(/\d/g, (d) => "০১২৩৪৫৬৭৮৯"[Number(d)]);
+      const day = toBnDigits(dateObj.getDate());
+      const month = monthsBn[dateObj.getMonth()] || "";
+      const hours24 = dateObj.getHours();
+      const period = hours24 >= 12 ? "PM" : "AM";
+      const h12 = hours24 % 12 || 12;
+      const hh = toBnDigits(String(h12).padStart(2, "0"));
+      const mm = toBnDigits(String(dateObj.getMinutes()).padStart(2, "0"));
+      return `${day} ${month}, ${hh}:${mm} ${period}`;
+    };
+
+    let backupMeta = {
+      lastBackupLabel: "২৩ নভেম্বর, ০৯:৩৯ AM",
+      synced: true
+    };
+    try {
+      const savedBk = JSON.parse(localStorage.getItem(BACKUP_META_KEY) || "null");
+      if (savedBk && typeof savedBk === "object") backupMeta = { ...backupMeta, ...savedBk };
+    } catch (e) {}
+
+    const saveBackupMeta = () => localStorage.setItem(BACKUP_META_KEY, JSON.stringify(backupMeta));
+
     const getInitials = (name) => {
       const parts = String(name || "P").trim().split(/\s+/).filter(Boolean);
       if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
@@ -1593,6 +1886,96 @@
       if (digits.startsWith("01") && digits.length === 11) return "+88" + digits;
       return "+" + digits;
     }
+
+    function renderProfileScreen() {
+      const currentName = localStorage.getItem(LOGIN_PROFILE_KEY) || "MD Noyon Mia";
+      const currentPhone = localStorage.getItem(LOGIN_PHONE_KEY) || "-";
+      pfAvatar.textContent = getInitials(currentName);
+      pfTopName.textContent = currentName;
+      pfTopPhone.textContent = currentPhone;
+      pfDetailName.textContent = profileDetails.detailName || "";
+      pfDetailBusinessType.textContent = profileDetails.businessType || "ফার্মেসি";
+      pfDetailNid.textContent = profileDetails.nid || "";
+      pfDetailBusinessAge.textContent = profileDetails.businessAge || "০ বছর";
+      pfDetailBusinessAddress.textContent = profileDetails.businessAddress || "";
+    }
+
+    function renderBackupScreen() {
+      bkLastBackupTime.textContent = backupMeta.lastBackupLabel || formatBanglaBackupTime(new Date());
+      bkPartyCountBadge.textContent = `${latestParties.length} পার্টি`;
+      if (backupMeta.synced) {
+        bkMainStatusText.textContent = "সব ডাটা ব্যাকআপ নেয়া আছে।";
+        bkRunNowBtn.classList.add("synced");
+        bkRunNowBtn.textContent = "ডাটা ব্যাকআপ করুন";
+      } else {
+        bkMainStatusText.textContent = "নতুন ডাটা আপডেট হয়েছে — ব্যাকআপ নিন।";
+        bkRunNowBtn.classList.remove("synced");
+        bkRunNowBtn.textContent = "এখনই ডাটা ব্যাকআপ করুন";
+      }
+    }
+
+    function openDataBackupScreen() {
+      renderBackupScreen();
+      bkScreenMsg.textContent = "";
+      dataBackupScreen.classList.add("open");
+      dataBackupScreen.setAttribute("aria-hidden", "false");
+    }
+
+    function closeDataBackupScreen() {
+      dataBackupScreen.classList.remove("open");
+      dataBackupScreen.setAttribute("aria-hidden", "true");
+    }
+
+    function openProfileScreen() {
+      renderProfileScreen();
+      profileScreen.classList.add("open");
+      profileScreen.setAttribute("aria-hidden", "false");
+    }
+
+    function closeProfileScreen() {
+      profileScreen.classList.remove("open");
+      profileScreen.setAttribute("aria-hidden", "true");
+    }
+
+    bkBackBtn.addEventListener("click", closeDataBackupScreen);
+    pfBackBtn.addEventListener("click", closeProfileScreen);
+
+    pfEditOpenBtn.addEventListener("click", () => {
+      editPfProfileName.value = localStorage.getItem(LOGIN_PROFILE_KEY) || "";
+      editPfPhone.value = localStorage.getItem(LOGIN_PHONE_KEY) || "";
+      editPfDetailName.value = profileDetails.detailName || "";
+      editPfBusinessType.value = profileDetails.businessType || "";
+      editPfNid.value = profileDetails.nid || "";
+      editPfBusinessAge.value = profileDetails.businessAge || "";
+      editPfBusinessAddress.value = profileDetails.businessAddress || "";
+      editProfileModal.classList.add("open");
+      editProfileModal.setAttribute("aria-hidden", "false");
+    });
+
+    cancelEditProfileBtn.addEventListener("click", () => {
+      editProfileModal.classList.remove("open");
+      editProfileModal.setAttribute("aria-hidden", "true");
+    });
+
+    editProfileForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const nextName = editPfProfileName.value.trim();
+      const nextPhone = editPfPhone.value.trim();
+      if (!nextName || !nextPhone) return;
+
+      profileDetails = {
+        detailName: editPfDetailName.value.trim(),
+        businessType: editPfBusinessType.value.trim(),
+        nid: editPfNid.value.trim(),
+        businessAge: editPfBusinessAge.value.trim(),
+        businessAddress: editPfBusinessAddress.value.trim()
+      };
+      localStorage.setItem(PROFILE_DETAILS_KEY, JSON.stringify(profileDetails));
+      applyLoggedInState(nextName, nextPhone);
+      renderProfileScreen();
+      editProfileModal.classList.remove("open");
+      editProfileModal.setAttribute("aria-hidden", "true");
+    });
 
     function applyLoggedInState(profileName, phone) {
       const cleanName = String(profileName || "").trim();
@@ -1610,6 +1993,7 @@
         mdProfileName.textContent = cleanName;
         mdProfilePhone.textContent = cleanPhone;
         mdAvatar.textContent = getInitials(cleanName);
+        renderProfileScreen();
       } else {
         localStorage.removeItem(LOGIN_PROFILE_KEY);
         localStorage.removeItem(LOGIN_PHONE_KEY);
@@ -1717,6 +2101,11 @@
       if (e.target === menuDrawerBackdrop) closeMenuDrawer();
     });
 
+    mdProfileTrigger.addEventListener("click", () => {
+      closeMenuDrawer();
+      openProfileScreen();
+    });
+
     function switchPage(pageId) {
       if (pageId === "page-menu") {
         openMenuDrawer();
@@ -1737,7 +2126,9 @@
       btn.addEventListener("click", () => {
         const target = btn.getAttribute("data-md-nav");
         closeMenuDrawer();
-        if (target === "cashbox") switchPage("page-cashbox");
+        if (target === "data-backup") {
+          openDataBackupScreen();
+        } else if (target === "cashbox") switchPage("page-cashbox");
         else if (target === "transactions") switchPage("page-tallypay");
         else if (target === "backup") {
           pageSections.forEach((sec) => sec.classList.toggle("active", sec.id === "page-menu"));
@@ -2113,7 +2504,7 @@
       renderCashboxDashboard();
     });
 
-    // Add Customer/Supplier Screen (Matches 1000143908.jpg)
+    // Add Customer/Supplier Screen
     function syncAddPartyFormState() {
       const hasName = partyNameInput.value.trim().length > 0;
       addPartyBtn.disabled = !hasName;
@@ -2149,7 +2540,7 @@
       if (act === "add-party") openAddPartyScreenBtn.click();
       else if (act === "add-tx" || act === "cashbox") switchPage("page-cashbox");
       else if (act === "transactions") switchPage("page-tallypay");
-      else if (act === "backup") openMenuDrawer();
+      else if (act === "backup") openDataBackupScreen();
       else if (act === "filter-due") {
         statusFilterIdx = 1;
         statusFilterLabel.textContent = "ফিল্টার: " + statusFilterLabels.due;
@@ -2354,6 +2745,10 @@
           balance: increment(type === "due" ? amount : -amount)
         });
 
+        backupMeta.synced = false;
+        saveBackupMeta();
+        renderBackupScreen();
+
         peDueAmount.value = "";
         peReceiveAmount.value = "";
         peNoteInput.value = "";
@@ -2416,6 +2811,30 @@
       downloadFile("\uFEFF" + lines.join("\n"), `hisab-khata-${toLocalDateStr(new Date())}.csv`, "text/csv;charset=utf-8;");
     };
 
+    const runFullBackupAction = async () => {
+      const payload = {
+        app: "Digital Hisab Khata",
+        version: 2,
+        exportedAt: new Date().toISOString(),
+        profileName: localStorage.getItem(LOGIN_PROFILE_KEY) || "",
+        profilePhone: localStorage.getItem(LOGIN_PHONE_KEY) || "",
+        profileDetails,
+        parties: latestParties,
+        transactions: latestTransactions,
+        cashbox: cashboxTotals
+      };
+      downloadFile(JSON.stringify(payload, null, 2), `hisab-khata-backup-${toLocalDateStr(new Date())}.json`, "application/json;charset=utf-8");
+      backupMeta.lastBackupLabel = formatBanglaBackupTime(new Date());
+      backupMeta.synced = true;
+      saveBackupMeta();
+      renderBackupScreen();
+      const statusText = `ব্যাকআপ সম্পন্ন হয়েছে (${latestParties.length} পার্টি, ${latestTransactions.length} লেনদেন) ✓`;
+      backupMsg.textContent = statusText;
+      backupMsg.className = "msg ok";
+      bkScreenMsg.textContent = statusText;
+      bkScreenMsg.className = "msg ok";
+    };
+
     quickCsvDownloadBtn.addEventListener("click", exportAllCsvAction);
     exportCsvBtn.addEventListener("click", async () => {
       exportCsvBtn.disabled = true;
@@ -2425,23 +2844,18 @@
         backupMsg.className = "msg ok";
       } finally { exportCsvBtn.disabled = false; }
     });
+    bkExportCsvBtn.addEventListener("click", async () => {
+      await exportAllCsvAction();
+      bkScreenMsg.textContent = "CSV ডাউনলোড হয়েছে ✓";
+      bkScreenMsg.className = "msg ok";
+    });
 
     exportJsonBtn.addEventListener("click", async () => {
       exportJsonBtn.disabled = true;
-      try {
-        const payload = {
-          app: "Digital Hisab Khata",
-          version: 1,
-          exportedAt: new Date().toISOString(),
-          parties: latestParties,
-          transactions: latestTransactions,
-          cashbox: cashboxTotals
-        };
-        downloadFile(JSON.stringify(payload, null, 2), `hisab-khata-backup-${toLocalDateStr(new Date())}.json`, "application/json;charset=utf-8");
-        backupMsg.textContent = `JSON ব্যাকআপ ডাউনলোড হয়েছে (${latestParties.length} পার্টি, ${latestTransactions.length} লেনদেন) ✓`;
-        backupMsg.className = "msg ok";
-      } finally { exportJsonBtn.disabled = false; }
+      try { await runFullBackupAction(); } finally { exportJsonBtn.disabled = false; }
     });
+    bkExportJsonBtn.addEventListener("click", runFullBackupAction);
+    bkRunNowBtn.addEventListener("click", runFullBackupAction);
 
     restoreJsonInput.addEventListener("change", async (e) => {
       const file = e.target.files && e.target.files[0];
@@ -2458,6 +2872,11 @@
           cashboxTotals = { ...defaultCashbox, ...parsed.cashbox };
           saveCashboxState();
           renderCashboxDashboard();
+        }
+        if (parsed.profileDetails && typeof parsed.profileDetails === "object") {
+          profileDetails = { ...defaultProfileDetails, ...parsed.profileDetails };
+          localStorage.setItem(PROFILE_DETAILS_KEY, JSON.stringify(profileDetails));
+          renderProfileScreen();
         }
         if (!parties.length && !transactions.length) throw new Error("Empty backup");
 
@@ -2501,11 +2920,20 @@
 
         recalculatedBalance.forEach((bal, pId) => batch.update(doc(db, "parties", pId), { balance: bal }));
         await batch.commit();
-        backupMsg.textContent = `রিস্টোর সম্পন্ন হয়েছে (${parties.length} পার্টি, ${transactions.length} লেনদেন) ✓`;
+        backupMeta.lastBackupLabel = formatBanglaBackupTime(new Date());
+        backupMeta.synced = true;
+        saveBackupMeta();
+        renderBackupScreen();
+        const msgText = `রিস্টোর সম্পন্ন হয়েছে (${parties.length} পার্টি, ${transactions.length} লেনদেন) ✓`;
+        backupMsg.textContent = msgText;
         backupMsg.className = "msg ok";
+        bkScreenMsg.textContent = msgText;
+        bkScreenMsg.className = "msg ok";
       } catch (err) {
         backupMsg.textContent = "সঠিক JSON ব্যাকআপ ফাইল দিন।";
         backupMsg.className = "msg err";
+        bkScreenMsg.textContent = "সঠিক JSON ব্যাকআপ ফাইল দিন।";
+        bkScreenMsg.className = "msg err";
       } finally { e.target.value = ""; }
     });
 
@@ -2776,6 +3204,7 @@
       renderCashboxDashboard();
       renderFilteredParties();
       renderFilteredTransactions();
+      renderBackupScreen();
       if (activePartyId && partiesMap.has(activePartyId)) renderPartyEntryScreen(activePartyId);
       if (activeKhataPartyId && partiesMap.has(activeKhataPartyId)) renderPartyKhata(activeKhataPartyId);
     });
@@ -2881,6 +3310,9 @@
       addPartyBtn.disabled = true;
       try {
         await addDoc(collection(db, "parties"), { name, phone, role, balance, createdAt: serverTimestamp() });
+        backupMeta.synced = false;
+        saveBackupMeta();
+        renderBackupScreen();
         partyForm.reset();
         document.getElementById("openingBalance").value = "0";
         roleCustomerRadio.checked = true;
@@ -2894,6 +3326,8 @@
     });
 
     renderCashboxDashboard();
+    renderBackupScreen();
+    renderProfileScreen();
 
     function escapeHtml(str) {
       return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
