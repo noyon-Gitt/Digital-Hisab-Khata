@@ -4,11 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#0284c7" />
+  <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <meta name="apple-mobile-web-app-title" content="হিসাব খাতা" />
+  <meta name="apple-mobile-web-app-title" content="Hisab Khata" />
+  <link id="appleTouchIconLink" rel="apple-touch-icon" />
   <link id="pwaManifestLink" rel="manifest" />
-  <title>Digital Hisab Khata - Complete Sky UI</title>
+  <title>Hisab Khata - Complete Sky UI</title>
   <style>
     * { box-sizing: border-box; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
     body { margin: 0; background: #f0f9ff; color: #0f172a; padding-bottom: 84px; }
@@ -35,16 +37,16 @@
     }
     .login-brand { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
     .login-logo {
-      width: 44px;
-      height: 44px;
+      width: 46px;
+      height: 46px;
       border-radius: 12px;
       background: #0284c7;
       color: #fff;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 22px;
-      font-weight: 800;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
     }
     .login-title { margin: 0; font-size: 19px; font-weight: 800; color: #0f172a; }
     .login-sub { margin: 2px 0 0; font-size: 12px; color: #475569; }
@@ -573,7 +575,7 @@
       background: #f8fafc;
     }
 
-    /* Data Backup Full Screen (Matches 1000144008.jpg) */
+    /* Data Backup Full Screen */
     .backup-screen {
       display: none;
       position: fixed;
@@ -636,7 +638,7 @@
     }
     .bk-primary-btn.synced { background: #e0f2fe; color: #0369a1; }
 
-    /* Profile Details Full Screen (Matches 1000144009.jpg) */
+    /* Profile Details Full Screen */
     .profile-screen {
       display: none;
       position: fixed;
@@ -1004,9 +1006,9 @@
   <div id="phoneLoginScreen" class="login-screen open" aria-hidden="false">
     <div class="login-card">
       <div class="login-brand">
-        <div class="login-logo">৳</div>
+        <div id="loginBrandLogoBox" class="login-logo">৳</div>
         <div>
-          <h2 class="login-title">ডিজিটাল হিসাব খাতা</h2>
+          <h2 class="login-title">Hisab Khata</h2>
           <p class="login-sub">প্রোফাইল নাম ও ফোন নম্বর দিয়ে লগইন করুন</p>
         </div>
       </div>
@@ -1041,7 +1043,7 @@
       <div>
         <h1 id="headerProfileTitle" class="brand-title">MD Noyon Mia ⌄</h1>
         <div class="brand-sub">
-          <span class="plan-pill">স্ট্যান্ডার্ড</span>
+          <span class="plan-pill">Hisab Khata</span>
           <span id="loggedInPhoneBadge">নম্বর: -</span>
           <span id="dbStatus">Firestore যুক্ত হচ্ছে...</span>
           <button type="button" id="installAppBtn" class="mini-action-btn" style="display:none; background:#fff; color:#0284c7;">ইনস্টল</button>
@@ -1065,7 +1067,7 @@
     <!-- TAB 1: টালি -->
     <section id="page-tally" class="page-view active" aria-label="টালি">
       <div class="gold-banner" id="goldBannerBtn">
-        <span>👑 ডিজিটাল হিসাব খাতা • সহজে বকেয়া ও জমা পরিচালনা করুন</span>
+        <span>👑 Hisab Khata • সহজে বকেয়া ও জমা পরিচালনা করুন</span>
         <span>→</span>
       </div>
 
@@ -1314,7 +1316,7 @@
     </div>
   </div>
 
-  <!-- DATA BACKUP FULL SCREEN (Matches 1000144008.jpg) -->
+  <!-- DATA BACKUP FULL SCREEN -->
   <div id="dataBackupScreen" class="backup-screen" aria-hidden="true">
     <div class="bk-header">
       <div style="display:flex; align-items:center; gap:12px;">
@@ -1346,7 +1348,7 @@
     </div>
   </div>
 
-  <!-- PROFILE DETAILS FULL SCREEN (Matches 1000144009.jpg) -->
+  <!-- PROFILE DETAILS FULL SCREEN -->
   <div id="profileScreen" class="profile-screen" aria-hidden="true">
     <div class="ap-header">
       <button type="button" id="pfBackBtn" class="ap-back-btn" aria-label="ফিরে যান">←</button>
@@ -1445,7 +1447,7 @@
 
         <div style="padding:10px 14px 4px;">
           <div class="gold-banner" id="mdGoldBanner" style="margin-bottom:4px;">
-            <span>👑 হিসাব খাতা গোল্ড কিনুন</span>
+            <span>👑 Hisab Khata গোল্ড কিনুন</span>
             <span>›</span>
           </div>
         </div>
@@ -1483,12 +1485,14 @@
         </button>
         <button type="button" class="md-item-btn" id="mdShareAppBtn">
           <span>🔗</span>
-          <span>হিসাব খাতা রেফার করুন</span>
+          <span>Hisab Khata রেফার করুন</span>
         </button>
       </div>
 
       <div class="md-footer">
-        <div style="font-size:15px; font-weight:800; color:#0284c7;">৳ হিসাব খাতা</div>
+        <div id="mdFooterBrandBadge" style="display:flex; align-items:center; gap:6px; font-size:14px; font-weight:800; color:#0284c7;">
+          <span>Hisab Khata</span>
+        </div>
         <div style="display:flex; align-items:center; gap:8px;">
           <span style="font-size:11px; color:#64748b;">ভার্সন - ৭.১৮.১</span>
           <button type="button" id="mdLogoutBtn" class="mini-action-btn btn-logout">লগআউট</button>
@@ -1516,7 +1520,7 @@
 
     <div class="pe-body">
       <div class="gold-banner" id="peGoldBanner">
-        <span>👑 ডিজিটাল হিসাব খাতা • সহজে বকেয়া ও জমা পরিচালনা করুন</span>
+        <span>👑 Hisab Khata • সহজে বকেয়া ও জমা পরিচালনা করুন</span>
         <span>→</span>
       </div>
 
@@ -1717,29 +1721,128 @@
   </div>
 
   <script>
-    (function setupPWA() {
+    (function setupTallyStyleIconAndPWA() {
       try {
-        const iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192"><rect width="192" height="192" rx="36" fill="#0284c7"/><text x="96" y="118" font-size="88" text-anchor="middle" fill="#ffffff" font-family="sans-serif" font-weight="bold">৳</text></svg>`;
-        const iconUrl = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(iconSvg);
+        // TallyKhata-inspired Ledger Book + Up Arrow Icon
+        const iconSvg = `
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+            <rect width="512" height="512" rx="116" fill="#0284c7"/>
+            <!-- Ledger Book Cover -->
+            <rect x="128" y="88" width="256" height="336" rx="34" fill="#e11d48"/>
+            <!-- Left Binding Spine -->
+            <rect x="128" y="88" width="46" height="336" rx="18" fill="#9f1239"/>
+            <!-- White Ribbon Bookmark -->
+            <path d="M236 88 H284 V212 L260 192 L236 212 Z" fill="#ffffff"/>
+            <!-- Upward Ledger Arrow -->
+            <path d="M260 228 L322 292 H286 V368 H234 V292 H198 Z" fill="#ffffff"/>
+          </svg>
+        `.trim();
+
+        const svgUrl = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(iconSvg);
+
+        function renderPngDataUrl(size) {
+          const canvas = document.createElement("canvas");
+          canvas.width = size;
+          canvas.height = size;
+          const ctx = canvas.getContext("2d");
+          if (!ctx) return svgUrl;
+
+          // Rounded Background
+          const r = size * 0.225;
+          ctx.fillStyle = "#0284c7";
+          ctx.beginPath();
+          ctx.roundRect(0, 0, size, size, r);
+          ctx.fill();
+
+          // Ledger Cover
+          const bx = size * 0.25;
+          const by = size * 0.17;
+          const bw = size * 0.5;
+          const bh = size * 0.66;
+          const br = size * 0.065;
+          ctx.fillStyle = "#e11d48";
+          ctx.beginPath();
+          ctx.roundRect(bx, by, bw, bh, br);
+          ctx.fill();
+
+          // Spine
+          ctx.fillStyle = "#9f1239";
+          ctx.beginPath();
+          ctx.roundRect(bx, by, size * 0.09, bh, [br, 0, 0, br]);
+          ctx.fill();
+
+          // White Ribbon
+          const rx1 = size * 0.46;
+          const rx2 = size * 0.555;
+          const ry1 = by;
+          const ry2 = size * 0.41;
+          const rMidX = (rx1 + rx2) / 2;
+          ctx.fillStyle = "#ffffff";
+          ctx.beginPath();
+          ctx.moveTo(rx1, ry1);
+          ctx.lineTo(rx2, ry1);
+          ctx.lineTo(rx2, ry2);
+          ctx.lineTo(rMidX, ry2 - size * 0.038);
+          ctx.lineTo(rx1, ry2);
+          ctx.closePath();
+          ctx.fill();
+
+          // Upward Arrow
+          const cx = size * 0.508;
+          ctx.fillStyle = "#ffffff";
+          ctx.beginPath();
+          ctx.moveTo(cx, size * 0.445);
+          ctx.lineTo(cx + size * 0.122, size * 0.57);
+          ctx.lineTo(cx + size * 0.05, size * 0.57);
+          ctx.lineTo(cx + size * 0.05, size * 0.72);
+          ctx.lineTo(cx - size * 0.05, size * 0.72);
+          ctx.lineTo(cx - size * 0.05, size * 0.57);
+          ctx.lineTo(cx - size * 0.122, size * 0.57);
+          ctx.closePath();
+          ctx.fill();
+
+          return canvas.toDataURL("image/png");
+        }
+
+        const png192 = renderPngDataUrl(192);
+        const png512 = renderPngDataUrl(512);
+
+        const appleIcon = document.getElementById("appleTouchIconLink");
+        if (appleIcon) appleIcon.href = png192;
+
+        const loginLogoBox = document.getElementById("loginBrandLogoBox");
+        if (loginLogoBox) {
+          loginLogoBox.innerHTML = `<img src="${png192}" alt="Hisab Khata" style="width:100%; height:100%; object-fit:cover; display:block;" />`;
+        }
+
+        const footerBadge = document.getElementById("mdFooterBrandBadge");
+        if (footerBadge) {
+          footerBadge.innerHTML = `<img src="${png192}" alt="Hisab Khata" style="width:22px; height:22px; border-radius:6px; object-fit:cover;" /><span>Hisab Khata</span>`;
+        }
+
         const manifestObj = {
-          name: "Digital Hisab Khata",
-          short_name: "হিসাব খাতা",
+          name: "Hisab Khata",
+          short_name: "Hisab Khata",
           start_url: "./",
+          scope: "./",
           display: "standalone",
           background_color: "#f0f9ff",
           theme_color: "#0284c7",
           icons: [
-            { src: iconUrl, sizes: "192x192", type: "image/svg+xml", purpose: "any" },
-            { src: iconUrl, sizes: "512x512", type: "image/svg+xml", purpose: "any" }
+            { src: png192, sizes: "192x192", type: "image/png", purpose: "any" },
+            { src: png512, sizes: "512x512", type: "image/png", purpose: "any maskable" },
+            { src: svgUrl, sizes: "any", type: "image/svg+xml", purpose: "any" }
           ]
         };
+
         const manifestLink = document.getElementById("pwaManifestLink");
         if (manifestLink) {
           manifestLink.href = URL.createObjectURL(new Blob([JSON.stringify(manifestObj)], { type: "application/manifest+json" }));
         }
+
         if ("serviceWorker" in navigator && window.location.protocol.startsWith("http")) {
           const swCode = `
-            const CACHE_NAME = "hisab-khata-complete-v2";
+            const CACHE_NAME = "hisab-khata-complete-v3";
             self.addEventListener("install", () => self.skipWaiting());
             self.addEventListener("activate", (event) => {
               event.waitUntil(caches.keys().then((keys) => Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k)))));
@@ -1997,7 +2100,7 @@
       } else {
         localStorage.removeItem(LOGIN_PROFILE_KEY);
         localStorage.removeItem(LOGIN_PHONE_KEY);
-        headerProfileTitle.textContent = "হিসাব খাতা ⌄";
+        headerProfileTitle.textContent = "Hisab Khata ⌄";
         loggedInPhoneBadge.textContent = "লগইন প্রয়োজন";
         menuProfileName.textContent = "-";
         menuAccountPhone.textContent = "-";
@@ -2152,8 +2255,8 @@
     });
 
     mdShareAppBtn.addEventListener("click", async () => {
-      const shareText = "ডিজিটাল হিসাব খাতা দিয়ে সহজে কাস্টমার ও ক্যাশবক্সের হিসাব রাখুন!";
-      if (navigator.share) await navigator.share({ title: "ডিজিটাল হিসাব খাতা", text: shareText, url: location.href }).catch(() => {});
+      const shareText = "Hisab Khata দিয়ে সহজে কাস্টমার ও ক্যাশবক্সের হিসাব রাখুন!";
+      if (navigator.share) await navigator.share({ title: "Hisab Khata", text: shareText, url: location.href }).catch(() => {});
       else prompt("শেয়ার লিংক কপি করুন:", location.href);
     });
 
@@ -2410,7 +2513,7 @@
       if (!waPhone) return "";
       const bal = Number(party?.balance) || 0;
       const summaryLine = bal > 0 ? `বাকি আছে: ${formatBDT(bal)}` : bal < 0 ? `জমা আছে: ${formatBDT(bal)}` : "হিসাব সমান";
-      const msgText = `আসসালামু আলাইকুম ${party?.name || ""}, আপনার ডিজিটাল হিসাব খাতার বর্তমান অবস্থা— ${summaryLine}।`;
+      const msgText = `আসসালামু আলাইকুম ${party?.name || ""}, আপনার Hisab Khata-এর বর্তমান অবস্থা— ${summaryLine}।`;
       return `https://wa.me/${waPhone}?text=${encodeURIComponent(msgText)}`;
     };
 
@@ -2813,8 +2916,8 @@
 
     const runFullBackupAction = async () => {
       const payload = {
-        app: "Digital Hisab Khata",
-        version: 2,
+        app: "Hisab Khata",
+        version: 3,
         exportedAt: new Date().toISOString(),
         profileName: localStorage.getItem(LOGIN_PROFILE_KEY) || "",
         profilePhone: localStorage.getItem(LOGIN_PHONE_KEY) || "",
