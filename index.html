@@ -1,1184 +1,744 @@
-<!DOCTYPE html>
-<html lang="bn">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Digital Hisab Khata - নিরাপদ ডিজিটাল হিসাব খাতা</title>
-  <style>
-    :root {
-      --sky-primary: #0284c7;
-      --sky-dark: #0369a1;
-      --sky-light: #e0f2fe;
-      --sky-soft: #f0f9ff;
-      --text-main: #0f172a;
-      --text-muted: #64748b;
-      --border-color: #cbd5e1;
-      --danger: #e11d48;
-      --danger-soft: #ffe4e6;
-      --success: #059669;
-      --success-soft: #d1fae5;
-      --white: #ffffff;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-
-    body {
-      background-color: #e2e8f0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-    }
-
-    .app-container {
-      width: 100%;
-      max-width: 440px;
-      min-height: 100vh;
-      background-color: var(--white);
-      box-shadow: 0 12px 32px rgba(2, 132, 199, 0.14);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      position: relative;
-    }
-
-    @media (min-width: 480px) {
-      .app-container {
-        min-height: 800px;
-        max-height: 92vh;
-        border-radius: 24px;
-      }
-    }
-
-    .screen {
-      display: none;
-      flex: 1;
-      flex-direction: column;
-      justify-content: space-between;
-      overflow-y: auto;
-    }
-
-    .screen.active {
-      display: flex;
-    }
-
-    /* Auth & PIN Shared Styles */
-    .hero-banner {
-      background: linear-gradient(180deg, var(--sky-light) 0%, var(--sky-soft) 100%);
-      padding: 28px 22px 22px;
-      text-align: center;
-      border-bottom-left-radius: 28px;
-      border-bottom-right-radius: 28px;
-    }
-
-    .hero-icon {
-      width: 78px;
-      height: 78px;
-      margin: 0 auto 12px;
-      background-color: var(--white);
-      border-radius: 22px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 8px 20px rgba(2, 132, 199, 0.15);
-      font-size: 36px;
-    }
-
-    .hero-title {
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--text-main);
-      line-height: 1.5;
-    }
-
-    .content-body {
-      padding: 22px;
-      flex: 1;
-    }
-
-    .heading {
-      font-size: 21px;
-      font-weight: 700;
-      color: var(--text-main);
-      margin-bottom: 8px;
-    }
-
-    .subtext {
-      font-size: 14px;
-      color: var(--text-muted);
-      line-height: 1.5;
-      margin-bottom: 16px;
-    }
-
-    .btn-google {
-      width: 100%;
-      padding: 13px 14px;
-      border-radius: 14px;
-      border: 1.5px solid #bae6fd;
-      background-color: var(--sky-soft);
-      color: var(--text-main);
-      font-size: 14px;
-      font-weight: 700;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      margin-bottom: 14px;
-    }
-
-    .btn-google:hover {
-      background-color: var(--sky-light);
-      border-color: var(--sky-primary);
-    }
-
-    .divider {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      color: var(--text-muted);
-      font-size: 12px;
-      margin: 12px 0 16px;
-    }
-
-    .divider::before,
-    .divider::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background-color: #e2e8f0;
-    }
-
-    .input-field {
-      width: 100%;
-      border: 1.5px solid var(--border-color);
-      border-radius: 12px;
-      padding: 12px 14px;
-      font-size: 14px;
-      color: var(--text-main);
-      outline: none;
-      margin-bottom: 10px;
-      background-color: var(--white);
-    }
-
-    .input-field:focus {
-      border-color: var(--sky-primary);
-      box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.14);
-    }
-
-    .pin-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
-      margin: 16px 0;
-    }
-
-    .pin-box {
-      width: 100%;
-      height: 58px;
-      text-align: center;
-      font-size: 24px;
-      font-weight: 700;
-      border: 1.5px solid var(--border-color);
-      border-radius: 14px;
-      outline: none;
-    }
-
-    .pin-box:focus {
-      border-color: var(--sky-primary);
-      background-color: var(--sky-soft);
-      box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.14);
-    }
-
-    .btn-primary {
-      width: 100%;
-      padding: 14px;
-      font-size: 15px;
-      font-weight: 700;
-      color: var(--white);
-      background-color: var(--sky-primary);
-      border: none;
-      border-radius: 13px;
-      cursor: pointer;
-    }
-
-    .btn-primary:hover:not(:disabled) {
-      background-color: var(--sky-dark);
-    }
-
-    .btn-primary:disabled {
-      background-color: #bae6fd;
-      cursor: not-allowed;
-    }
-
-    .btn-secondary {
-      width: 100%;
-      padding: 11px;
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--sky-dark);
-      background-color: var(--sky-light);
-      border: none;
-      border-radius: 12px;
-      cursor: pointer;
-      margin-top: 8px;
-    }
-
-    .footer-action {
-      padding: 14px 22px 24px;
-    }
-
-    .error-msg {
-      color: var(--danger);
-      font-size: 13px;
-      margin-top: 6px;
-      min-height: 18px;
-    }
-
-    .success-msg {
-      color: var(--success);
-      font-size: 13px;
-      margin-top: 6px;
-      font-weight: 600;
-    }
-
-    .helper-note {
-      font-size: 12px;
-      color: var(--text-muted);
-      line-height: 1.5;
-    }
-
-    /* Dashboard Header & Summary */
-    .dash-header {
-      background: linear-gradient(135deg, var(--sky-primary), var(--sky-dark));
-      color: var(--white);
-      padding: 18px 20px 20px;
-      border-bottom-left-radius: 24px;
-      border-bottom-right-radius: 24px;
-    }
-
-    .dash-top-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 14px;
-    }
-
-    .app-brand {
-      font-size: 18px;
-      font-weight: 700;
-    }
-
-    .user-pill {
-      font-size: 11px;
-      opacity: 0.9;
-      margin-top: 2px;
-    }
-
-    .icon-btn-group {
-      display: flex;
-      gap: 8px;
-    }
-
-    .header-icon-btn {
-      background: rgba(255, 255, 255, 0.2);
-      color: var(--white);
-      border: none;
-      border-radius: 10px;
-      padding: 7px 10px;
-      font-size: 12px;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    .summary-cards {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-
-    .sum-box {
-      background: rgba(255, 255, 255, 0.16);
-      border-radius: 14px;
-      padding: 12px;
-      backdrop-filter: blur(4px);
-    }
-
-    .sum-label {
-      font-size: 12px;
-      opacity: 0.92;
-    }
-
-    .sum-amount {
-      font-size: 19px;
-      font-weight: 800;
-      margin-top: 4px;
-    }
-
-    /* Tabs */
-    .tab-bar {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 6px;
-      padding: 12px 16px 6px;
-      background: var(--white);
-    }
-
-    .tab-btn {
-      padding: 10px 6px;
-      border-radius: 11px;
-      border: 1px solid #e2e8f0;
-      background: #f8fafc;
-      color: var(--text-muted);
-      font-size: 13px;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    .tab-btn.active {
-      background: var(--sky-light);
-      color: var(--sky-dark);
-      border-color: var(--sky-primary);
-    }
-
-    .tab-pane {
-      display: none;
-      padding: 12px 16px 24px;
-      flex: 1;
-    }
-
-    .tab-pane.active {
-      display: block;
-    }
-
-    /* Filters & Lists */
-    .filter-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      margin-bottom: 10px;
-    }
-
-    .customer-card {
-      border: 1px solid #e2e8f0;
-      border-radius: 14px;
-      padding: 13px;
-      margin-bottom: 10px;
-      background: var(--white);
-      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
-    }
-
-    .cust-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 8px;
-    }
-
-    .cust-name {
-      font-size: 15px;
-      font-weight: 700;
-      color: var(--text-main);
-    }
-
-    .cust-phone {
-      font-size: 12px;
-      color: var(--text-muted);
-      margin-top: 2px;
-    }
-
-    .badge-due {
-      background: var(--danger-soft);
-      color: var(--danger);
-      font-weight: 700;
-      font-size: 13px;
-      padding: 4px 10px;
-      border-radius: 99px;
-    }
-
-    .badge-paid {
-      background: var(--success-soft);
-      color: var(--success);
-      font-weight: 700;
-      font-size: 13px;
-      padding: 4px 10px;
-      border-radius: 99px;
-    }
-
-    .cust-actions {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-      margin-top: 8px;
-      padding-top: 8px;
-      border-top: 1px dashed #e2e8f0;
-    }
-
-    .mini-btn {
-      border: none;
-      border-radius: 8px;
-      padding: 6px 10px;
-      font-size: 12px;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    .btn-due {
-      background: var(--danger-soft);
-      color: var(--danger);
-    }
-
-    .btn-get {
-      background: var(--success-soft);
-      color: var(--success);
-    }
-
-    .btn-wa {
-      background: #dcfce7;
-      color: #15803d;
-    }
-
-    .btn-del {
-      background: #f1f5f9;
-      color: #475569;
-      margin-left: auto;
-    }
-
-    .tx-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px 12px;
-      border-radius: 12px;
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
-      margin-bottom: 8px;
-      font-size: 13px;
-    }
-
-    /* Modal */
-    .modal-backdrop {
-      position: fixed;
-      inset: 0;
-      background: rgba(15, 23, 42, 0.5);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      padding: 16px;
-      z-index: 50;
-    }
-
-    .modal-backdrop.open {
-      display: flex;
-    }
-
-    .modal-card {
-      width: 100%;
-      max-width: 380px;
-      background: var(--white);
-      border-radius: 20px;
-      padding: 20px;
-      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.2);
-    }
-
-    .modal-title {
-      font-size: 17px;
-      font-weight: 700;
-      margin-bottom: 12px;
-      color: var(--text-main);
-    }
-
-    .modal-actions {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      margin-top: 8px;
-    }
-  </style>
-</head>
-<body>
-  <div class="app-container">
-    <!-- SCREEN 1: GOOGLE SIGN-IN OR EMAIL VERIFICATION -->
-    <section id="authScreen" class="screen active">
-      <div>
-        <div class="hero-banner">
-          <div class="hero-icon">📘</div>
-          <p class="hero-title">Digital Hisab Khata — ফ্রি ও নিরাপদ লগইন এবং 4-Digit PIN সুরক্ষা।</p>
-        </div>
-
-        <div class="content-body">
-          <h1 class="heading">রেজিস্ট্রেশন / লগইন</h1>
-          <p class="subtext">Google অ্যাকাউন্ট দিয়ে দ্রুত লগইন করুন অথবা ইমেইলে ভেরিফিকেশন লিংক নিন।</p>
-
-          <button id="googleSignInBtn" type="button" class="btn-google">
-            <span>🔐</span>
-            <span>Google দিয়ে লগইন করুন</span>
-          </button>
-
-          <div class="divider">অথবা ইমেইল ভেরিফিকেশন</div>
-
-          <input type="email" id="emailInput" class="input-field" placeholder="আপনার Gmail / Email দিন" />
-          <input type="password" id="passwordInput" class="input-field" placeholder="পাসওয়ার্ড (কমপক্ষে ৬ অক্ষর)" />
-          <button id="emailAuthBtn" type="button" class="btn-primary">ইমেইল দিয়ে লগইন / রেজিস্টার</button>
-
-          <div id="authError" class="error-msg"></div>
-          <div id="authSuccess" class="success-msg"></div>
-        </div>
-      </div>
-
-      <div class="footer-action">
-        <p class="helper-note">
-          নিরাপদ সুরক্ষা: আপনার সব হিসাব ব্রাউজারে সংরক্ষিত থাকে এবং ৪-ডিজিট SHA-256 PIN দ্বারা লক করা থাকে।
-        </p>
-      </div>
-    </section>
-
-    <!-- SCREEN 2: 4-DIGIT PIN SETUP / UNLOCK -->
-    <section id="pinScreen" class="screen">
-      <div class="content-body">
-        <h1 id="pinTitle" class="heading">৪-ডিজিট PIN সেট করুন</h1>
-        <p id="pinDesc" class="subtext">আপনার হিসাব খাতা লক করে রাখতে ৪ সংখ্যার গোপন PIN দিন।</p>
-
-        <div class="pin-grid">
-          <input type="password" inputmode="numeric" maxlength="1" class="pin-box" />
-          <input type="password" inputmode="numeric" maxlength="1" class="pin-box" />
-          <input type="password" inputmode="numeric" maxlength="1" class="pin-box" />
-          <input type="password" inputmode="numeric" maxlength="1" class="pin-box" />
-        </div>
-
-        <div id="pinError" class="error-msg"></div>
-      </div>
-
-      <div class="footer-action">
-        <button id="pinSubmitBtn" type="button" class="btn-primary" disabled>নিশ্চিত করুন</button>
-        <button id="pinLogoutBtn" type="button" class="btn-secondary">অন্য অ্যাকাউন্টে যান</button>
-      </div>
-    </section>
-
-    <!-- SCREEN 3: FULL HISAB KHATA DASHBOARD -->
-    <section id="dashScreen" class="screen">
-      <div>
-        <div class="dash-header">
-          <div class="dash-top-row">
-            <div>
-              <div class="app-brand">📘 Digital Hisab Khata</div>
-              <div id="userEmailText" class="user-pill">—</div>
-            </div>
-            <div class="icon-btn-group">
-              <button id="lockBtn" type="button" class="header-icon-btn">🔒 লক</button>
-              <button id="signOutBtn" type="button" class="header-icon-btn">লগআউট</button>
-            </div>
-          </div>
-
-          <div class="summary-cards">
-            <div class="sum-box">
-              <div class="sum-label">মোট পাবো (বাকি)</div>
-              <div id="totalDueDisplay" class="sum-amount">৳ ০</div>
-            </div>
-            <div class="sum-box">
-              <div class="sum-label">মোট জমা / আদায়</div>
-              <div id="totalPaidDisplay" class="sum-amount">৳ ০</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="tab-bar">
-          <button type="button" class="tab-btn active" data-tab="customersTab">কাস্টমার</button>
-          <button type="button" class="tab-btn" data-tab="historyTab">লেনদেন</button>
-          <button type="button" class="tab-btn" data-tab="backupTab">ব্যাকআপ</button>
-        </div>
-
-        <!-- TAB 1: CUSTOMERS -->
-        <div id="customersTab" class="tab-pane active">
-          <button id="openAddCustomerBtn" type="button" class="btn-primary" style="margin-bottom: 12px;">
-            + নতুন কাস্টমার যোগ করুন
-          </button>
-
-          <input
-            type="text"
-            id="searchCustomerInput"
-            class="input-field"
-            placeholder="কাস্টমারের নাম বা মোবাইল নম্বর খুঁজুন..."
-          />
-
-          <div id="customerListContainer"></div>
-        </div>
-
-        <!-- TAB 2: TRANSACTION HISTORY WITH DATE & MONTH FILTER -->
-        <div id="historyTab" class="tab-pane">
-          <div class="filter-row">
-            <div>
-              <label class="helper-note">তারিখ অনুযায়ী</label>
-              <input type="date" id="filterDateInput" class="input-field" />
-            </div>
-            <div>
-              <label class="helper-note">মাস অনুযায়ী</label>
-              <input type="month" id="filterMonthInput" class="input-field" />
-            </div>
-          </div>
-          <button id="clearFilterBtn" type="button" class="btn-secondary" style="margin-bottom: 12px;">
-            ফিল্টার রিসেট করুন
-          </button>
-
-          <div id="transactionListContainer"></div>
-        </div>
-
-        <!-- TAB 3: JSON BACKUP & RESTORE -->
-        <div id="backupTab" class="tab-pane">
-          <div class="customer-card">
-            <h3 style="font-size: 16px; margin-bottom: 6px;">ডেটা ব্যাকআপ (JSON)</h3>
-            <p class="helper-note" style="margin-bottom: 12px;">
-              আপনার সব কাস্টমার ও লেনদেনের হিসাব নিরাপদে JSON ফাইল হিসেবে ডাউনলোড করে রাখুন।
-            </p>
-            <button id="exportJsonBtn" type="button" class="btn-primary">
-              ⬇️ ব্যাকআপ ডাউনলোড করুন (.json)
-            </button>
-          </div>
-
-          <div class="customer-card">
-            <h3 style="font-size: 16px; margin-bottom: 6px;">ব্যাকআপ রিস্টোর করুন</h3>
-            <p class="helper-note" style="margin-bottom: 12px;">
-              আগের সংরক্ষিত JSON ব্যাকআপ ফাইল সিলেক্ট করে সব হিসাব ফিরিয়ে আনুন।
-            </p>
-            <input type="file" id="importJsonInput" accept=".json" class="input-field" />
-            <div id="backupStatus" class="success-msg"></div>
-          </div>
-        </div>
-      </div>
-    </section>
-  </div>
-
-  <!-- MODAL: ADD CUSTOMER -->
-  <div id="customerModal" class="modal-backdrop">
-    <div class="modal-card">
-      <div class="modal-title">নতুন কাস্টমার যোগ করুন</div>
-      <input type="text" id="newCustName" class="input-field" placeholder="কাস্টমারের নাম *" />
-      <input type="tel" id="newCustPhone" class="input-field" placeholder="মোবাইল নম্বর (যেমন: 017XXXXXXXX)" />
-      <input type="text" id="newCustNote" class="input-field" placeholder="ঠিকানা বা নোট (ঐচ্ছিক)" />
-      <div class="modal-actions">
-        <button id="cancelCustModalBtn" type="button" class="btn-secondary" style="margin-top: 0;">বাতিল</button>
-        <button id="saveCustBtn" type="button" class="btn-primary">সংরক্ষণ</button>
-      </div>
+amount-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+.pe-amt-box {
+background: #fff;
+border: 1.5px solid #e2e8f0;
+border-radius: 12px;
+padding: 12px;
+display: flex;
+align-items: center;
+gap: 6px;
+}
+.pe-amt-box.active-due { border-color: #dc2626; background: #fffafa; }
+.pe-amt-box.active-receive { border-color: #16a34a; background: #f7fef9; }
+.pe-curr { font-size: 18px; font-weight: 800; color: #64748b; }
+.pe-amt-input {
+border: none !important;
+margin: 0 !important;
+padding: 4px 2px !important;
+font-size: 15px !important;
+font-weight: 700 !important;
+background: transparent !important;
+width: 100%;
+outline: none;
+}
+.pe-note-box {
+background: #fff;
+border: 1px solid #e2e8f0;
+border-radius: 12px;
+padding: 10px 12px;
+display: flex;
+align-items: center;
+gap: 8px;
+margin-bottom: 12px;
+}
+.pe-note-box input {
+border: none !important;
+margin: 0 !important;
+padding: 4px !important;
+background: transparent !important;
+outline: none;
+width: 100%;
+}
+.pe-options-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+.pe-date-chip {
+background: #fff;
+border: 1px solid #bae6fd;
+border-radius: 999px;
+padding: 6px 12px;
+font-size: 12px;
+font-weight: 700;
+color: #0369a1;
+display: inline-flex;
+align-items: center;
+gap: 6px;
+}
+.pe-date-chip input[type="date"] {
+border: none;
+margin: 0;
+padding: 0;
+font-size: 12px;
+font-weight: 700;
+color: #0369a1;
+background: transparent;
+width: auto;
+}
+.pe-toggle-wrap { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; color: #334155; }
+.pe-wa-share-row { text-align: center; font-size: 13px; font-weight: 700; color: #334155; margin-bottom: 16px; }
+.pe-wa-share-link { color: #15803d; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; }
+.pe-confirm-btn {
+width: 100%;
+padding: 14px 18px;
+border-radius: 999px;
+font-size: 16px;
+font-weight: 800;
+background: #bae6fd;
+color: #fff;
+transition: background 0.15s ease;
+}
+.pe-confirm-btn.ready { background: #0284c7; color: #fff; }
+.pe-confirm-btn.ready:hover:not(:disabled) { background: #0369a1; }
+
+/* Cards, Forms & Tables */
+.card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.06);
+  margin-bottom: 12px;
+}
+.card h2 { margin: 0 0 12px; font-size: 17px; }
+label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 5px; color: #334155; }
+input, select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  font-size: 14px;
+  background: #fff;
+}
+input:focus, select:focus { outline: none; border-color: #0284c7; }
+button {
+  background: #0284c7;
+  color: #fff;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  width: 100%;
+}
+button:hover:not(:disabled) { background: #0369a1; }
+button:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.mini-action-btn {
+  width: auto;
+  padding: 5px 8px;
+  font-size: 11px;
+  border-radius: 6px;
+  font-weight: 700;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+}
+.btn-edit { background: #e0f2fe; color: #0369a1; }
+.btn-del { background: #fee2e2; color: #b91c1c; }
+.btn-json { background: #0284c7; color: #fff; }
+.btn-csv { background: #15803d; color: #fff; }
+.btn-cancel { background: #e2e8f0; color: #1e293b; }
+.btn-logout { background: #334155; color: #fff; }
+
+.filter-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+.filter-row input, .filter-row select, .filter-row button {
+  width: auto;
+  margin-bottom: 0;
+  padding: 8px 10px;
+  font-size: 12px;
+}
+.btn-chip {
+  width: auto;
+  padding: 5px 10px;
+  font-size: 11px;
+  border-radius: 999px;
+  background: #f0f9ff;
+  color: #0369a1;
+  border: 1px solid #bae6fd;
+  font-weight: 700;
+}
+
+table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 12px; overflow: hidden; }
+th, td { padding: 11px 12px; text-align: left; border-bottom: 1px solid #e2e8f0; font-size: 13px; }
+th { background: #f0f9ff; color: #0369a1; font-weight: 700; }
+.badge-due { background: #fee2e2; color: #b91c1c; padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; }
+.badge-receive { background: #dcfce7; color: #15803d; padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; }
+
+.toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.toolbar button, .toolbar .upload-btn {
+  width: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 9px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-bottom: 0;
+}
+.upload-btn { background: #e2e8f0; color: #0f172a; border: 1px solid #cbd5e1; }
+.msg { margin-top: 8px; font-size: 13px; min-height: 18px; font-weight: 600; }
+.ok { color: #15803d; }
+.err { color: #dc2626; }
+
+/* Bottom Navigation Bar */
+.bottom-nav {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #ffffff;
+  border-top: 1px solid #bae6fd;
+  box-shadow: 0 -4px 16px rgba(2, 132, 199, 0.08);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  z-index: 200;
+  padding: 6px 6px calc(6px + env(safe-area-inset-bottom));
+}
+.nav-tab-btn {
+  width: 100%;
+  background: transparent;
+  color: #64748b;
+  border-radius: 10px;
+  padding: 6px 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  font-size: 12px;
+  font-weight: 700;
+}
+.nav-tab-btn.active { background: #e0f2fe; color: #0284c7; }
+.nav-icon { font-size: 17px; line-height: 1; }
+
+/* Modals */
+.modal-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.55);
+  z-index: 1100;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.modal-backdrop.open { display: flex; }
+.modal-box {
+  background: #fff;
+  width: 100%;
+  max-width: 440px;
+  border-radius: 14px;
+  padding: 20px;
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.24);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+.modal-box.khata-modal-box { max-width: 760px; }
+.modal-box h3 { margin: 0 0 14px; font-size: 17px; color: #0f172a; }
+.modal-actions { display: flex; gap: 10px; margin-top: 6px; }
+.khata-meta {
+  background: #f0f9ff;
+  border: 1px solid #bae6fd;
+  border-radius: 10px;
+  padding: 12px;
+  margin-bottom: 12px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 10px;
+  font-size: 13px;
+}
+.khata-meta div strong { display: block; font-size: 15px; margin-top: 2px; }
+
+@media print {
+  body { padding-bottom: 0; }
+  body * { visibility: hidden; }
+  #khataModal, #khataModal * { visibility: visible; }
+  #khataModal { position: static; background: #fff; padding: 0; display: block !important; }
+  .modal-box.khata-modal-box { max-width: 100%; box-shadow: none; max-height: none; padding: 0; }
+  .no-print { display: none !important; }
+}
+  <form id="phoneSendOtpForm">
+    <label for="loginProfileNameInput">প্রোফাইল নাম *</label>
+    <input type="text" id="loginProfileNameInput" placeholder="যেমন: MD Noyon Mia" required />
+
+    <label for="loginPhoneInput">মোবাইল নম্বর *</label>
+    <input type="tel" id="loginPhoneInput" placeholder="যেমন: 017XXXXXXXX বা +88017XXXXXXXX" required />
+
+    <button type="submit" id="sendOtpBtn">ভেরিফিকেশন কোড পাঠান</button>
+  </form>
+
+  <div id="otpHintBox" class="otp-hint-box"></div>
+
+  <form id="verifyOtpForm" style="display:none; margin-top:10px;">
+    <label for="otpCodeInput">৪ ডিজিটের কোড লিখুন *</label>
+    <input type="text" id="otpCodeInput" inputmode="numeric" maxlength="6" placeholder="যেমন: 1234" required />
+    <div class="modal-actions">
+      <button type="submit" id="verifyOtpBtn">লগইন নিশ্চিত করুন</button>
+      <button type="button" id="changePhoneBtn" class="btn-cancel">তথ্য বদলান</button>
+    </div>
+  </form>
+
+  <div id="loginMsg" class="msg"></div>
+</div>
+  <div class="quick-grid-card">
+    <div class="quick-grid">
+      <button type="button" class="quick-tile" data-action="add-party">
+        <span class="quick-tile-icon">📖</span>
+        <span>মাল্টি ব্যবসা</span>
+      </button>
+      <button type="button" class="quick-tile" data-action="add-tx">
+        <span class="quick-tile-icon">📦</span>
+        <span>স্টক হিসাব</span>
+      </button>
+      <button type="button" class="quick-tile" data-action="transactions">
+        <span class="quick-tile-icon">📝</span>
+        <span>ব্যবসার নোট</span>
+      </button>
+      <button type="button" class="quick-tile" data-action="filter-due">
+        <span class="quick-tile-icon">🔔</span>
+        <span>গ্রুপ তাগাদা</span>
+      </button>
+      <button type="button" class="quick-tile" data-action="backup">
+        <span class="quick-tile-icon">🏁</span>
+        <span>QR কোড</span>
+      </button>
+      <button type="button" class="quick-tile" data-action="backup">
+        <span class="quick-tile-icon">☁️</span>
+        <span>ডাটা ব্যাকআপ</span>
+      </button>
+      <button type="button" class="quick-tile" data-action="filter-due">
+        <span class="quick-tile-icon">💬</span>
+        <span>টালি-মেসেজ</span>
+      </button>
+      <button type="button" class="quick-tile" data-action="cashbox">
+        <span class="quick-tile-icon">📥</span>
+        <span>ক্যাশবক্স</span>
+      </button>
     </div>
   </div>
 
-  <!-- MODAL: ADD TRANSACTION (BAKI / JOMA) -->
-  <div id="txModal" class="modal-backdrop">
-    <div class="modal-card">
-      <div id="txModalTitle" class="modal-title">লেনদেন যুক্ত করুন</div>
-      <input type="number" id="txAmount" class="input-field" placeholder="টাকার পরিমাণ (৳) *" />
-      <input type="date" id="txDate" class="input-field" />
-      <input type="text" id="txNote" class="input-field" placeholder="বিবরণ (যেমন: পণ্যের নাম বা নগদ জমা)" />
-      <div class="modal-actions">
-        <button id="cancelTxModalBtn" type="button" class="btn-secondary" style="margin-top: 0;">বাতিল</button>
-        <button id="saveTxBtn" type="button" class="btn-primary">নিশ্চিত করুন</button>
-      </div>
+  <div class="summary-strip">
+    <div class="summary-col">
+      <div id="totalReceivable" class="summary-val due">৳0</div>
+      <div class="summary-lbl">মোট পাবো</div>
+    </div>
+    <div class="summary-col">
+      <div id="totalPayable" class="summary-val credit">৳0</div>
+      <div class="summary-lbl">মোট দেবো</div>
     </div>
   </div>
 
-  <script type="module">
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
-    import {
-      getAuth,
-      GoogleAuthProvider,
-      signInWithPopup,
-      createUserWithEmailAndPassword,
-      signInWithEmailAndPassword,
-      sendEmailVerification,
-      signOut,
-      onAuthStateChanged
-    } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+  <div class="search-action-bar">
+    <div class="search-box-wrap">
+      <span>🔍</span>
+      <input type="search" id="partySearchInput" placeholder="খোঁজ" aria-label="খোঁজ" />
+    </div>
+    <button type="button" class="circle-icon-btn" id="cycleStatusFilterBtn" title="অবস্থা ফিল্টার">⚙</button>
+    <button type="button" class="circle-icon-btn" id="quickCsvDownloadBtn" title="CSV ডাউনলোড">⬇</button>
+  </div>
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyC4dUfe6B5hrzn49c4F6OpuWD7BmFfi6Mc",
-      authDomain: "digital-hisab-khata-db87f.firebaseapp.com",
-      projectId: "digital-hisab-khata-db87f",
-      storageBucket: "digital-hisab-khata-db87f.firebasestorage.app",
-      messagingSenderId: "1058373687985",
-      appId: "1:1058373687985:web:53155b120fc0484c13e090",
-      measurementId: "G-7GDFMF27D2"
-    };
+  <div class="list-meta-row">
+    <span id="partyCountSummary">কাস্টমার ০ / সাপ্লায়ার ০</span>
+    <span id="statusFilterLabel">ফিল্টার: সব</span>
+  </div>
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const provider = new GoogleAuthProvider();
+  <div id="partiesListContainer" class="party-list-card">
+    <div class="party-row-item">লোড হচ্ছে...</div>
+  </div>
 
-    const screens = {
-      auth: document.getElementById('authScreen'),
-      pin: document.getElementById('pinScreen'),
-      dash: document.getElementById('dashScreen')
-    };
+  <div id="tallyMsg" class="msg"></div>
 
-    function showScreen(key) {
-      Object.values(screens).forEach((s) => s.classList.remove('active'));
-      screens[key].classList.add('active');
-    }
+  <button type="button" class="fab-add-btn" id="openAddPartyScreenBtn" title="নতুন কাস্টমার/সাপ্লায়ার যোগ করুন">👤+</button>
+</section>
 
-    const googleSignInBtn = document.getElementById('googleSignInBtn');
-    const emailInput = document.getElementById('emailInput');
-    const passwordInput = document.getElementById('passwordInput');
-    const emailAuthBtn = document.getElementById('emailAuthBtn');
-    const authError = document.getElementById('authError');
-    const authSuccess = document.getElementById('authSuccess');
-    const userEmailText = document.getElementById('userEmailText');
+<!-- TAB 2: ক্যাশবক্স -->
+<section id="page-cashbox" class="page-view" aria-label="ক্যাশবক্স">
+  <div class="cb-hero-card">
+    <div class="cb-top-grid">
+      <div>
+        <div id="cbTodaySale" class="cb-big-num">৳0.00</div>
+        <div class="cb-sub-lbl">আজকের বেচা</div>
+      </div>
+      <div>
+        <div id="cbCurrentCash" class="cb-big-num">৳0.00</div>
+        <div class="cb-sub-lbl">বর্তমান ক্যাশ</div>
+      </div>
+    </div>
 
-    let currentUid = null;
-    let ledgerData = { customers: [], transactions: [] };
+    <div class="cb-mid-grid">
+      <div class="credit">আজ পেলাম <span id="cbTodayGot">৳0.00</span></div>
+      <div class="due">আজ দিলাম <span id="cbTodayGave">৳0.00</span></div>
+    </div>
 
-    async function hashPin(pin) {
-      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pin + ':hisab_khata_pin'));
-      return Array.from(new Uint8Array(buf)).map((b) => b.toString(16).padStart(2, '0')).join('');
-    }
+    <div class="cb-action-pills">
+      <button type="button" id="cbReportBtn" class="cb-pill-yellow">📄 রিপোর্ট</button>
+      <button type="button" id="cbReconcileBtn" class="cb-pill-outline">⇄ ক্যাশবক্স মিলাই</button>
+      <button type="button" id="cbTogglePrivacyBtn" class="circle-icon-btn" style="width:32px; height:32px; font-size:13px;" title="হিসাব লুকান/দেখান">👁</button>
+    </div>
 
-    googleSignInBtn.addEventListener('click', async () => {
-      authError.textContent = '';
-      authSuccess.textContent = '';
-      try {
-        await signInWithPopup(auth, provider);
-      } catch (err) {
-        authError.textContent = 'Google লগইন সম্পন্ন হয়নি: ' + err.message;
-      }
-    });
+    <div class="cb-foot-stats">
+      <div class="credit">বাকি আদায় <span id="cbDueCollect">৳0.00</span></div>
+      <div>পেমেন্ট দেয়া <span id="cbPaymentGiven">৳0.00</span></div>
+    </div>
+  </div>
 
-    emailAuthBtn.addEventListener('click', async () => {
-      authError.textContent = '';
-      authSuccess.textContent = '';
-      const email = emailInput.value.trim();
-      const pass = passwordInput.value;
+  <div class="cb-list-card">
+    <button type="button" class="cb-row-btn" data-cb-entry="cash_sale">
+      <span class="cb-row-left">
+        <span class="cb-icon-circle" style="background:#dcfce7; color:#15803d;">↙</span>
+        <span class="cb-row-title">ক্যাশ বেচা</span>
+      </span>
+      <span class="cb-row-right credit"><span id="cbValCashSale">৳0.00</span> <span>›</span></span>
+    </button>
 
-      if (!email || pass.length < 6) {
-        authError.textContent = 'সঠিক ইমেইল এবং অন্তত ৬ অক্ষরের পাসওয়ার্ড দিন।';
-        return;
-      }
+    <button type="button" class="cb-row-btn" data-cb-entry="cash_buy">
+      <span class="cb-row-left">
+        <span class="cb-icon-circle" style="background:#fee2e2; color:#dc2626;">↗</span>
+        <span class="cb-row-title">ক্যাশ কেনা</span>
+      </span>
+      <span class="cb-row-right due"><span id="cbValCashBuy">৳0.00</span> <span>›</span></span>
+    </button>
 
-      try {
-        await signInWithEmailAndPassword(auth, email, pass);
-      } catch (loginErr) {
-        if (loginErr.code === 'auth/user-not-found' || loginErr.code === 'auth/invalid-credential') {
-          try {
-            const cred = await createUserWithEmailAndPassword(auth, email, pass);
-            await sendEmailVerification(cred.user);
-            authSuccess.textContent = 'নতুন অ্যাকাউন্ট তৈরি হয়েছে! আপনার ইমেইলে ভেরিফিকেশন লিংক পাঠানো হয়েছে।';
-          } catch (regErr) {
-            authError.textContent = regErr.message;
-          }
-        } else {
-          authError.textContent = loginErr.message;
-        }
-      }
-    });
+    <button type="button" class="cb-row-btn" data-cb-entry="expense">
+      <span class="cb-row-left">
+        <span class="cb-icon-circle" style="background:#fee2e2; color:#dc2626;">↗</span>
+        <span class="cb-row-title">খরচ</span>
+      </span>
+      <span class="cb-row-right due"><span id="cbValExpense">৳0.00</span> <span>›</span></span>
+    </button>
 
-    // PIN Screen Logic
-    const pinBoxes = Array.from(document.querySelectorAll('.pin-box'));
-    const pinSubmitBtn = document.getElementById('pinSubmitBtn');
-    const pinLogoutBtn = document.getElementById('pinLogoutBtn');
-    const pinTitle = document.getElementById('pinTitle');
-    const pinDesc = document.getElementById('pinDesc');
-    const pinError = document.getElementById('pinError');
-    let pinMode = 'setup';
-    let pinFailCount = 0;
-    let pinLockUntil = 0;
+    <button type="button" class="cb-row-btn" data-cb-entry="owner_gave">
+      <span class="cb-row-left">
+        <span class="cb-icon-circle" style="background:#dcfce7; color:#15803d;">↙</span>
+        <span class="cb-row-title">মালিক দিল</span>
+      </span>
+      <span class="cb-row-right credit"><span id="cbValOwnerGave">৳0.00</span> <span>›</span></span>
+    </button>
 
-    function clearPinBoxes() {
-      pinBoxes.forEach((b) => (b.value = ''));
-      pinSubmitBtn.disabled = true;
-    }
+    <button type="button" class="cb-row-btn" data-cb-entry="owner_took">
+      <span class="cb-row-left">
+        <span class="cb-icon-circle" style="background:#fee2e2; color:#dc2626;">↗</span>
+        <span class="cb-row-title">মালিক নিল</span>
+      </span>
+      <span class="cb-row-right due"><span id="cbValOwnerTook">৳0.00</span> <span>›</span></span>
+    </button>
+  </div>
+  <div id="cashboxMsg" class="msg"></div>
+</section>
 
-    pinBoxes.forEach((box, i) => {
-      box.addEventListener('input', (e) => {
-        e.target.value = e.target.value.replace(/\D/g, '').slice(-1);
-        pinError.textContent = '';
-        if (e.target.value && i < 3) pinBoxes[i + 1].focus();
-        const code = pinBoxes.map((x) => x.value).join('');
-        pinSubmitBtn.disabled = code.length !== 4;
-      });
-      box.addEventListener('keydown', (e) => {
-        if (e.key === 'Backspace' && !box.value && i > 0) pinBoxes[i - 1].focus();
-      });
-    });
+<!-- TAB 3: টালিপে / লেনদেন -->
+<section id="page-tallypay" class="page-view" aria-label="লেনদেন ও টালিপে">
+  <div class="card">
+    <h2>সব লেনদেনের খাতা</h2>
+    <div class="filter-row">
+      <button type="button" class="btn-chip" id="todayOnlyFilterBtn">আজকের লেনদেন</button>
+      <input type="month" id="txMonthFilter" aria-label="মাস ফিল্টার" />
+      <input type="date" id="txDateFilter" aria-label="তারিখ ফিল্টার" />
+      <input type="search" id="txSearchInput" placeholder="পার্টি বা নোট খুঁজুন..." />
+      <select id="txTypeFilter" aria-label="ধরন ফিল্টার">
+        <option value="all">সব ধরন</option>
+        <option value="receive">আজ জমা দিল</option>
+        <option value="due">আজ বাকি দিলাম</option>
+      </select>
+      <button type="button" class="btn-chip" id="clearTxFilterBtn">রিসেট</button>
+    </div>
+    <div style="overflow-x:auto;">
+      <table>
+        <thead>
+          <tr>
+            <th>তারিখ</th>
+            <th>পার্টি</th>
+            <th>ধরন</th>
+            <th>নোট</th>
+            <th>পরিমাণ</th>
+            <th>অ্যাকশন</th>
+          </tr>
+        </thead>
+        <tbody id="txBody">
+          <tr><td colspan="6">লোড হচ্ছে...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
 
-    function openPin(mode, uid) {
-      pinMode = mode;
-      pinError.textContent = '';
-      clearPinBoxes();
-      if (mode === 'setup') {
-        pinTitle.textContent = '৪-ডিজিট PIN সেট করুন';
-        pinDesc.textContent = 'হিসাব খাতা সুরক্ষিত রাখতে ৪ সংখ্যার PIN তৈরি করুন।';
-        pinSubmitBtn.textContent = 'PIN সংরক্ষণ করুন';
-      } else {
-        pinTitle.textContent = 'PIN দিয়ে আনলক করুন';
-        pinDesc.textContent = 'হিসাব খাতা দেখতে আপনার ৪-ডিজিট PIN দিন।';
-        pinSubmitBtn.textContent = 'আনলক করুন';
-      }
-      showScreen('pin');
-      pinSubmitBtn.dataset.uid = uid;
-      setTimeout(() => pinBoxes[0].focus(), 80);
-    }
+<!-- TAB 4: মেনু -->
+<section id="page-menu" class="page-view" aria-label="মেনু ও ব্যাকআপ">
+  <div class="card">
+    <h2>অ্যাকাউন্ট ও ব্যাকআপ</h2>
+    <p style="margin:0 0 12px; font-size:13px; color:#475569;">
+      প্রোফাইল: <strong id="menuProfileName">-</strong> • নম্বর: <strong id="menuAccountPhone">-</strong> • মোট পার্টি: <strong id="menuTotalParties">0</strong>
+    </p>
+    <div class="toolbar">
+      <button type="button" id="exportJsonBtn" class="btn-json">JSON ব্যাকআপ নামান</button>
+      <button type="button" id="exportCsvBtn" class="btn-csv">CSV এক্সপোর্ট করুন</button>
+      <label for="restoreJsonInput" class="upload-btn">JSON রিস্টোর করুন</label>
+      <input type="file" id="restoreJsonInput" accept=".json,application/json" style="display:none;" />
+      <button type="button" id="logoutPhoneBtn" class="btn-logout">লগআউট (নম্বর ও নাম বদলান)</button>
+    </div>
+    <div id="backupMsg" class="msg"></div>
+  </div>
+</section>
+<div class="ap-body">
+  <form id="partyForm">
+    <div class="ap-role-row">
+      <div class="ap-avatar-placeholder">👤<span style="font-size:11px; margin-left:-4px;">📷</span></div>
 
-    pinSubmitBtn.addEventListener('click', async () => {
-      if (Date.now() < pinLockUntil) {
-        const left = Math.ceil((pinLockUntil - Date.now()) / 1000);
-        pinError.textContent = `অনেকবার ভুল PIN দেওয়া হয়েছে। ${left} সেকেন্ড পর চেষ্টা করুন।`;
-        return;
-      }
+      <label id="apRoleCustomerCard" class="ap-radio-card selected">
+        <input type="radio" name="partyRole" id="roleCustomer" value="customer" checked />
+        <span>কাস্টমার</span>
+      </label>
 
-      const uid = pinSubmitBtn.dataset.uid;
-      const pin = pinBoxes.map((b) => b.value).join('');
-      if (pin.length !== 4 || !uid) return;
+      <label id="apRoleSupplierCard" class="ap-radio-card">
+        <input type="radio" name="partyRole" id="roleSupplier" value="supplier" />
+        <span>সাপ্লায়ার</span>
+      </label>
+    </div>
 
-      const hashed = await hashPin(pin);
-      const storageKey = `hk_pin_${uid}`;
+    <button type="button" id="pickContactBtn" class="ap-contact-btn">📇 ফোনবুক থেকে যোগ করি</button>
 
-      if (pinMode === 'setup') {
-        localStorage.setItem(storageKey, hashed);
-        enterDashboard();
-      } else {
-        if (localStorage.getItem(storageKey) === hashed) {
-          pinFailCount = 0;
-          enterDashboard();
-        } else {
-          pinFailCount++;
-          clearPinBoxes();
-          pinBoxes[0].focus();
-          if (pinFailCount >= 3) {
-            pinLockUntil = Date.now() + 30000;
-            pinError.textContent = '৩ বার ভুল PIN দিয়েছেন। ৩০ সেকেন্ডের জন্য লক করা হয়েছে।';
-          } else {
-            pinError.textContent = `ভুল PIN দিয়েছেন (${pinFailCount}/3), আবার চেষ্টা করুন।`;
-          }
-        }
-      }
-    });
+    <div class="ap-input-box">
+      <span>👤</span>
+      <input type="text" id="partyName" placeholder="নাম" required />
+    </div>
 
-    function getDataKey() {
-      return `hk_ledger_${currentUid || 'default'}`;
-    }
+    <div class="ap-input-box">
+      <span>📞</span>
+      <input type="tel" id="partyPhone" placeholder="মোবাইল নম্বর" />
+    </div>
 
-    function loadLedger() {
-      const raw = localStorage.getItem(getDataKey());
-      if (raw) {
-        try {
-          ledgerData = JSON.parse(raw);
-          if (!Array.isArray(ledgerData.customers)) ledgerData.customers = [];
-          if (!Array.isArray(ledgerData.transactions)) ledgerData.transactions = [];
-        } catch {
-          ledgerData = { customers: [], transactions: [] };
-        }
-      } else {
-        ledgerData = { customers: [], transactions: [] };
-      }
-    }
+    <label for="openingBalance" style="margin-top:6px;">শুরুর ব্যালেন্স (৳) — বাকি (+), জমা (-)</label>
+    <input type="number" id="openingBalance" step="any" value="0" />
 
-    function saveLedger() {
-      localStorage.setItem(getDataKey(), JSON.stringify(ledgerData));
-      renderAll();
-    }
+    <div id="partyMsg" class="msg"></div>
+    <button type="submit" id="addPartyBtn" class="ap-submit-btn">নিশ্চিত</button>
+  </form>
+</div>
+<div class="bk-body">
+  <div class="bk-status-center">
+    <div class="bk-cloud-circle">☁︎✓</div>
+    <div id="bkMainStatusText" class="bk-main-status">সব ডাটা ব্যাকআপ নেয়া আছে।</div>
 
-    function enterDashboard() {
-      loadLedger();
-      renderAll();
-      showScreen('dash');
-    }
+    <hr class="bk-divider" />
 
-    function getCustomerBalance(custId) {
-      let due = 0;
-      let paid = 0;
-      ledgerData.transactions.forEach((tx) => {
-        if (tx.customerId === custId) {
-          if (tx.type === 'due') due += Number(tx.amount);
-          if (tx.type === 'paid') paid += Number(tx.amount);
-        }
-      });
-      return { due, paid, netDue: due - paid };
-    }
+    <div class="bk-last-label">সর্বশেষ ব্যাকআপঃ</div>
+    <div id="bkLastBackupTime" class="bk-last-time">২৩ নভেম্বর, ০৯:৩৯ AM</div>
 
-    function renderSummary() {
-      let totalDue = 0;
-      let totalPaid = 0;
-      ledgerData.transactions.forEach((tx) => {
-        if (tx.type === 'due') totalDue += Number(tx.amount);
-        if (tx.type === 'paid') totalPaid += Number(tx.amount);
-      });
-      const netReceivable = Math.max(0, totalDue - totalPaid);
-      document.getElementById('totalDueDisplay').textContent = `৳ ${netReceivable.toLocaleString('bn-BD')}`;
-      document.getElementById('totalPaidDisplay').textContent = `৳ ${totalPaid.toLocaleString('bn-BD')}`;
-    }
+    <div class="bk-tools-row">
+      <button type="button" id="bkExportJsonBtn" class="mini-action-btn btn-json" style="padding:8px 12px; font-size:12px;">JSON ব্যাকআপ নামান</button>
+      <button type="button" id="bkExportCsvBtn" class="mini-action-btn btn-csv" style="padding:8px 12px; font-size:12px;">CSV এক্সপোর্ট</button>
+      <label for="restoreJsonInput" class="mini-action-btn btn-cancel" style="padding:8px 12px; font-size:12px; cursor:pointer; margin:0;">JSON রিস্টোর</label>
+    </div>
+    <div id="bkScreenMsg" class="msg"></div>
+  </div>
 
-    function renderCustomers() {
-      const container = document.getElementById('customerListContainer');
-      const query = document.getElementById('searchCustomerInput').value.trim().toLowerCase();
+  <button type="button" id="bkRunNowBtn" class="bk-primary-btn synced">ডাটা ব্যাকআপ করুন</button>
+</div>
+<div class="pf-top-card">
+  <div id="pfAvatar" class="avatar-circle" style="width:52px; height:52px; font-size:17px; background:#fef08a; color:#854d0e;">MN</div>
+  <div>
+    <div id="pfTopName" style="font-size:16px; font-weight:800; color:#0f172a;">MD Noyon Mia</div>
+    <div id="pfTopPhone" style="font-size:13px; color:#64748b; margin-top:2px;">-</div>
+  </div>
+</div>
 
-      const filtered = ledgerData.customers.filter(
-        (c) => c.name.toLowerCase().includes(query) || (c.phone && c.phone.includes(query))
-      );
+<div class="pf-section-card">
+  <div class="pf-section-head">
+    <div style="font-size:15px; font-weight:700; color:#0f172a;">অন্যান্য তথ্য</div>
+    <button type="button" id="pfEditOpenBtn" class="pf-edit-btn" title="তথ্য এডিট করুন">✎</button>
+  </div>
 
-      if (filtered.length === 0) {
-        container.innerHTML = `<p class="helper-note" style="text-align:center; padding: 24px 0;">কোনো কাস্টমার পাওয়া যায়নি। নতুন কাস্টমার যোগ করুন।</p>`;
-        return;
-      }
+  <div class="pf-field-item">
+    <div class="pf-field-label">নাম</div>
+    <div id="pfDetailName" class="pf-field-value"></div>
+  </div>
 
-      container.innerHTML = filtered
-        .map((c) => {
-          const { netDue } = getCustomerBalance(c.id);
-          const badgeHtml =
-            netDue > 0
-              ? `<span class="badge-due">বাকি: ৳ ${netDue}</span>`
-              : `<span class="badge-paid">পরিশোধিত (৳ ${Math.abs(netDue)})</span>`;
+  <div class="pf-field-item">
+    <div class="pf-field-label">ব্যবসার ধরণ</div>
+    <div id="pfDetailBusinessType" class="pf-field-value">ফার্মেসি</div>
+  </div>
 
-          return `
-            <div class="customer-card">
-              <div class="cust-top">
-                <div>
-                  <div class="cust-name">${escapeHtml(c.name)}</div>
-                  <div class="cust-phone">${c.phone ? '📞 ' + escapeHtml(c.phone) : 'নম্বর নেই'} ${c.note ? '• ' + escapeHtml(c.note) : ''}</div>
-                </div>
-                ${badgeHtml}
-              </div>
-              <div class="cust-actions">
-                <button type="button" class="mini-btn btn-due" onclick="openTxModal('${c.id}', 'due')">+ বাকি দিলাম</button>
-                <button type="button" class="mini-btn btn-get" onclick="openTxModal('${c.id}', 'paid')">+ জমা পেলাম</button>
-                ${c.phone ? `<button type="button" class="mini-btn btn-wa" onclick="sendWhatsAppReminder('${c.id}')">💬 WhatsApp</button>` : ''}
-                <button type="button" class="mini-btn btn-del" onclick="deleteCustomer('${c.id}')">মুছুন</button>
-              </div>
-            </div>
-          `;
-        })
-        .join('');
-    }
+  <div class="pf-field-item">
+    <div class="pf-field-label">NID নম্বর</div>
+    <div id="pfDetailNid" class="pf-field-value"></div>
+  </div>
 
-    function renderTransactions() {
-      const container = document.getElementById('transactionListContainer');
-      const dateFilter = document.getElementById('filterDateInput').value;
-      const monthFilter = document.getElementById('filterMonthInput').value;
+  <div class="pf-field-item">
+    <div class="pf-field-label">ব্যবসা প্রতিষ্ঠানের আনুমানিক বয়স (বছর)</div>
+    <div id="pfDetailBusinessAge" class="pf-field-value">০ বছর</div>
+  </div>
 
-      const sorted = [...ledgerData.transactions].sort((a, b) => b.createdAt - a.createdAt);
-      const filtered = sorted.filter((tx) => {
-        if (dateFilter && tx.date !== dateFilter) return false;
-        if (monthFilter && !tx.date.startsWith(monthFilter)) return false;
-        return true;
-      });
+  <div class="pf-field-item" style="margin-bottom:0;">
+    <div class="pf-field-label">ব্যবসা প্রতিষ্ঠানের ঠিকানা</div>
+    <div id="pfDetailBusinessAddress" class="pf-field-value"></div>
+  </div>
+</div>
+    <label for="editPfPhone">মোবাইল নম্বর *</label>
+    <input type="tel" id="editPfPhone" required />
 
-      if (filtered.length === 0) {
-        container.innerHTML = `<p class="helper-note" style="text-align:center; padding: 24px 0;">এই তারিখে কোনো লেনদেন পাওয়া যায়নি।</p>`;
-        return;
-      }
+    <label for="editPfDetailName">অন্যান্য তথ্যে নাম</label>
+    <input type="text" id="editPfDetailName" placeholder="যেমন: MD Noyon Mia" />
 
-      container.innerHTML = filtered
-        .map((tx) => {
-          const cust = ledgerData.customers.find((c) => c.id === tx.customerId);
-          const custName = cust ? cust.name : 'অজানা কাস্টমার';
-          const isDue = tx.type === 'due';
-          return `
-            <div class="tx-item">
-              <div>
-                <div style="font-weight:700; color:var(--text-main);">${escapeHtml(custName)}</div>
-                <div class="helper-note">${tx.date} ${tx.note ? '• ' + escapeHtml(tx.note) : ''}</div>
-              </div>
-              <div style="font-weight:800; color:${isDue ? 'var(--danger)' : 'var(--success)'};">
-                ${isDue ? '+ বাকি' : '- জমা'} ৳ ${tx.amount}
-              </div>
-            </div>
-          `;
-        })
-        .join('');
-    }
+    <label for="editPfBusinessType">ব্যবসার ধরণ</label>
+    <input type="text" id="editPfBusinessType" placeholder="যেমন: ফার্মেসি" />
 
-    function renderAll() {
-      renderSummary();
-      renderCustomers();
-      renderTransactions();
-    }
+    <label for="editPfNid">NID নম্বর</label>
+    <input type="text" id="editPfNid" placeholder="NID নম্বর লিখুন" />
 
-    function escapeHtml(str) {
-      return String(str || '')
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;');
-    }
+    <label for="editPfBusinessAge">ব্যবসা প্রতিষ্ঠানের আনুমানিক বয়স (বছর)</label>
+    <input type="text" id="editPfBusinessAge" placeholder="যেমন: ০ বছর বা ২ বছর" />
 
-    document.querySelectorAll('.tab-btn').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.tab-btn').forEach((b) => b.classList.remove('active'));
-        document.querySelectorAll('.tab-pane').forEach((p) => p.classList.remove('active'));
-        btn.classList.add('active');
-        document.getElementById(btn.dataset.tab).classList.add('active');
-      });
-    });
+    <label for="editPfBusinessAddress">ব্যবসা প্রতিষ্ঠানের ঠিকানা</label>
+    <input type="text" id="editPfBusinessAddress" placeholder="ঠিকানা লিখুন" />
 
-    const customerModal = document.getElementById('customerModal');
-    document.getElementById('openAddCustomerBtn').addEventListener('click', () => {
-      document.getElementById('newCustName').value = '';
-      document.getElementById('newCustPhone').value = '';
-      document.getElementById('newCustNote').value = '';
-      customerModal.classList.add('open');
-    });
+    <div class="modal-actions">
+      <button type="submit" id="saveProfileBtn">সেভ করুন</button>
+      <button type="button" id="cancelEditProfileBtn" class="btn-cancel">বাতিল</button>
+    </div>
+  </form>
+</div>
+    <div style="padding:10px 14px 4px;">
+      <div class="gold-banner" id="mdGoldBanner" style="margin-bottom:4px;">
+        <span>👑 Hisab Khata গোল্ড কিনুন</span>
+        <span>›</span>
+      </div>
+    </div>
 
-    document.getElementById('cancelCustModalBtn').addEventListener('click', () => {
-      customerModal.classList.remove('open');
-    });
+    <div class="md-section-title">হিসাব খাতা</div>
+    <button type="button" class="md-item-btn" data-md-nav="cashbox">
+      <span>🏷️</span>
+      <span>বেচা কেনা হিসাব</span>
+    </button>
+    <button type="button" class="md-item-btn" data-md-nav="expense">
+      <span>📤</span>
+      <span>খরচ</span>
+    </button>
+    <button type="button" class="md-item-btn" data-md-nav="due">
+      <span>📖</span>
+      <span>বাকি হিসাব</span>
+    </button>
+    <button type="button" class="md-item-btn" data-md-nav="cashbox">
+      <span>💼</span>
+      <span>ক্যাশ হিসাব</span>
+    </button>
+    <button type="button" class="md-item-btn" data-md-nav="transactions">
+      <span>📋</span>
+      <span>মালিকের রিপোর্ট</span>
+    </button>
 
-    document.getElementById('saveCustBtn').addEventListener('click', () => {
-      const name = document.getElementById('newCustName').value.trim();
-      const phone = document.getElementById('newCustPhone').value.trim();
-      const note = document.getElementById('newCustNote').value.trim();
+    <div class="md-section-title">অন্যান্য</div>
+    <button type="button" class="md-item-btn" data-md-nav="data-backup">
+      <span>☁️</span>
+      <span>ডাটা ব্যাকআপ</span>
+    </button>
+    <button type="button" class="md-item-btn" data-md-nav="backup">
+      <span>⚙️</span>
+      <span>সেটিংস</span>
+    </button>
+    <button type="button" class="md-item-btn" id="mdShareAppBtn">
+      <span>🔗</span>
+      <span>Hisab Khata রেফার করুন</span>
+    </button>
+  </div>
 
-      if (!name) {
-        alert('কাস্টমারের নাম লিখুন।');
-        return;
-      }
+  <div class="md-footer">
+    <div id="mdFooterBrandBadge" style="display:flex; align-items:center; gap:6px; font-size:14px; font-weight:800; color:#0284c7;">
+      <span>Hisab Khata</span>
+    </div>
+    <div style="display:flex; align-items:center; gap:8px;">
+      <span style="font-size:11px; color:#64748b;">ভার্সন - ৭.১৮.১</span>
+      <button type="button" id="mdLogoutBtn" class="mini-action-btn btn-logout">লগআউট</button>
+    </div>
+  </div>
+</aside>
+<div class="pe-body">
+  <div class="gold-banner" id="peGoldBanner">
+    <span>👑 Hisab Khata • সহজে বকেয়া ও জমা পরিচালনা করুন</span>
+    <span>→</span>
+  </div>
 
-      ledgerData.customers.unshift({
-        id: 'cust_' + Date.now(),
-        name,
-        phone,
-        note
-      });
+  <div class="pe-balance-bar">
+    <div>
+      <div id="peBalanceText" style="font-size:15px; font-weight:800;">পাবো ৳0.00</div>
+      <div id="peUpdatedAgo" style="font-size:12px; color:#64748b; margin-top:2px;">এইমাত্র</div>
+    </div>
+    <div style="display:flex; gap:8px;">
+      <a id="peTagadaLink" class="pe-pill-btn" style="text-decoration:none;" href="#" target="_blank" rel="noopener noreferrer">🔔 তাগাদা</a>
+      <button type="button" id="peReportBtn" class="pe-pill-btn">📄 রিপোর্ট</button>
+    </div>
+  </div>
 
-      customerModal.classList.remove('open');
-      saveLedger();
-    });
+  <form id="peTxForm">
+    <div class="pe-amount-grid">
+      <div id="peDueBox" class="pe-amt-box active-due">
+        <span class="pe-curr due">৳</span>
+        <input type="number" id="peDueAmount" class="pe-amt-input due" step="any" min="0" placeholder="দিলাম/বেচা" aria-label="দিলাম/বেচা" />
+      </div>
+      <div id="peReceiveBox" class="pe-amt-box">
+        <span class="pe-curr credit">৳</span>
+        <input type="number" id="peReceiveAmount" class="pe-amt-input credit" step="any" min="0" placeholder="পেলাম" aria-label="পেলাম" />
+      </div>
+    </div>
 
-    const txModal = document.getElementById('txModal');
-    let activeTxCustomerId = null;
-    let activeTxType = 'due';
+    <div class="pe-note-box">
+      <span>📝</span>
+      <input type="text" id="peNoteInput" placeholder="বিবরণ" aria-label="বিবরণ" />
+    </div>
 
-    window.openTxModal = (custId, type) => {
-      activeTxCustomerId = custId;
-      activeTxType = type;
-      const cust = ledgerData.customers.find((c) => c.id === custId);
-      document.getElementById('txModalTitle').textContent =
-        `${cust ? cust.name : ''} — ${type === 'due' ? 'বাকি লিখুন' : 'জমা লিখুন'}`;
-      document.getElementById('txAmount').value = '';
-      document.getElementById('txNote').value = '';
-      document.getElementById('txDate').value = new Date().toISOString().split('T')[0];
-      txModal.classList.add('open');
-    };
+    <div class="pe-options-row">
+      <div class="pe-date-chip">
+        <span>📅</span>
+        <input type="date" id="peDateInput" aria-label="তারিখ" />
+      </div>
 
-    document.getElementById('cancelTxModalBtn').addEventListener('click', () => {
-      txModal.classList.remove('open');
-    });
+      <label class="pe-toggle-wrap" style="margin:0;">
+        <span>টালি-মেসেজ</span>
+        <input type="checkbox" id="peSmsToggle" checked style="width:auto; margin:0;" />
+      </label>
 
-    document.getElementById('saveTxBtn').addEventListener('click', () => {
-      const amount = Number(document.getElementById('txAmount').value);
-      const date = document.getElementById('txDate').value || new Date().toISOString().split('T')[0];
-      const note = document.getElementById('txNote').value.trim();
+      <button type="button" id="pePhotoNoteBtn" class="pe-pill-btn">📷 ছবি/নোট</button>
+    </div>
 
-      if (!amount || amount <= 0) {
-        alert('সঠিক টাকার পরিমাণ দিন।');
-        return;
-      }
+    <div class="pe-wa-share-row">
+      <span>সর্বশেষ শেয়ার </span>
+      <a id="peQuickWaShare" class="pe-wa-share-link" href="#" target="_blank" rel="noopener noreferrer">💬 হোয়াটসঅ্যাপ</a>
+    </div>
 
-      ledgerData.transactions.push({
-        id: 'tx_' + Date.now(),
-        customerId: activeTxCustomerId,
-        type: activeTxType,
-        amount,
-        date,
-        note,
-        createdAt: Date.now()
-      });
+    <button type="submit" id="peConfirmBtn" class="pe-confirm-btn" disabled>নিশ্চিত</button>
+    <div id="peMsg" class="msg"></div>
+  </form>
 
-      txModal.classList.remove('open');
-      saveLedger();
-    });
+  <div class="card" style="margin-top:16px;">
+    <h2 style="font-size:15px; margin-bottom:10px;">এই পার্টির লেনদেনের ইতিহাস</h2>
+    <div style="overflow-x:auto;">
+      <table>
+        <thead>
+          <tr>
+            <th>তারিখ</th>
+            <th>ধরন</th>
+            <th>বিবরণ</th>
+            <th>পরিমাণ</th>
+            <th>অ্যাকশন</th>
+          </tr>
+        </thead>
+        <tbody id="peHistoryBody">
+          <tr><td colspan="5">কোনো লেনদেন নেই।</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+  <div class="filter-row no-print">
+    <select id="khataTypeFilter">
+      <option value="all">সব লেনদেন</option>
+      <option value="receive">শুধু পেলাম (Receive)</option>
+      <option value="due">শুধু দিলাম/বেচা (Due)</option>
+    </select>
+  </div>
 
-    window.sendWhatsAppReminder = (custId) => {
-      const cust = ledgerData.customers.find((c) => c.id === custId);
-      if (!cust || !cust.phone) return;
-      const { netDue } = getCustomerBalance(custId);
-      let cleanPhone = cust.phone.replace(/\D/g, '');
-      if (cleanPhone.startsWith('01')) cleanPhone = '88' + cleanPhone;
-
-      const msg =
-        netDue > 0
-          ? `আসসালামু আলাইকুম ${cust.name}, আপনার বর্তমান বকেয়া হিসাব ৳${netDue}। সুবিধামতো পরিশোধ করার অনুরোধ রইল। - Digital Hisab Khata`
-          : `আসসালামু আলাইকুম ${cust.name}, আপনার বর্তমান কোনো বকেয়া নেই। ধন্যবাদ! - Digital Hisab Khata`;
-
-      window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`, '_blank');
-    };
-
-    window.deleteCustomer = (custId) => {
-      if (!confirm('এই কাস্টমার এবং তার সব লেনদেন মুছে ফেলতে চান?')) return;
-      ledgerData.customers = ledgerData.customers.filter((c) => c.id !== custId);
-      ledgerData.transactions = ledgerData.transactions.filter((t) => t.customerId !== custId);
-      saveLedger();
-    };
-
-    document.getElementById('searchCustomerInput').addEventListener('input', renderCustomers);
-    document.getElementById('filterDateInput').addEventListener('change', renderTransactions);
-    document.getElementById('filterMonthInput').addEventListener('change', renderTransactions);
-    document.getElementById('clearFilterBtn').addEventListener('click', () => {
-      document.getElementById('filterDateInput').value = '';
-      document.getElementById('filterMonthInput').value = '';
-      renderTransactions();
-    });
-
-    document.getElementById('exportJsonBtn').addEventListener('click', () => {
-      const blob = new Blob([JSON.stringify(ledgerData, null, 2)], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `digital-hisab-khata-backup-${new Date().toISOString().split('T')[0]}.json`;
-      a.click();
-      URL.revokeObjectURL(url);
-    });
-
-    document.getElementById('importJsonInput').addEventListener('change', (e) => {
-      const file = e.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = (ev) => {
-        try {
-          const parsed = JSON.parse(ev.target.result);
-          if (Array.isArray(parsed.customers) && Array.isArray(parsed.transactions)) {
-            ledgerData = parsed;
-            saveLedger();
-            document.getElementById('backupStatus').textContent = 'ব্যাকআপ সফলভাবে রিস্টোর হয়েছে!';
-          } else {
-            alert('সঠিক ব্যাকআপ ফাইল নয়।');
-          }
-        } catch {
-          alert('ফাইলটি পড়া যাচ্ছে না।');
-        }
-      };
-      reader.readAsText(file);
-    });
-
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        currentUid = user.uid;
-        userEmailText.textContent = user.email || user.displayName || 'Verified User';
-        const savedPin = localStorage.getItem(`hk_pin_${user.uid}`);
-        openPin(savedPin ? 'unlock' : 'setup', user.uid);
-      } else {
-        currentUid = null;
-        showScreen('auth');
-      }
-    });
-
-    document.getElementById('lockBtn').addEventListener('click', () => {
-      if (auth.currentUser) openPin('unlock', auth.currentUser.uid);
-    });
-
-    document.addEventListener('visibilitychange', () => {
-      if (document.visibilityState === 'hidden' && auth.currentUser && screens.dash.classList.contains('active')) {
-        openPin('unlock', auth.currentUser.uid);
-      }
-    });
-
-    async function doLogout() {
-      await signOut(auth);
-      showScreen('auth');
-    }
-
-    document.getElementById('signOutBtn').addEventListener('click', doLogout);
-    pinLogoutBtn.addEventListener('click', doLogout);
-  </script>
-</body>
-</html>
+  <div id="khataMeta" class="khata-meta"></div>
+  <div style="overflow-x:auto;">
+    <table>
+      <thead>
+        <tr>
+          <th>তারিখ</th>
+          <th>ধরন</th>
+          <th>বিবরণ</th>
+          <th>পরিমাণ</th>
+        </tr>
+      </thead>
+      <tbody id="khataTxBody"></tbody>
+    </table>
+  </div>
+</div>
