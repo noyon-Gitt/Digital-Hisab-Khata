@@ -2,32 +2,30 @@
 <html lang="bn">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hisab Khata</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="theme-color" content="#0284c7" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="Hisab Khata" />
   <link id="appleTouchIconLink" rel="apple-touch-icon" href="" />
   <link id="pwaManifestLink" rel="manifest" href="" />
+  <title>Hisab Khata — কাস্টমার ও সাপ্লায়ার হিসাব</title>
   <style>
-    * { box-sizing: border-box; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+    * { box-sizing: border-box; }
     body {
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans Bengali", sans-serif;
       margin: 0;
+      padding-bottom: 84px;
       background: #f0f9ff;
       color: #0f172a;
-      padding-bottom: 84px;
     }
 
-    .due { color: #dc2626; font-weight: 700; }
-    .credit { color: #16a34a; font-weight: 700; }
-
-    /* Phone + PIN Login Screen */
+    /* Login Screen */
     .login-screen {
       display: none;
       position: fixed;
       inset: 0;
-      background: linear-gradient(160deg, #0284c7 0%, #0369a1 55%, #075985 100%);
+      background: linear-gradient(180deg, #0284c7 0%, #e0f2fe 45%, #f0f9ff 100%);
       z-index: 2000;
       align-items: center;
       justify-content: center;
@@ -39,101 +37,85 @@
       max-width: 400px;
       background: #ffffff;
       border-radius: 18px;
-      padding: 24px 20px;
-      box-shadow: 0 20px 45px rgba(2, 6, 23, 0.28);
+      padding: 22px 20px;
+      box-shadow: 0 16px 36px rgba(2, 132, 199, 0.22);
+      border: 1px solid #bae6fd;
     }
     .login-brand { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
     .login-logo {
-      width: 48px;
-      height: 48px;
+      width: 46px;
+      height: 46px;
       border-radius: 12px;
-      background: #e0f2fe;
-      color: #0284c7;
+      background: #0284c7;
+      color: #fff;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 24px;
+      font-size: 22px;
       font-weight: 800;
       overflow: hidden;
     }
-    .login-title { margin: 0; font-size: 20px; color: #0f172a; }
-    .login-sub { margin: 2px 0 0; font-size: 12px; color: #64748b; }
-    .auth-mode-tabs {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      background: #f1f5f9;
-      padding: 4px;
-      border-radius: 10px;
-      margin-bottom: 14px;
-    }
-    .auth-tab-btn {
-      background: transparent;
-      color: #475569;
-      padding: 8px 10px;
-      font-size: 13px;
-      font-weight: 700;
-      border-radius: 8px;
-    }
-    .auth-tab-btn.active {
-      background: #ffffff;
-      color: #0284c7;
-      box-shadow: 0 2px 6px rgba(2, 132, 199, 0.12);
-    }
-    .pin-note-box {
+    .login-title { margin: 0; font-size: 20px; font-weight: 800; color: #0284c7; }
+    .login-sub { margin: 2px 0 0; font-size: 12px; color: #475569; }
+    .otp-hint-box {
       background: #f0f9ff;
-      border: 1px solid #bae6fd;
+      border: 1px dashed #0284c7;
       color: #0369a1;
       border-radius: 10px;
       padding: 10px 12px;
-      font-size: 12px;
-      font-weight: 600;
-      margin-bottom: 14px;
-      line-height: 1.45;
+      font-size: 13px;
+      font-weight: 700;
+      margin-top: 8px;
+      display: none;
     }
 
-    /* Top Sky-Blue Header */
+    /* Top Sky Blue Header */
     .top-header {
-      background: linear-gradient(135deg, #0284c7, #0369a1);
-      color: #fff;
+      background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+      color: #ffffff;
       padding: 14px 16px 18px;
       box-shadow: 0 4px 14px rgba(2, 132, 199, 0.22);
-      position: sticky;
-      top: 0;
-      z-index: 100;
     }
     .top-header-row {
       max-width: 960px;
       margin: 0 auto;
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       justify-content: space-between;
-      gap: 10px;
+      gap: 12px;
     }
-    .brand-title { margin: 0; font-size: 18px; font-weight: 800; letter-spacing: 0.2px; }
-    .brand-sub { font-size: 11px; opacity: 0.94; margin-top: 3px; display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+    .brand-title { margin: 0; font-size: 21px; font-weight: 800; letter-spacing: -0.2px; }
+    .brand-sub {
+      margin-top: 6px;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      font-size: 12px;
+      color: #e0f2fe;
+    }
     .plan-pill {
       background: rgba(255, 255, 255, 0.2);
-      border: 1px solid rgba(255, 255, 255, 0.35);
-      border-radius: 999px;
+      color: #ffffff;
       padding: 2px 8px;
-      font-size: 10px;
+      border-radius: 999px;
       font-weight: 700;
+      font-size: 11px;
     }
     .header-right-actions { display: flex; align-items: center; gap: 14px; }
     .header-icon-btn {
+      position: relative;
       width: auto;
       background: transparent;
       color: #ffffff;
       padding: 4px 6px;
-      border-radius: 8px;
-      display: inline-flex;
+      border-radius: 10px;
+      display: flex;
       flex-direction: column;
       align-items: center;
       gap: 2px;
       font-size: 11px;
-      font-weight: 600;
-      position: relative;
+      font-weight: 700;
     }
     .header-icon-btn:hover { background: rgba(255, 255, 255, 0.14); }
     .badge-count {
@@ -153,15 +135,15 @@
       padding: 0 4px;
     }
 
-    .container { max-width: 960px; margin: 0 auto; padding: 12px 14px 20px; }
+    .container { max-width: 960px; margin: 0 auto; padding: 12px 14px 24px; }
     .page-view { display: none; }
     .page-view.active { display: block; }
 
-    /* Gold Banner */
+    /* Gold Promo Banner */
     .gold-banner {
-      background: linear-gradient(90deg, #fef9c3, #fef08a);
+      background: linear-gradient(90deg, #fef9c3 0%, #fef08a 100%);
       border: 1px solid #fde047;
-      color: #713f12;
+      color: #854d0e;
       border-radius: 12px;
       padding: 10px 14px;
       display: flex;
@@ -177,73 +159,66 @@
     .quick-grid-card {
       background: #ffffff;
       border-radius: 14px;
-      padding: 14px 10px;
+      padding: 12px 10px;
       box-shadow: 0 2px 8px rgba(2, 132, 199, 0.06);
       margin-bottom: 12px;
     }
-    .quick-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 14px 8px;
-    }
+    .quick-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px 6px; }
     .quick-tile {
       width: 100%;
       background: transparent;
       color: #1e293b;
-      padding: 4px 2px;
+      padding: 6px 4px;
       border-radius: 10px;
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 6px;
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 600;
-      text-align: center;
+      line-height: 1.25;
     }
     .quick-tile:hover { background: #f0f9ff; }
     .quick-tile-icon {
       width: 34px;
       height: 34px;
       border-radius: 10px;
-      background: #e0f2fe;
+      background: #f0f9ff;
       color: #0284c7;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      font-size: 18px;
+      font-size: 17px;
     }
 
     /* Receivable / Payable Summary Strip */
     .summary-strip {
       background: #ffffff;
       border-radius: 14px;
-      padding: 14px 10px;
       box-shadow: 0 2px 8px rgba(2, 132, 199, 0.06);
       display: grid;
       grid-template-columns: 1fr 1fr;
-      margin-bottom: 12px;
       position: relative;
+      margin-bottom: 12px;
+      overflow: hidden;
     }
     .summary-strip::after {
       content: "";
       position: absolute;
-      top: 16%;
-      bottom: 16%;
+      top: 14%;
+      bottom: 14%;
       left: 50%;
       width: 1px;
       background: #e2e8f0;
     }
-    .summary-col { text-align: center; padding: 0 8px; }
-    .summary-val { font-size: 20px; font-weight: 800; line-height: 1.25; }
-    .summary-lbl { font-size: 12px; color: #64748b; margin-top: 3px; font-weight: 600; }
+    .summary-col { padding: 14px 12px; text-align: center; }
+    .summary-val { font-size: 19px; font-weight: 800; line-height: 1.2; }
+    .summary-lbl { margin-top: 4px; font-size: 12px; color: #64748b; font-weight: 600; }
+    .due { color: #dc2626; }
+    .credit { color: #16a34a; }
 
     /* Search & Filter Row */
-    .search-action-bar {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 8px;
-    }
+    .search-action-bar { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
     .search-box-wrap {
       flex: 1;
       background: #ffffff;
@@ -259,6 +234,7 @@
       border: none;
       margin: 0;
       padding: 6px 0;
+      height: 36px;
       background: transparent;
       font-size: 14px;
       width: 100%;
@@ -268,8 +244,9 @@
       width: 40px;
       height: 40px;
       border-radius: 50%;
-      background: #e0f2fe;
+      background: #ffffff;
       color: #0284c7;
+      border: 1px solid #bae6fd;
       padding: 0;
       display: inline-flex;
       align-items: center;
@@ -277,25 +254,23 @@
       font-size: 16px;
       flex-shrink: 0;
     }
-    .circle-icon-btn:hover { background: #bae6fd; color: #0369a1; }
-    .circle-icon-btn.active { background: #0284c7; color: #ffffff; }
-
+    .circle-icon-btn.active { background: #0284c7; color: #ffffff; border-color: #0284c7; }
     .list-meta-row {
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
       font-size: 12px;
       color: #64748b;
-      padding: 0 4px 8px;
+      padding: 2px 4px 8px;
       font-weight: 600;
     }
 
-    /* Party Rows */
+    /* Party List Rows */
     .party-list-card {
       background: #ffffff;
       border-radius: 14px;
-      overflow: hidden;
       box-shadow: 0 2px 8px rgba(2, 132, 199, 0.06);
+      overflow: hidden;
     }
     .party-row-item {
       display: flex;
@@ -305,11 +280,11 @@
       padding: 12px 14px;
       border-bottom: 1px solid #f1f5f9;
       cursor: pointer;
-      transition: background 0.15s ease;
+      transition: background 0.12s ease;
     }
     .party-row-item:last-child { border-bottom: none; }
-    .party-row-item:hover { background: #f8fafc; }
-    .party-left { display: flex; align-items: center; gap: 12px; min-width: 0; }
+    .party-row-item:hover { background: #f0f9ff; }
+    .party-left { display: flex; align-items: center; gap: 12px; min-width: 0; flex: 1; }
     .avatar-circle {
       width: 42px;
       height: 42px;
@@ -317,7 +292,7 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      font-size: 13px;
+      font-size: 14px;
       font-weight: 800;
       flex-shrink: 0;
     }
@@ -332,9 +307,9 @@
     }
     .party-sub-time { font-size: 12px; color: #94a3b8; margin-top: 2px; }
     .party-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
-    .party-bal-num { font-size: 15px; font-weight: 800; color: #334155; }
+    .party-bal-num { font-size: 15px; font-weight: 800; }
 
-    /* Floating Add Button */
+    /* Floating Action Button */
     .fab-add-btn {
       position: fixed;
       right: 18px;
@@ -345,23 +320,23 @@
       border-radius: 999px;
       background: #0284c7;
       color: #ffffff;
+      font-size: 15px;
+      font-weight: 800;
       box-shadow: 0 8px 20px rgba(2, 132, 199, 0.35);
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 6px;
-      font-size: 15px;
-      font-weight: 800;
       z-index: 150;
     }
     .fab-add-btn:hover { background: #0369a1; }
 
-    /* Cashbox Dashboard */
+    /* Cashbox Tab UI */
     .cb-hero-card {
       background: #ffffff;
       border-radius: 16px;
       padding: 16px;
-      box-shadow: 0 2px 10px rgba(2, 132, 199, 0.07);
+      box-shadow: 0 2px 10px rgba(2, 132, 199, 0.08);
       margin-bottom: 12px;
     }
     .cb-top-grid {
@@ -371,25 +346,15 @@
       text-align: center;
       padding-bottom: 12px;
       border-bottom: 1px solid #f1f5f9;
-      position: relative;
     }
-    .cb-top-grid::after {
-      content: "";
-      position: absolute;
-      top: 10%;
-      bottom: 10%;
-      left: 50%;
-      width: 1px;
-      background: #e2e8f0;
-    }
-    .cb-big-num { font-size: 20px; font-weight: 800; color: #0f172a; }
-    .cb-sub-lbl { font-size: 12px; color: #64748b; margin-top: 2px; font-weight: 600; }
+    .cb-big-num { font-size: 22px; font-weight: 800; color: #0f172a; }
+    .cb-sub-lbl { font-size: 12px; color: #64748b; margin-top: 3px; font-weight: 600; }
     .cb-mid-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 8px;
+      gap: 12px;
       text-align: center;
-      padding: 10px 0;
+      padding: 12px 0;
       border-bottom: 1px solid #f1f5f9;
       font-size: 13px;
       font-weight: 700;
@@ -401,7 +366,6 @@
       gap: 10px;
       padding: 12px 0;
       border-bottom: 1px solid #f1f5f9;
-      flex-wrap: wrap;
     }
     .cb-pill-yellow {
       width: auto;
@@ -417,17 +381,16 @@
       width: auto;
       background: #ffffff;
       color: #0284c7;
-      border: 1.5px solid #0284c7;
+      border: 1px solid #7dd3fc;
       border-radius: 999px;
       padding: 7px 16px;
       font-size: 13px;
       font-weight: 700;
     }
     .cb-foot-stats {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       padding-top: 10px;
       font-size: 12px;
       font-weight: 700;
@@ -436,8 +399,8 @@
     .cb-list-card {
       background: #ffffff;
       border-radius: 16px;
+      box-shadow: 0 2px 10px rgba(2, 132, 199, 0.06);
       overflow: hidden;
-      box-shadow: 0 2px 10px rgba(2, 132, 199, 0.07);
     }
     .cb-row-btn {
       width: 100%;
@@ -452,7 +415,7 @@
       font-weight: 700;
     }
     .cb-row-btn:last-child { border-bottom: none; }
-    .cb-row-btn:hover { background: #f8fafc; }
+    .cb-row-btn:hover { background: #f0f9ff; }
     .cb-row-left { display: flex; align-items: center; gap: 12px; }
     .cb-icon-circle {
       width: 34px;
@@ -461,32 +424,32 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 800;
     }
-    .cb-row-title { font-size: 15px; font-weight: 700; color: #0f172a; }
+    .cb-row-title { font-size: 15px; font-weight: 700; }
     .cb-row-right { display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 800; }
 
-    /* Menu Slide Drawer */
+    /* Menu Slide Drawer & Profile Screen */
     .menu-drawer-backdrop {
       display: none;
       position: fixed;
       inset: 0;
       background: rgba(15, 23, 42, 0.45);
-      z-index: 1550;
+      z-index: 1400;
       justify-content: flex-end;
     }
     .menu-drawer-backdrop.open { display: flex; }
     .menu-drawer-panel {
-      width: 84%;
-      max-width: 340px;
+      width: 86%;
+      max-width: 360px;
       height: 100%;
       background: #ffffff;
+      box-shadow: -10px 0 28px rgba(15, 23, 42, 0.18);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       overflow-y: auto;
-      box-shadow: -8px 0 28px rgba(15, 23, 42, 0.18);
     }
     .md-profile-head {
       padding: 18px 16px;
@@ -497,11 +460,16 @@
       cursor: pointer;
     }
     .md-profile-head:hover { background: #f8fafc; }
-    .md-section-title { padding: 12px 16px 6px; font-size: 12px; font-weight: 700; color: #64748b; }
+    .md-section-title {
+      padding: 12px 16px 6px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #64748b;
+    }
     .md-item-btn {
       width: 100%;
       background: transparent;
-      color: #1e293b;
+      color: #0f172a;
       border-radius: 0;
       padding: 12px 16px;
       display: flex;
@@ -511,7 +479,7 @@
       font-weight: 600;
       text-align: left;
     }
-    .md-item-btn:hover { background: #f0f9ff; color: #0284c7; }
+    .md-item-btn:hover { background: #f0f9ff; }
     .md-footer {
       padding: 12px 16px;
       border-top: 1px solid #e2e8f0;
@@ -521,28 +489,29 @@
       background: #f8fafc;
     }
 
-    /* Profile & Data Backup Full Screens */
-    .profile-screen, .backup-screen {
+    .profile-screen {
       display: none;
       position: fixed;
       inset: 0;
       background: #f0f9ff;
-      z-index: 1580;
-      flex-direction: column;
+      z-index: 1550;
       overflow-y: auto;
+      padding-bottom: 32px;
     }
-    .profile-screen.open, .backup-screen.open { display: flex; }
+    .profile-screen.open { display: block; }
     .pf-top-card {
       background: #ffffff;
+      margin: 14px;
+      border-radius: 14px;
       padding: 16px;
       display: flex;
       align-items: center;
       gap: 14px;
-      border-bottom: 1px solid #e2e8f0;
+      box-shadow: 0 2px 8px rgba(2, 132, 199, 0.06);
     }
     .pf-section-card {
       background: #ffffff;
-      margin: 12px;
+      margin: 0 14px 14px;
       border-radius: 14px;
       padding: 16px;
       box-shadow: 0 2px 8px rgba(2, 132, 199, 0.06);
@@ -567,8 +536,19 @@
     }
     .pf-field-item { margin-bottom: 14px; }
     .pf-field-label { font-size: 12px; color: #64748b; margin-bottom: 3px; }
-    .pf-field-value { font-size: 15px; font-weight: 600; color: #0f172a; min-height: 20px; }
+    .pf-field-value { font-size: 15px; font-weight: 700; color: #0f172a; min-height: 20px; }
 
+    /* Fullscreen Data Backup UI */
+    .backup-screen {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: #f0f9ff;
+      z-index: 1500;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .backup-screen.open { display: flex; }
     .bk-header {
       background: #ffffff;
       padding: 12px 14px;
@@ -963,7 +943,6 @@
       text-decoration: none;
       display: inline-flex;
       align-items: center;
-      gap: 3px;
     }
     .btn-edit { background: #e0f2fe; color: #0369a1; }
     .btn-del { background: #fee2e2; color: #b91c1c; }
@@ -1051,7 +1030,7 @@
       position: fixed;
       inset: 0;
       background: rgba(15, 23, 42, 0.55);
-      z-index: 1600;
+      z-index: 1100;
       align-items: center;
       justify-content: center;
       padding: 16px;
@@ -1094,79 +1073,49 @@
   </style>
 </head>
 <body>
-  <!-- Firebase Auth: Phone + 6-Digit PIN Login / Register Screen -->
+  <!-- Phone + Profile Name Login Screen -->
   <div id="phoneLoginScreen" class="login-screen open" aria-hidden="false">
     <div class="login-card">
       <div class="login-brand">
         <div id="loginBrandLogoBox" class="login-logo">৳</div>
         <div>
           <h2 class="login-title">Hisab Khata</h2>
-          <p class="login-sub">মোবাইল নম্বর ও ৬ ডিজিটের গোপন পিন দিয়ে নিরাপদ লগইন</p>
+          <p class="login-sub">প্রোফাইল নাম ও ফোন নম্বর দিয়ে লগইন করুন</p>
         </div>
       </div>
 
-      <div class="auth-mode-tabs">
-        <button type="button" id="tabLoginBtn" class="auth-tab-btn active">লগইন করুন</button>
-        <button type="button" id="tabRegisterBtn" class="auth-tab-btn">নতুন অ্যাকাউন্ট</button>
-      </div>
+      <form id="phoneSendOtpForm">
+        <label for="loginProfileNameInput">প্রোফাইল নাম *</label>
+        <input type="text" id="loginProfileNameInput" placeholder="যেমন: MD Noyon Mia" required />
 
-      <div class="pin-note-box">
-        🔒 ১০০% ফ্রি Firebase Auth • পার্টি বা লেনদেন এডিট/ডিলিট করতেও আপনার এই পিন লাগবে।
-      </div>
-
-      <form id="firebaseLoginForm">
         <label for="loginPhoneInput">মোবাইল নম্বর *</label>
-        <input type="tel" id="loginPhoneInput" placeholder="যেমন: 017XXXXXXXX" required />
+        <input type="tel" id="loginPhoneInput" placeholder="যেমন: 017XXXXXXXX বা +88017XXXXXXXX" required />
 
-        <label for="loginPinInput">৬ ডিজিটের গোপন পিন *</label>
-        <input type="password" id="loginPinInput" inputmode="numeric" minlength="6" maxlength="20" placeholder="আপনার ৬ ডিজিটের পিন" required />
-
-        <button type="submit" id="loginSubmitBtn">লগইন করুন</button>
+        <button type="submit" id="sendOtpBtn">ভেরিফিকেশন কোড পাঠান</button>
       </form>
 
-      <form id="firebaseRegisterForm" style="display:none;">
-        <label for="regProfileNameInput">আপনার / ব্যবসার নাম *</label>
-        <input type="text" id="regProfileNameInput" placeholder="যেমন: MD Noyon Mia" required />
+      <div id="otpHintBox" class="otp-hint-box"></div>
 
-        <label for="regPhoneInput">মোবাইল নম্বর *</label>
-        <input type="tel" id="regPhoneInput" placeholder="যেমন: 017XXXXXXXX" required />
-
-        <label for="regPinInput">নতুন ৬ ডিজিটের পিন সেট করুন *</label>
-        <input type="password" id="regPinInput" inputmode="numeric" minlength="6" maxlength="20" placeholder="যেমন: 123456" required />
-
-        <button type="submit" id="registerSubmitBtn">অ্যাকাউন্ট খুলুন</button>
+      <form id="verifyOtpForm" style="display:none; margin-top:10px;">
+        <label for="otpCodeInput">৪ ডিজিটের কোড লিখুন *</label>
+        <input type="text" id="otpCodeInput" inputmode="numeric" maxlength="6" placeholder="যেমন: 1234" required />
+        <div class="modal-actions">
+          <button type="submit" id="verifyOtpBtn">লগইন নিশ্চিত করুন</button>
+          <button type="button" id="changePhoneBtn" class="btn-cancel">তথ্য বদলান</button>
+        </div>
       </form>
 
       <div id="loginMsg" class="msg"></div>
     </div>
   </div>
 
-  <!-- PIN Verification Modal for Edit / Delete Party & Transaction -->
-  <div id="pinVerifyModal" class="modal-backdrop" aria-hidden="true">
-    <div class="modal-box" style="max-width:360px;">
-      <h3>🔒 পিন ভেরিফিকেশন প্রয়োজন</h3>
-      <p id="pinVerifyDesc" style="margin:0 0 12px; font-size:13px; color:#475569; font-weight:600;">
-        এই পরিবর্তন সম্পন্ন করতে আপনার ৬ ডিজিটের গোপন পিন লিখুন।
-      </p>
-      <form id="pinVerifyForm">
-        <label for="verifyActionPinInput">গোপন পিন *</label>
-        <input type="password" id="verifyActionPinInput" inputmode="numeric" placeholder="৬ ডিজিটের পিন লিখুন" required />
-        <div class="modal-actions">
-          <button type="submit" id="confirmPinActionBtn">নিশ্চিত করুন</button>
-          <button type="button" id="cancelPinActionBtn" class="btn-cancel">বাতিল</button>
-        </div>
-        <div id="pinVerifyMsg" class="msg"></div>
-      </form>
-    </div>
-  </div>
-
   <header class="top-header">
     <div class="top-header-row">
       <div>
-        <h1 id="headerProfileTitle" class="brand-title">Hisab Khata ⌄</h1>
+        <h1 id="headerProfileTitle" class="brand-title">MD Noyon Mia ⌄</h1>
         <div class="brand-sub">
-          <span class="plan-pill">PIN Protected</span>
-          <span id="loggedInPhoneBadge">লগইন প্রয়োজন</span>
+          <span class="plan-pill">Hisab Khata</span>
+          <span id="loggedInPhoneBadge">নম্বর: -</span>
           <span id="dbStatus">Firestore যুক্ত হচ্ছে...</span>
           <button type="button" id="installAppBtn" class="mini-action-btn" style="display:none; background:#fff; color:#0284c7;">ইনস্টল</button>
         </div>
@@ -1189,7 +1138,7 @@
     <!-- TAB 1: টালি -->
     <section id="page-tally" class="page-view active" aria-label="টালি">
       <div class="gold-banner" id="goldBannerBtn">
-        <span>👑 Hisab Khata • পিন সুরক্ষিত হিসাব খাতা</span>
+        <span>👑 Hisab Khata • সহজে বকেয়া ও জমা পরিচালনা করুন</span>
         <span>→</span>
       </div>
 
@@ -1342,7 +1291,7 @@
     <!-- TAB 3: টালিপে / লেনদেন -->
     <section id="page-tallypay" class="page-view" aria-label="লেনদেন ও টালিপে">
       <div class="card">
-        <h2>সব লেনদেনের খাতা (🔒 এডিট/ডিলিটে পিন লাগবে)</h2>
+        <h2>সব লেনদেনের খাতা</h2>
         <div class="filter-row">
           <button type="button" class="btn-chip" id="todayOnlyFilterBtn">আজকের লেনদেন</button>
           <input type="month" id="txMonthFilter" aria-label="মাস ফিল্টার" />
@@ -1387,7 +1336,7 @@
           <button type="button" id="exportCsvBtn" class="btn-csv">CSV এক্সপোর্ট করুন</button>
           <label for="restoreJsonInput" class="upload-btn">JSON রিস্টোর করুন</label>
           <input type="file" id="restoreJsonInput" accept=".json,application/json" style="display:none;" />
-          <button type="button" id="logoutPhoneBtn" class="btn-logout">লগআউট</button>
+          <button type="button" id="logoutPhoneBtn" class="btn-logout">লগআউট (নম্বর ও নাম বদলান)</button>
         </div>
         <div id="backupMsg" class="msg"></div>
       </div>
@@ -1478,9 +1427,9 @@
     </div>
 
     <div class="pf-top-card">
-      <div id="pfAvatar" class="avatar-circle" style="width:52px; height:52px; font-size:17px; background:#fef08a; color:#854d0e;">HK</div>
+      <div id="pfAvatar" class="avatar-circle" style="width:52px; height:52px; font-size:17px; background:#fef08a; color:#854d0e;">MN</div>
       <div>
-        <div id="pfTopName" style="font-size:16px; font-weight:800; color:#0f172a;">Hisab Khata</div>
+        <div id="pfTopName" style="font-size:16px; font-weight:800; color:#0f172a;">MD Noyon Mia</div>
         <div id="pfTopPhone" style="font-size:13px; color:#64748b; margin-top:2px;">-</div>
       </div>
     </div>
@@ -1526,6 +1475,9 @@
         <label for="editPfProfileName">প্রোফাইল নাম *</label>
         <input type="text" id="editPfProfileName" required />
 
+        <label for="editPfPhone">মোবাইল নম্বর *</label>
+        <input type="tel" id="editPfPhone" required />
+
         <label for="editPfDetailName">অন্যান্য তথ্যে নাম</label>
         <input type="text" id="editPfDetailName" placeholder="যেমন: MD Noyon Mia" />
 
@@ -1555,10 +1507,10 @@
       <div>
         <div id="mdProfileTrigger" class="md-profile-head" title="প্রোফাইল দেখুন">
           <div style="display:flex; align-items:center; gap:12px;">
-            <div id="mdAvatar" class="avatar-circle" style="background:#fef08a; color:#854d0e;">HK</div>
+            <div id="mdAvatar" class="avatar-circle" style="background:#fef08a; color:#854d0e;">MN</div>
             <div>
-              <div id="mdProfileName" style="font-size:15px; font-weight:800; color:#0f172a;">Hisab Khata</div>
-              <div id="mdProfilePhone" style="font-size:12px; color:#64748b;">-</div>
+              <div id="mdProfileName" style="font-size:15px; font-weight:800; color:#0f172a;">MD Noyon Mia</div>
+              <div id="mdProfilePhone" style="font-size:12px; color:#64748b;">+88017XXXXXXXX</div>
             </div>
           </div>
           <span style="color:#64748b; font-size:18px;">›</span>
@@ -1566,7 +1518,7 @@
 
         <div style="padding:10px 14px 4px;">
           <div class="gold-banner" id="mdGoldBanner" style="margin-bottom:4px;">
-            <span>👑 Hisab Khata • পিন সুরক্ষিত অ্যাকাউন্ট</span>
+            <span>👑 Hisab Khata গোল্ড কিনুন</span>
             <span>›</span>
           </div>
         </div>
@@ -1613,7 +1565,7 @@
           <span>Hisab Khata</span>
         </div>
         <div style="display:flex; align-items:center; gap:8px;">
-          <span style="font-size:11px; color:#64748b;">ভার্সন - ৮.০</span>
+          <span style="font-size:11px; color:#64748b;">ভার্সন - ৭.১৮.১</span>
           <button type="button" id="mdLogoutBtn" class="mini-action-btn btn-logout">লগআউট</button>
         </div>
       </div>
@@ -1632,14 +1584,14 @@
         </div>
       </div>
       <div style="display:flex; gap:6px;">
-        <button type="button" id="peEditPartyBtn" class="mini-action-btn btn-edit">🔒 এডিট</button>
-        <button type="button" id="peDelPartyBtn" class="mini-action-btn btn-del">🔒 ডিলিট</button>
+        <button type="button" id="peEditPartyBtn" class="mini-action-btn btn-edit">এডিট</button>
+        <button type="button" id="peDelPartyBtn" class="mini-action-btn btn-del">ডিলিট</button>
       </div>
     </div>
 
     <div class="pe-body">
       <div class="gold-banner" id="peGoldBanner">
-        <span>👑 Hisab Khata • পার্টি বা লেনদেন এডিট/ডিলিটে পিন সুরক্ষা চালু আছে</span>
+        <span>👑 Hisab Khata • সহজে বকেয়া ও জমা পরিচালনা করুন</span>
         <span>→</span>
       </div>
 
@@ -1695,7 +1647,7 @@
       </form>
 
       <div class="card" style="margin-top:16px;">
-        <h2 style="font-size:15px; margin-bottom:10px;">এই পার্টির লেনদেনের ইতিহাস (🔒 এডিট/ডিলিটে পিন লাগবে)</h2>
+        <h2 style="font-size:15px; margin-bottom:10px;">এই পার্টির লেনদেনের ইতিহাস</h2>
         <div style="overflow-x:auto;">
           <table>
             <thead>
@@ -1951,7 +1903,7 @@
 
         if ("serviceWorker" in navigator && window.location.protocol.startsWith("http")) {
           const swCode = `
-            const CACHE_NAME = "hisab-khata-auth-v6";
+            const CACHE_NAME = "hisab-khata-complete-v4";
             self.addEventListener("install", () => self.skipWaiting());
             self.addEventListener("activate", (event) => {
               event.waitUntil(caches.keys().then((keys) => Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k)))));
@@ -1973,16 +1925,6 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
-    import {
-      getAuth,
-      createUserWithEmailAndPassword,
-      signInWithEmailAndPassword,
-      updateProfile,
-      signOut,
-      onAuthStateChanged,
-      EmailAuthProvider,
-      reauthenticateWithCredential
-    } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
     import {
       getFirestore,
       collection,
@@ -2010,192 +1952,25 @@
     };
 
     const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
     const db = getFirestore(app);
 
+    const LOGIN_PHONE_KEY = "hisab_khata_logged_phone_v1";
+    const LOGIN_PROFILE_KEY = "hisab_khata_profile_name_v1";
     const PROFILE_DETAILS_KEY = "hisab_khata_profile_details_v1";
     const BACKUP_META_KEY = "hisab_khata_backup_meta_v1";
     const CASHBOX_STATE_KEY = "hisab_khata_cashbox_v1";
 
-    let currentAuthUser = null;
-    let unsubscribeParties = null;
-    let unsubscribeTransactions = null;
-    let unsubscribeLegacyParties = null;
-    let unsubscribeLegacyTransactions = null;
+    const getCurrentOwnerPhone = () => String(localStorage.getItem(LOGIN_PHONE_KEY) || "").trim();
 
-    function normalizePhoneDigits(raw) {
-      const digits = String(raw || "").replace(/[^\d]/g, "");
-      if (!digits) return "";
-      if (digits.startsWith("880") && digits.length >= 13) return "0" + digits.slice(3);
-      return digits;
-    }
-
-    function phoneToAuthEmail(rawPhone) {
-      const cleanDigits = normalizePhoneDigits(rawPhone);
-      return cleanDigits ? `${cleanDigits}@hisabkhata.app` : "";
-    }
-
-    function extractDisplayPhoneFromUser(user) {
-      if (!user || !user.email) return "-";
-      const localPart = user.email.split("@")[0] || "";
-      if (localPart.startsWith("01") && localPart.length === 11) return "+88" + localPart;
-      return localPart ? "+" + localPart : "-";
-    }
-
-    // PIN Verification Gate for Edit/Delete Party & Transaction
-    const pinVerifyModal = document.getElementById("pinVerifyModal");
-    const pinVerifyForm = document.getElementById("pinVerifyForm");
-    const verifyActionPinInput = document.getElementById("verifyActionPinInput");
-    const cancelPinActionBtn = document.getElementById("cancelPinActionBtn");
-    const confirmPinActionBtn = document.getElementById("confirmPinActionBtn");
-    const pinVerifyDesc = document.getElementById("pinVerifyDesc");
-    const pinVerifyMsg = document.getElementById("pinVerifyMsg");
-    let pendingPinCallback = null;
-
-    function requirePinVerification(actionLabel, callback) {
-      if (!currentAuthUser || !currentAuthUser.email) {
-        alert("আগে লগইন করুন।");
-        return;
-      }
-      pendingPinCallback = callback;
-      pinVerifyDesc.textContent = `"${actionLabel}" সম্পন্ন করতে আপনার ৬ ডিজিটের গোপন পিন দিন।`;
-      verifyActionPinInput.value = "";
-      pinVerifyMsg.textContent = "";
-      pinVerifyModal.classList.add("open");
-      pinVerifyModal.setAttribute("aria-hidden", "false");
-      setTimeout(() => verifyActionPinInput.focus(), 50);
-    }
-
-    function closePinVerifyModal() {
-      pendingPinCallback = null;
-      verifyActionPinInput.value = "";
-      pinVerifyMsg.textContent = "";
-      pinVerifyModal.classList.remove("open");
-      pinVerifyModal.setAttribute("aria-hidden", "true");
-    }
-
-    cancelPinActionBtn.addEventListener("click", closePinVerifyModal);
-    pinVerifyModal.addEventListener("click", (e) => {
-      if (e.target === pinVerifyModal) closePinVerifyModal();
-    });
-
-    pinVerifyForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      if (!currentAuthUser || !currentAuthUser.email || typeof pendingPinCallback !== "function") return;
-
-      const enteredPin = verifyActionPinInput.value.trim();
-      if (!enteredPin) return;
-
-      confirmPinActionBtn.disabled = true;
-      pinVerifyMsg.textContent = "পিন যাচাই করা হচ্ছে...";
-      pinVerifyMsg.className = "msg";
-
-      try {
-        const credential = EmailAuthProvider.credential(currentAuthUser.email, enteredPin);
-        await reauthenticateWithCredential(currentAuthUser, credential);
-        const fn = pendingPinCallback;
-        closePinVerifyModal();
-        await fn();
-      } catch (err) {
-        pinVerifyMsg.textContent = "ভুল পিন দিয়েছেন! সঠিক পিন নম্বর দিন।";
-        pinVerifyMsg.className = "msg err";
-        verifyActionPinInput.select();
-      } finally {
-        confirmPinActionBtn.disabled = false;
-      }
-    });
-
-    // Auth UI Elements
     const phoneLoginScreen = document.getElementById("phoneLoginScreen");
-    const tabLoginBtn = document.getElementById("tabLoginBtn");
-    const tabRegisterBtn = document.getElementById("tabRegisterBtn");
-    const firebaseLoginForm = document.getElementById("firebaseLoginForm");
-    const firebaseRegisterForm = document.getElementById("firebaseRegisterForm");
+    const phoneSendOtpForm = document.getElementById("phoneSendOtpForm");
+    const loginProfileNameInput = document.getElementById("loginProfileNameInput");
     const loginPhoneInput = document.getElementById("loginPhoneInput");
-    const loginPinInput = document.getElementById("loginPinInput");
-    const loginSubmitBtn = document.getElementById("loginSubmitBtn");
-    const regProfileNameInput = document.getElementById("regProfileNameInput");
-    const regPhoneInput = document.getElementById("regPhoneInput");
-    const regPinInput = document.getElementById("regPinInput");
-    const registerSubmitBtn = document.getElementById("registerSubmitBtn");
+    const otpHintBox = document.getElementById("otpHintBox");
+    const verifyOtpForm = document.getElementById("verifyOtpForm");
+    const otpCodeInput = document.getElementById("otpCodeInput");
+    const changePhoneBtn = document.getElementById("changePhoneBtn");
     const loginMsg = document.getElementById("loginMsg");
-
-    tabLoginBtn.addEventListener("click", () => {
-      tabLoginBtn.classList.add("active");
-      tabRegisterBtn.classList.remove("active");
-      firebaseLoginForm.style.display = "block";
-      firebaseRegisterForm.style.display = "none";
-      loginMsg.textContent = "";
-    });
-
-    tabRegisterBtn.addEventListener("click", () => {
-      tabRegisterBtn.classList.add("active");
-      tabLoginBtn.classList.remove("active");
-      firebaseRegisterForm.style.display = "block";
-      firebaseLoginForm.style.display = "none";
-      loginMsg.textContent = "";
-    });
-
-    firebaseLoginForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const email = phoneToAuthEmail(loginPhoneInput.value);
-      const pin = loginPinInput.value.trim();
-      if (!email || pin.length < 6) {
-        loginMsg.textContent = "সঠিক মোবাইল নম্বর ও ৬ ডিজিটের পিন দিন।";
-        loginMsg.className = "msg err";
-        return;
-      }
-      loginSubmitBtn.disabled = true;
-      loginMsg.textContent = "লগইন হচ্ছে...";
-      loginMsg.className = "msg";
-      try {
-        await signInWithEmailAndPassword(auth, email, pin);
-        loginPinInput.value = "";
-        loginMsg.textContent = "";
-      } catch (err) {
-        loginMsg.textContent = "নম্বর বা পিন মিলছে না। নতুন হলে 'নতুন অ্যাকাউন্ট' ট্যাবে যান।";
-        loginMsg.className = "msg err";
-      } finally {
-        loginSubmitBtn.disabled = false;
-      }
-    });
-
-    firebaseRegisterForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const name = regProfileNameInput.value.trim();
-      const email = phoneToAuthEmail(regPhoneInput.value);
-      const pin = regPinInput.value.trim();
-      if (!name || !email) {
-        loginMsg.textContent = "আপনার নাম ও সঠিক মোবাইল নম্বর দিন।";
-        loginMsg.className = "msg err";
-        return;
-      }
-      if (!/^\d{6}$/.test(pin)) {
-        loginMsg.textContent = "পিন অবশ্যই ৬ সংখ্যার (যেমন: 123456) হতে হবে।";
-        loginMsg.className = "msg err";
-        return;
-      }
-      registerSubmitBtn.disabled = true;
-      loginMsg.textContent = "অ্যাকাউন্ট তৈরি হচ্ছে...";
-      loginMsg.className = "msg";
-      try {
-        const cred = await createUserWithEmailAndPassword(auth, email, pin);
-        await updateProfile(cred.user, { displayName: name });
-        regPinInput.value = "";
-        loginMsg.textContent = "";
-      } catch (err) {
-        if (err && err.code === "auth/email-already-in-use") {
-          loginMsg.textContent = "এই মোবাইল নম্বরে আগেই অ্যাকাউন্ট খোলা আছে—'লগইন করুন' ট্যাবে যান।";
-        } else if (err && err.code === "auth/operation-not-allowed") {
-          loginMsg.textContent = "Firebase Console-এ Authentication > Email/Password চালু (Enable) করুন।";
-        } else {
-          loginMsg.textContent = "অ্যাকাউন্ট খোলা যায়নি: " + (err.message || "");
-        }
-        loginMsg.className = "msg err";
-      } finally {
-        registerSubmitBtn.disabled = false;
-      }
-    });
 
     const headerProfileTitle = document.getElementById("headerProfileTitle");
     const loggedInPhoneBadge = document.getElementById("loggedInPhoneBadge");
@@ -2236,6 +2011,7 @@
     const editProfileModal = document.getElementById("editProfileModal");
     const editProfileForm = document.getElementById("editProfileForm");
     const editPfProfileName = document.getElementById("editPfProfileName");
+    const editPfPhone = document.getElementById("editPfPhone");
     const editPfDetailName = document.getElementById("editPfDetailName");
     const editPfBusinessType = document.getElementById("editPfBusinessType");
     const editPfNid = document.getElementById("editPfNid");
@@ -2251,6 +2027,12 @@
     const roleCustomerRadio = document.getElementById("roleCustomer");
     const roleSupplierRadio = document.getElementById("roleSupplier");
     const addPartyBtn = document.getElementById("addPartyBtn");
+
+    let pendingProfileName = "";
+    let pendingPhone = "";
+    let generatedOtpCode = "";
+    let unsubscribeParties = null;
+    let unsubscribeTransactions = null;
 
     const defaultProfileDetails = {
       detailName: "",
@@ -2295,9 +2077,17 @@
       return String(name || "P").trim().slice(0, 2).toUpperCase();
     };
 
+    function normalizePhoneNumber(raw) {
+      const digits = String(raw || "").replace(/[^\d]/g, "");
+      if (!digits) return "";
+      if (digits.startsWith("880") && digits.length >= 13) return "+" + digits;
+      if (digits.startsWith("01") && digits.length === 11) return "+88" + digits;
+      return "+" + digits;
+    }
+
     function renderProfileScreen() {
-      const currentName = (currentAuthUser && currentAuthUser.displayName) || "Hisab Khata";
-      const currentPhone = extractDisplayPhoneFromUser(currentAuthUser);
+      const currentName = localStorage.getItem(LOGIN_PROFILE_KEY) || "MD Noyon Mia";
+      const currentPhone = localStorage.getItem(LOGIN_PHONE_KEY) || "-";
       pfAvatar.textContent = getInitials(currentName);
       pfTopName.textContent = currentName;
       pfTopPhone.textContent = currentPhone;
@@ -2349,7 +2139,8 @@
     pfBackBtn.addEventListener("click", closeProfileScreen);
 
     pfEditOpenBtn.addEventListener("click", () => {
-      editPfProfileName.value = (currentAuthUser && currentAuthUser.displayName) || "";
+      editPfProfileName.value = localStorage.getItem(LOGIN_PROFILE_KEY) || "";
+      editPfPhone.value = localStorage.getItem(LOGIN_PHONE_KEY) || "";
       editPfDetailName.value = profileDetails.detailName || "";
       editPfBusinessType.value = profileDetails.businessType || "";
       editPfNid.value = profileDetails.nid || "";
@@ -2364,12 +2155,12 @@
       editProfileModal.setAttribute("aria-hidden", "true");
     });
 
-    editProfileForm.addEventListener("submit", async (e) => {
+    editProfileForm.addEventListener("submit", (e) => {
       e.preventDefault();
       const nextName = editPfProfileName.value.trim();
-      if (!nextName || !currentAuthUser) return;
+      const nextPhone = editPfPhone.value.trim();
+      if (!nextName || !nextPhone) return;
 
-      await updateProfile(currentAuthUser, { displayName: nextName });
       profileDetails = {
         detailName: editPfDetailName.value.trim(),
         businessType: editPfBusinessType.value.trim(),
@@ -2378,35 +2169,33 @@
         businessAddress: editPfBusinessAddress.value.trim()
       };
       localStorage.setItem(PROFILE_DETAILS_KEY, JSON.stringify(profileDetails));
-
-      const phoneStr = extractDisplayPhoneFromUser(currentAuthUser);
-      headerProfileTitle.textContent = `${nextName} ⌄`;
-      menuProfileName.textContent = nextName;
-      mdProfileName.textContent = nextName;
-      mdAvatar.textContent = getInitials(nextName);
-      loggedInPhoneBadge.textContent = `নম্বর: ${phoneStr}`;
+      applyLoggedInState(nextName, nextPhone);
       renderProfileScreen();
       editProfileModal.classList.remove("open");
       editProfileModal.setAttribute("aria-hidden", "true");
     });
 
-    onAuthStateChanged(auth, (user) => {
-      currentAuthUser = user || null;
-      if (user) {
-        const displayName = user.displayName || "Hisab Khata";
-        const displayPhone = extractDisplayPhoneFromUser(user);
+    function applyLoggedInState(profileName, phone) {
+      const cleanName = String(profileName || "").trim();
+      const cleanPhone = String(phone || "").trim();
+
+      if (cleanName && cleanPhone) {
+        localStorage.setItem(LOGIN_PROFILE_KEY, cleanName);
+        localStorage.setItem(LOGIN_PHONE_KEY, cleanPhone);
         phoneLoginScreen.classList.remove("open");
         phoneLoginScreen.setAttribute("aria-hidden", "true");
-        headerProfileTitle.textContent = `${displayName} ⌄`;
-        loggedInPhoneBadge.textContent = `নম্বর: ${displayPhone}`;
-        menuProfileName.textContent = displayName;
-        menuAccountPhone.textContent = displayPhone;
-        mdProfileName.textContent = displayName;
-        mdProfilePhone.textContent = displayPhone;
-        mdAvatar.textContent = getInitials(displayName);
+        headerProfileTitle.textContent = `${cleanName} ⌄`;
+        loggedInPhoneBadge.textContent = `নম্বর: ${cleanPhone}`;
+        menuProfileName.textContent = cleanName;
+        menuAccountPhone.textContent = cleanPhone;
+        mdProfileName.textContent = cleanName;
+        mdProfilePhone.textContent = cleanPhone;
+        mdAvatar.textContent = getInitials(cleanName);
         renderProfileScreen();
         attachRealtimeListeners();
       } else {
+        localStorage.removeItem(LOGIN_PROFILE_KEY);
+        localStorage.removeItem(LOGIN_PHONE_KEY);
         headerProfileTitle.textContent = "Hisab Khata ⌄";
         loggedInPhoneBadge.textContent = "লগইন প্রয়োজন";
         menuProfileName.textContent = "-";
@@ -2414,16 +2203,76 @@
         mdProfileName.textContent = "-";
         mdProfilePhone.textContent = "-";
         mdAvatar.textContent = "HK";
+        pendingProfileName = "";
+        pendingPhone = "";
+        generatedOtpCode = "";
+        phoneSendOtpForm.style.display = "block";
+        verifyOtpForm.style.display = "none";
+        otpHintBox.style.display = "none";
+        otpCodeInput.value = "";
+        loginMsg.textContent = "";
         phoneLoginScreen.classList.add("open");
         phoneLoginScreen.setAttribute("aria-hidden", "false");
+        loginProfileNameInput.focus();
         attachRealtimeListeners();
       }
+    }
+
+    phoneSendOtpForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const profileName = loginProfileNameInput.value.trim();
+      const formatted = normalizePhoneNumber(loginPhoneInput.value);
+      const digitLen = formatted.replace(/\D/g, "").length;
+
+      if (!profileName) {
+        loginMsg.textContent = "প্রোফাইল নাম লিখুন।";
+        loginMsg.className = "msg err";
+        return;
+      }
+      if (digitLen < 10) {
+        loginMsg.textContent = "সঠিক মোবাইল নম্বর লিখুন।";
+        loginMsg.className = "msg err";
+        return;
+      }
+
+      pendingProfileName = profileName;
+      pendingPhone = formatted;
+      generatedOtpCode = String(Math.floor(1000 + Math.random() * 9000));
+      otpHintBox.style.display = "block";
+      otpHintBox.textContent = `${profileName} (${formatted}) — ভেরিফিকেশন কোড: ${generatedOtpCode}`;
+      phoneSendOtpForm.style.display = "none";
+      verifyOtpForm.style.display = "block";
+      otpCodeInput.value = "";
+      loginMsg.textContent = "নিচে কোডটি লিখে লগইন নিশ্চিত করুন।";
+      loginMsg.className = "msg ok";
+      otpCodeInput.focus();
     });
 
-    const handleLogoutFlow = async () => {
+    verifyOtpForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      if (otpCodeInput.value.trim() !== generatedOtpCode) {
+        loginMsg.textContent = "ভুল কোড দিয়েছেন, সঠিক কোড লিখুন।";
+        loginMsg.className = "msg err";
+        return;
+      }
+      applyLoggedInState(pendingProfileName, pendingPhone);
+    });
+
+    changePhoneBtn.addEventListener("click", () => {
+      pendingProfileName = "";
+      pendingPhone = "";
+      generatedOtpCode = "";
+      phoneSendOtpForm.style.display = "block";
+      verifyOtpForm.style.display = "none";
+      otpHintBox.style.display = "none";
+      loginMsg.textContent = "";
+      loginProfileNameInput.focus();
+    });
+
+    const handleLogoutFlow = () => {
       closeMenuDrawer();
-      if (confirm("লগআউট করতে চান?")) {
-        await signOut(auth);
+      if (confirm("লগআউট করলে আবার প্রোফাইল নাম ও ফোন নম্বর দিয়ে লগইন করতে হবে। লগআউট করবেন?")) {
+        applyLoggedInState("", "");
       }
     };
     logoutPhoneBtn.addEventListener("click", handleLogoutFlow);
@@ -2472,8 +2321,9 @@
       btn.addEventListener("click", () => {
         const target = btn.getAttribute("data-md-nav");
         closeMenuDrawer();
-        if (target === "data-backup") openDataBackupScreen();
-        else if (target === "cashbox") switchPage("page-cashbox");
+        if (target === "data-backup") {
+          openDataBackupScreen();
+        } else if (target === "cashbox") switchPage("page-cashbox");
         else if (target === "transactions") switchPage("page-tallypay");
         else if (target === "backup") {
           pageSections.forEach((sec) => sec.classList.toggle("active", sec.id === "page-menu"));
@@ -2616,11 +2466,6 @@
     const editTxNoteInput = document.getElementById("editTxNote");
     const editTxMsg = document.getElementById("editTxMsg");
     const cancelEditTxBtn = document.getElementById("cancelEditTxBtn");
-
-    let userPartiesCache = new Map();
-    let legacyPartiesCache = new Map();
-    let userTransactionsCache = new Map();
-    let legacyTransactionsCache = new Map();
 
     let partiesMap = new Map();
     let latestParties = [];
@@ -2983,8 +2828,8 @@
                 <td>${escapeHtml(tx.note || "-")}</td>
                 <td class="${isDue ? "due" : "credit"}"><strong>${isDue ? "+" : "-"}${formatBDT(tx.amount)}</strong></td>
                 <td>
-                  <button type="button" class="mini-action-btn btn-edit" data-edit-tx="${escapeHtml(tx.id)}">🔒 এডিট</button>
-                  <button type="button" class="mini-action-btn btn-del" data-del-tx="${escapeHtml(tx.id)}">🔒 ডিলিট</button>
+                  <button type="button" class="mini-action-btn btn-edit" data-edit-tx="${escapeHtml(tx.id)}">এডিট</button>
+                  <button type="button" class="mini-action-btn btn-del" data-del-tx="${escapeHtml(tx.id)}">ডিলিট</button>
                 </td>
               </tr>
             `;
@@ -3014,18 +2859,8 @@
 
     peBackBtn.addEventListener("click", closePartyEntryScreen);
     peReportBtn.addEventListener("click", () => { if (activePartyId) openPartyKhata(activePartyId); });
-
-    peEditPartyBtn.addEventListener("click", () => {
-      if (!activePartyId) return;
-      const pid = activePartyId;
-      requirePinVerification("পার্টির তথ্য এডিট", () => openEditPartyModal(pid));
-    });
-    peDelPartyBtn.addEventListener("click", () => {
-      if (!activePartyId) return;
-      const pid = activePartyId;
-      requirePinVerification("পার্টি ও সব লেনদেন ডিলিট", () => deletePartyWithTransactions(pid, peDelPartyBtn));
-    });
-
+    peEditPartyBtn.addEventListener("click", () => { if (activePartyId) openEditPartyModal(activePartyId); });
+    peDelPartyBtn.addEventListener("click", () => { if (activePartyId) deletePartyWithTransactions(activePartyId, peDelPartyBtn); });
     document.getElementById("peGoldBanner").addEventListener("click", () => {
       closePartyEntryScreen();
       openMenuDrawer();
@@ -3033,21 +2868,16 @@
 
     peHistoryBody.addEventListener("click", (e) => {
       const eb = e.target.closest("[data-edit-tx]");
-      if (eb) {
-        const txId = eb.getAttribute("data-edit-tx");
-        requirePinVerification("লেনদেন এডিট", () => openEditTxModal(txId));
-        return;
-      }
+      if (eb) { openEditTxModal(eb.getAttribute("data-edit-tx")); return; }
       const dbBtn = e.target.closest("[data-del-tx]");
-      if (dbBtn) {
-        const txId = dbBtn.getAttribute("data-del-tx");
-        requirePinVerification("লেনদেন ডিলিট", () => deleteTransactionWithBalance(txId, dbBtn));
-      }
+      if (dbBtn) { deleteTransactionWithBalance(dbBtn.getAttribute("data-del-tx"), dbBtn); }
     });
 
     peTxForm.addEventListener("submit", async (e) => {
       e.preventDefault();
-      if (!activePartyId || !currentAuthUser) return;
+      if (!activePartyId) return;
+      const ownerPhone = getCurrentOwnerPhone();
+      if (!ownerPhone) return;
 
       const dueVal = Number(peDueAmount.value) || 0;
       const recVal = Number(peReceiveAmount.value) || 0;
@@ -3066,8 +2896,7 @@
 
       try {
         await addDoc(collection(db, "transactions"), {
-          ownerUid: currentAuthUser.uid,
-          ownerPhone: extractDisplayPhoneFromUser(currentAuthUser),
+          ownerPhone,
           partyId: activePartyId,
           partyName: partyObj ? partyObj.name : "",
           type,
@@ -3078,7 +2907,6 @@
           createdAt: serverTimestamp()
         });
         await updateDoc(doc(db, "parties", activePartyId), {
-          ownerUid: currentAuthUser.uid,
           balance: increment(type === "due" ? amount : -amount)
         });
 
@@ -3150,10 +2978,10 @@
     const runFullBackupAction = async () => {
       const payload = {
         app: "Hisab Khata",
-        version: 6,
+        version: 4,
         exportedAt: new Date().toISOString(),
-        profileName: (currentAuthUser && currentAuthUser.displayName) || "",
-        profilePhone: extractDisplayPhoneFromUser(currentAuthUser),
+        profileName: localStorage.getItem(LOGIN_PROFILE_KEY) || "",
+        profilePhone: getCurrentOwnerPhone(),
         profileDetails,
         parties: latestParties,
         transactions: latestTransactions,
@@ -3195,11 +3023,13 @@
 
     restoreJsonInput.addEventListener("change", async (e) => {
       const file = e.target.files && e.target.files[0];
-      if (!file || !currentAuthUser) {
+      if (!file) return;
+      const ownerPhone = getCurrentOwnerPhone();
+      if (!ownerPhone) {
         e.target.value = "";
         return;
       }
-      if (!confirm("ব্যাকআপ ফাইল থেকে রিস্টোর করলে আপনার অ্যাকাউন্টে ডেটা যুক্ত হবে। এগিয়ে যাবেন?")) {
+      if (!confirm("ব্যাকআপ ফাইল থেকে রিস্টোর করলে বর্তমান লগইন করা নম্বরের ডেটা আপডেট হবে। এগিয়ে যাবেন?")) {
         e.target.value = "";
         return;
       }
@@ -3222,7 +3052,6 @@
         const batch = writeBatch(db);
         const partyIdMap = new Map();
         const recalculatedBalance = new Map();
-        const ownerPhone = extractDisplayPhoneFromUser(currentAuthUser);
 
         parties.forEach((p) => {
           const docRef = doc(collection(db, "parties"));
@@ -3230,7 +3059,6 @@
           const startBal = Number(p.balance) || 0;
           recalculatedBalance.set(docRef.id, startBal);
           batch.set(docRef, {
-            ownerUid: currentAuthUser.uid,
             ownerPhone,
             name: String(p.name || "").trim(),
             phone: String(p.phone || "").trim(),
@@ -3249,7 +3077,6 @@
             recalculatedBalance.set(mappedPartyId, (recalculatedBalance.get(mappedPartyId) || 0) + (type === "due" ? amount : -amount));
           }
           batch.set(txRef, {
-            ownerUid: currentAuthUser.uid,
             ownerPhone,
             partyId: mappedPartyId,
             partyName: String(tx.partyName || ""),
@@ -3389,8 +3216,8 @@
               <td>${escapeHtml(tx.note || "-")}</td>
               <td class="${isDue ? "due" : "credit"}"><strong>${isDue ? "+" : "-"}${formatBDT(tx.amount)}</strong></td>
               <td>
-                <button type="button" class="mini-action-btn btn-edit" data-edit-tx="${escapeHtml(tx.id)}">🔒 এডিট</button>
-                <button type="button" class="mini-action-btn btn-del" data-del-tx="${escapeHtml(tx.id)}">🔒 ডিলিট</button>
+                <button type="button" class="mini-action-btn btn-edit" data-edit-tx="${escapeHtml(tx.id)}">এডিট</button>
+                <button type="button" class="mini-action-btn btn-del" data-del-tx="${escapeHtml(tx.id)}">ডিলিট</button>
               </td>
             </tr>
           `;
@@ -3496,9 +3323,7 @@
     cancelEditPartyBtn.addEventListener("click", () => editPartyModal.classList.remove("open"));
     editPartyForm.addEventListener("submit", async (e) => {
       e.preventDefault();
-      if (!currentAuthUser) return;
       await updateDoc(doc(db, "parties", editPartyId.value), {
-        ownerUid: currentAuthUser.uid,
         name: editPartyName.value.trim(),
         phone: editPartyPhone.value.trim(),
         balance: Number(editPartyBalance.value) || 0
@@ -3509,133 +3334,115 @@
     });
 
     async function deletePartyWithTransactions(partyId, btnEl) {
+      const p = partiesMap.get(partyId);
+      if (!confirm(`"${p?.name || "এই পার্টি"}" ও এর সব লেনদেন মুছে ফেলতে চান?`)) return;
       if (btnEl) btnEl.disabled = true;
-      try {
-        const txSnap = await getDocs(query(collection(db, "transactions"), where("partyId", "==", partyId)));
-        const batch = writeBatch(db);
-        txSnap.forEach((d) => batch.delete(d.ref));
-        batch.delete(doc(db, "parties", partyId));
-        await batch.commit();
-        if (activeKhataPartyId === partyId) khataModal.classList.remove("open");
-        if (activePartyId === partyId) closePartyEntryScreen();
-        tallyMsg.textContent = "পার্টি ও সব লেনদেন মুছে ফেলা হয়েছে ✓";
-        tallyMsg.className = "msg ok";
-      } finally {
-        if (btnEl) btnEl.disabled = false;
-      }
+      const ownerPhone = getCurrentOwnerPhone();
+      const txSnap = await getDocs(
+        ownerPhone
+          ? query(collection(db, "transactions"), where("ownerPhone", "==", ownerPhone), where("partyId", "==", partyId))
+          : query(collection(db, "transactions"), where("partyId", "==", partyId))
+      );
+      const batch = writeBatch(db);
+      txSnap.forEach((d) => batch.delete(d.ref));
+      batch.delete(doc(db, "parties", partyId));
+      await batch.commit();
+      if (activeKhataPartyId === partyId) khataModal.classList.remove("open");
+      if (activePartyId === partyId) closePartyEntryScreen();
+      tallyMsg.textContent = "পার্টি মুছে ফেলা হয়েছে ✓";
+      tallyMsg.className = "msg ok";
     }
 
-    function mergeAndRefreshAllData() {
+    function resetPartiesState() {
       partiesMap.clear();
       latestParties = [];
-      let rec = 0;
-      let pay = 0;
-
-      const combinedParties = new Map([...legacyPartiesCache, ...userPartiesCache]);
-      combinedParties.forEach((item, id) => {
-        const bal = Number(item.balance) || 0;
-        partiesMap.set(id, { ...item, balance: bal });
-        latestParties.push({ ...item, balance: bal });
-        if (bal > 0) rec += bal;
-        if (bal < 0) pay += Math.abs(bal);
-      });
-
-      latestParties.sort((a, b) => String(a.name || "").localeCompare(String(b.name || ""), "bn"));
-      latestReceivable = rec;
-      latestPayable = pay;
-      document.getElementById("totalReceivable").textContent = formatBDT(rec);
-      document.getElementById("totalPayable").textContent = formatBDT(pay);
-      menuTotalParties.textContent = String(latestParties.length);
-
-      const combinedTx = new Map([...legacyTransactionsCache, ...userTransactionsCache]);
-      latestTransactions = Array.from(combinedTx.values()).sort(
-        (a, b) => new Date(b.createdAt || b.date || 0) - new Date(a.createdAt || a.date || 0)
-      );
-
+      latestReceivable = 0;
+      latestPayable = 0;
+      document.getElementById("totalReceivable").textContent = formatBDT(0);
+      document.getElementById("totalPayable").textContent = formatBDT(0);
+      menuTotalParties.textContent = "0";
       renderCashboxDashboard();
       renderFilteredParties();
       renderFilteredTransactions();
       renderBackupScreen();
-      if (activePartyId && partiesMap.has(activePartyId)) renderPartyEntryScreen(activePartyId);
-      if (activeKhataPartyId && partiesMap.has(activeKhataPartyId)) renderPartyKhata(activeKhataPartyId);
-    }
-
-    function detachAllListeners() {
-      [unsubscribeParties, unsubscribeTransactions, unsubscribeLegacyParties, unsubscribeLegacyTransactions].forEach((unsub) => {
-        if (typeof unsub === "function") unsub();
-      });
-      unsubscribeParties = null;
-      unsubscribeTransactions = null;
-      unsubscribeLegacyParties = null;
-      unsubscribeLegacyTransactions = null;
     }
 
     function attachRealtimeListeners() {
-      detachAllListeners();
-      userPartiesCache.clear();
-      legacyPartiesCache.clear();
-      userTransactionsCache.clear();
-      legacyTransactionsCache.clear();
+      if (typeof unsubscribeParties === "function") {
+        unsubscribeParties();
+        unsubscribeParties = null;
+      }
+      if (typeof unsubscribeTransactions === "function") {
+        unsubscribeTransactions();
+        unsubscribeTransactions = null;
+      }
 
-      if (!currentAuthUser) {
+      const ownerPhone = getCurrentOwnerPhone();
+      if (!ownerPhone) {
         dbStatusEl.textContent = "লগইন করুন";
-        mergeAndRefreshAllData();
+        latestTransactions = [];
+        resetPartiesState();
         return;
       }
 
       dbStatusEl.textContent = "সংযুক্ত হচ্ছে...";
-      const uid = currentAuthUser.uid;
 
       unsubscribeParties = onSnapshot(
-        query(collection(db, "parties"), where("ownerUid", "==", uid)),
+        query(collection(db, "parties"), where("ownerPhone", "==", ownerPhone)),
         (snapshot) => {
           dbStatusEl.textContent = "সংযুক্ত ✓";
-          userPartiesCache.clear();
+          partiesMap.clear();
+          latestParties = [];
+          let rec = 0;
+          let pay = 0;
+
           snapshot.forEach((docSnap) => {
-            userPartiesCache.set(docSnap.id, { id: docSnap.id, ...serializeValueForJSON(docSnap.data()) });
+            const data = docSnap.data();
+            const bal = Number(data.balance) || 0;
+            const item = { id: docSnap.id, ...serializeValueForJSON(data), balance: bal };
+            partiesMap.set(docSnap.id, item);
+            latestParties.push(item);
+            if (bal > 0) rec += bal;
+            if (bal < 0) pay += Math.abs(bal);
           });
-          mergeAndRefreshAllData();
+
+          latestParties.sort((a, b) => String(a.name || "").localeCompare(String(b.name || ""), "bn"));
+
+          latestReceivable = rec;
+          latestPayable = pay;
+          document.getElementById("totalReceivable").textContent = formatBDT(rec);
+          document.getElementById("totalPayable").textContent = formatBDT(pay);
+          menuTotalParties.textContent = String(snapshot.size);
+
+          renderCashboxDashboard();
+          renderFilteredParties();
+          renderFilteredTransactions();
+          renderBackupScreen();
+          if (activePartyId && partiesMap.has(activePartyId)) renderPartyEntryScreen(activePartyId);
+          if (activeKhataPartyId && partiesMap.has(activeKhataPartyId)) renderPartyKhata(activeKhataPartyId);
         },
         (err) => {
-          dbStatusEl.textContent = "Firestore Rules দেখুন";
+          dbStatusEl.textContent = "Rules/ফিল্টার ত্রুটি";
           console.error(err);
         }
       );
 
-      unsubscribeLegacyParties = onSnapshot(
-        query(collection(db, "parties"), where("ownerUid", "==", null)),
-        (snapshot) => {
-          legacyPartiesCache.clear();
-          snapshot.forEach((docSnap) => {
-            legacyPartiesCache.set(docSnap.id, { id: docSnap.id, ...serializeValueForJSON(docSnap.data()) });
-          });
-          mergeAndRefreshAllData();
-        },
-        () => {}
-      );
-
       unsubscribeTransactions = onSnapshot(
-        query(collection(db, "transactions"), where("ownerUid", "==", uid)),
+        query(collection(db, "transactions"), where("ownerPhone", "==", ownerPhone)),
         (snapshot) => {
-          userTransactionsCache.clear();
-          snapshot.forEach((docSnap) => {
-            userTransactionsCache.set(docSnap.id, { id: docSnap.id, ...serializeValueForJSON(docSnap.data()) });
-          });
-          mergeAndRefreshAllData();
-        },
-        (err) => console.error(err)
-      );
+          latestTransactions = snapshot.docs
+            .map((d) => ({ id: d.id, ...serializeValueForJSON(d.data()) }))
+            .sort((a, b) => new Date(b.createdAt || b.date || 0) - new Date(a.createdAt || a.date || 0));
 
-      unsubscribeLegacyTransactions = onSnapshot(
-        query(collection(db, "transactions"), where("ownerUid", "==", null)),
-        (snapshot) => {
-          legacyTransactionsCache.clear();
-          snapshot.forEach((docSnap) => {
-            legacyTransactionsCache.set(docSnap.id, { id: docSnap.id, ...serializeValueForJSON(docSnap.data()) });
-          });
-          mergeAndRefreshAllData();
+          renderCashboxDashboard();
+          renderFilteredParties();
+          renderFilteredTransactions();
+          if (activePartyId && partiesMap.has(activePartyId)) renderPartyEntryScreen(activePartyId);
+          if (activeKhataPartyId && partiesMap.has(activeKhataPartyId)) renderPartyKhata(activeKhataPartyId);
         },
-        () => {}
+        (err) => {
+          console.error(err);
+        }
       );
     }
 
@@ -3654,7 +3461,6 @@
     cancelEditTxBtn.addEventListener("click", () => editTxModal.classList.remove("open"));
     editTxForm.addEventListener("submit", async (e) => {
       e.preventDefault();
-      if (!currentAuthUser) return;
       await runTransaction(db, async (transaction) => {
         const txRef = doc(db, "transactions", editTxId.value);
         const txSnap = await transaction.get(txRef);
@@ -3669,21 +3475,20 @@
         if (oldData.partyId && oldData.partyId === newPId) {
           const pRef = doc(db, "parties", String(newPId));
           const pSnap = await transaction.get(pRef);
-          if (pSnap.exists()) transaction.update(pRef, { ownerUid: currentAuthUser.uid, balance: (Number(pSnap.data().balance) || 0) - oldEff + newEff });
+          if (pSnap.exists()) transaction.update(pRef, { balance: (Number(pSnap.data().balance) || 0) - oldEff + newEff });
         } else {
           if (oldData.partyId) {
             const oRef = doc(db, "parties", String(oldData.partyId));
             const oSnap = await transaction.get(oRef);
-            if (oSnap.exists()) transaction.update(oRef, { ownerUid: currentAuthUser.uid, balance: (Number(oSnap.data().balance) || 0) - oldEff });
+            if (oSnap.exists()) transaction.update(oRef, { balance: (Number(oSnap.data().balance) || 0) - oldEff });
           }
           if (newPId) {
             const nRef = doc(db, "parties", String(newPId));
             const nSnap = await transaction.get(nRef);
-            if (nSnap.exists()) transaction.update(nRef, { ownerUid: currentAuthUser.uid, balance: (Number(nSnap.data().balance) || 0) + newEff });
+            if (nSnap.exists()) transaction.update(nRef, { balance: (Number(nSnap.data().balance) || 0) + newEff });
           }
         }
         transaction.update(txRef, {
-          ownerUid: currentAuthUser.uid,
           partyId: newPId,
           partyName: partiesMap.get(newPId)?.name || oldData.partyName || "",
           type: newType,
@@ -3695,43 +3500,34 @@
     });
 
     async function deleteTransactionWithBalance(txId, btnEl) {
+      if (!confirm("এই লেনদেনটি মুছে ফেলতে চান?")) return;
       if (btnEl) btnEl.disabled = true;
-      try {
-        await runTransaction(db, async (transaction) => {
-          const txRef = doc(db, "transactions", txId);
-          const txSnap = await transaction.get(txRef);
-          if (!txSnap.exists()) return;
-          const d = txSnap.data();
-          const rev = (d.type === "due" ? -1 : 1) * Math.abs(Number(d.amount) || 0);
-          if (d.partyId) {
-            const pRef = doc(db, "parties", String(d.partyId));
-            const pSnap = await transaction.get(pRef);
-            if (pSnap.exists()) transaction.update(pRef, { balance: (Number(pSnap.data().balance) || 0) + rev });
-          }
-          transaction.delete(txRef);
-        });
-      } finally {
-        if (btnEl) btnEl.disabled = false;
-      }
+      await runTransaction(db, async (transaction) => {
+        const txRef = doc(db, "transactions", txId);
+        const txSnap = await transaction.get(txRef);
+        if (!txSnap.exists()) return;
+        const d = txSnap.data();
+        const rev = (d.type === "due" ? -1 : 1) * Math.abs(Number(d.amount) || 0);
+        if (d.partyId) {
+          const pRef = doc(db, "parties", String(d.partyId));
+          const pSnap = await transaction.get(pRef);
+          if (pSnap.exists()) transaction.update(pRef, { balance: (Number(pSnap.data().balance) || 0) + rev });
+        }
+        transaction.delete(txRef);
+      });
     }
 
     txBody.addEventListener("click", (e) => {
       const eb = e.target.closest("[data-edit-tx]");
-      if (eb) {
-        const txId = eb.getAttribute("data-edit-tx");
-        requirePinVerification("লেনদেন এডিট", () => openEditTxModal(txId));
-        return;
-      }
+      if (eb) { openEditTxModal(eb.getAttribute("data-edit-tx")); return; }
       const dbBtn = e.target.closest("[data-del-tx]");
-      if (dbBtn) {
-        const txId = dbBtn.getAttribute("data-del-tx");
-        requirePinVerification("লেনদেন ডিলিট", () => deleteTransactionWithBalance(txId, dbBtn));
-      }
+      if (dbBtn) { deleteTransactionWithBalance(dbBtn.getAttribute("data-del-tx"), dbBtn); }
     });
 
     partyForm.addEventListener("submit", async (e) => {
       e.preventDefault();
-      if (!currentAuthUser) return;
+      const ownerPhone = getCurrentOwnerPhone();
+      if (!ownerPhone) return;
 
       const name = partyNameInput.value.trim();
       const phone = partyPhoneInput.value.trim();
@@ -3745,8 +3541,7 @@
       addPartyBtn.disabled = true;
       try {
         await addDoc(collection(db, "parties"), {
-          ownerUid: currentAuthUser.uid,
-          ownerPhone: extractDisplayPhoneFromUser(currentAuthUser),
+          ownerPhone,
           name,
           phone,
           role,
@@ -3767,6 +3562,11 @@
         syncAddPartyFormState();
       }
     });
+
+    const savedName = localStorage.getItem(LOGIN_PROFILE_KEY);
+    const savedPhone = localStorage.getItem(LOGIN_PHONE_KEY);
+    if (savedName && savedPhone) applyLoggedInState(savedName, savedPhone);
+    else applyLoggedInState("", "");
 
     renderCashboxDashboard();
     renderBackupScreen();
