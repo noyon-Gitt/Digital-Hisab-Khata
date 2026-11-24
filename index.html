@@ -694,12 +694,14 @@
       onAuthStateChanged
     } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
 
-    // ১. Firebase Console থেকে আপনার প্রজেক্টের আসল config এখানে বসান:
     const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_PROJECT.firebaseapp.com",
-      projectId: "YOUR_PROJECT_ID",
-      appId: "YOUR_APP_ID"
+      apiKey: "AIzaSyC4dUfe6B5hrzn49c4F6OpuWD7BmFfi6Mc",
+      authDomain: "digital-hisab-khata-db87f.firebaseapp.com",
+      projectId: "digital-hisab-khata-db87f",
+      storageBucket: "digital-hisab-khata-db87f.firebasestorage.app",
+      messagingSenderId: "1058373687985",
+      appId: "1:1058373687985:web:53155b120fc0484c13e090",
+      measurementId: "G-7GDFMF27D2"
     };
 
     const app = initializeApp(firebaseConfig);
@@ -717,7 +719,6 @@
       screens[key].classList.add('active');
     }
 
-    // Auth Elements
     const googleSignInBtn = document.getElementById('googleSignInBtn');
     const emailInput = document.getElementById('emailInput');
     const passwordInput = document.getElementById('passwordInput');
@@ -854,7 +855,6 @@
       }
     });
 
-    // ---------------- HISAB KHATA DATA & LOGIC ----------------
     function getDataKey() {
       return `hk_ledger_${currentUid || 'default'}`;
     }
@@ -1002,7 +1002,6 @@
         .replace(/"/g, '&quot;');
     }
 
-    // Tabs Navigation
     document.querySelectorAll('.tab-btn').forEach((btn) => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.tab-btn').forEach((b) => b.classList.remove('active'));
@@ -1012,7 +1011,6 @@
       });
     });
 
-    // Add Customer Modal
     const customerModal = document.getElementById('customerModal');
     document.getElementById('openAddCustomerBtn').addEventListener('click', () => {
       document.getElementById('newCustName').value = '';
@@ -1046,7 +1044,6 @@
       saveLedger();
     });
 
-    // Add Transaction Modal
     const txModal = document.getElementById('txModal');
     let activeTxCustomerId = null;
     let activeTxType = 'due';
@@ -1091,7 +1088,6 @@
       saveLedger();
     });
 
-    // WhatsApp Reminder
     window.sendWhatsAppReminder = (custId) => {
       const cust = ledgerData.customers.find((c) => c.id === custId);
       if (!cust || !cust.phone) return;
@@ -1107,7 +1103,6 @@
       window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`, '_blank');
     };
 
-    // Delete Customer
     window.deleteCustomer = (custId) => {
       if (!confirm('এই কাস্টমার এবং তার সব লেনদেন মুছে ফেলতে চান?')) return;
       ledgerData.customers = ledgerData.customers.filter((c) => c.id !== custId);
@@ -1115,7 +1110,6 @@
       saveLedger();
     };
 
-    // Search & Filters
     document.getElementById('searchCustomerInput').addEventListener('input', renderCustomers);
     document.getElementById('filterDateInput').addEventListener('change', renderTransactions);
     document.getElementById('filterMonthInput').addEventListener('change', renderTransactions);
@@ -1125,7 +1119,6 @@
       renderTransactions();
     });
 
-    // JSON Backup & Restore
     document.getElementById('exportJsonBtn').addEventListener('click', () => {
       const blob = new Blob([JSON.stringify(ledgerData, null, 2)], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
@@ -1157,7 +1150,6 @@
       reader.readAsText(file);
     });
 
-    // Auth State & Auto-Lock
     onAuthStateChanged(auth, (user) => {
       if (user) {
         currentUid = user.uid;
